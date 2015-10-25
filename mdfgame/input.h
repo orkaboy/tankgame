@@ -1,11 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#ifdef _WIN32
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include "SDL2/SDL.h"
 
 #include "player.h"
 #include "world.h"
@@ -30,18 +26,16 @@ enum PlayerAction
 };
 
 typedef void(*ActionHandler)(Player* player, World& world);
-typedef void(*KeyHandler)(SDLKey key, World& world);
+typedef void(*KeyHandler)(SDL_Scancode key, World& world);
 typedef void(*MouseMoveHandler)(Player* player, World &world, Sint16 x, Sint16 y, Uint8 button);
 
 void Input_Init(World& w);
 void Input_HandleEvents();
 void Input_SetActionHandler(PlayerAction action, ActionHandler handler);
-void Input_BindKey(SDLKey key, Player* player, PlayerAction ation, KeyStroke keystroke);
+void Input_BindKey(SDL_Scancode key, Player* player, PlayerAction ation, KeyStroke keystroke);
 void Input_SetHandler(KeyStroke stroke, KeyHandler handler);
 void Input_BindMouseHandler(Player* player);
 void Input_Grab();
 void Input_Release();
-bool Input_HasFocus();
-bool Input_KeyIsDown(SDLKey key);
 
 #endif

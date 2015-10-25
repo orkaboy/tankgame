@@ -1,11 +1,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#ifdef _WIN32
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include "SDL2/SDL.h"
 
 #include "animation.h"
 
@@ -27,8 +23,8 @@ typedef struct Weapon
 {
 	TankWeapon type;
 	
-	SDL_Surface *tankTurret;
-	SDL_Surface *tankCursor;
+    SDL_Texture *tankTurret;
+    SDL_Texture *tankCursor;
 	
 	Animation *FireAnimation;
 	

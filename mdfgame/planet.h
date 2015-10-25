@@ -3,11 +3,7 @@
 
 #include "utility.h"
 
-#ifdef _WIN32
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include "SDL2/SDL.h"
 
 typedef struct Planet
 {
@@ -17,7 +13,7 @@ typedef struct Planet
 	float rotvel;
 	vec2 vel;
 	float mass;
-	SDL_Surface *image;
+    SDL_Texture *image;
 } Planet;
 
 Planet *Planet_Init(float x, float y, float radius, float mass);

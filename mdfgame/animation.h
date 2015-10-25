@@ -1,18 +1,14 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#ifdef _WIN32
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include "SDL2/SDL.h"
 
 #include <string>
 using namespace std;
 
 typedef struct Animation
 {
-	SDL_Surface **frames;
+    SDL_Texture **frames;
 	float *frameTimer;
 	unsigned int numFrames;
 } Animation;
@@ -24,7 +20,7 @@ void UnloadAnimations(void);
 Animation * GetAnimation(string id);
 
 /* Return the surface at frame, if there is one */
-SDL_Surface * GetFrame(Animation *anim, unsigned int frame);
+SDL_Texture * GetFrame(Animation *anim, unsigned int frame);
 
 /* Updates frame and timer */
 void UpdateAnimation(Animation *anim, unsigned int &frame, float &timer, float dt);

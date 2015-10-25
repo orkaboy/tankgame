@@ -1,6 +1,6 @@
 #include "menu.h"
 
-Menu* Menu_Init(SDL_Surface* bg, SDL_Surface* cursor)
+Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor)
 {
 	Menu* menu = new Menu;
 	menu->bg = bg;

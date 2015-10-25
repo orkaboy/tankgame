@@ -1,11 +1,7 @@
 #ifndef OURGAME_SDL_AUDIO
 #define OURGAME_SDL_AUDIO
 
-#ifdef _WIN32
-#include "SDL_mixer.h"
-#else
-#include "SDL/SDL_mixer.h"
-#endif
+#include "SDL2/SDL_mixer.h"
 
 bool Audio_Init();
 Mix_Chunk* Audio_LoadWav(const char *file);

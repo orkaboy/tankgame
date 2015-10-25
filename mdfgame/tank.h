@@ -6,11 +6,7 @@
 #include "audio.h"
 #include "weapon.h"
 
-#ifdef _WIN32
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include "SDL2/SDL.h"
 
 #define MAX_HITPOINTS 100
 
@@ -40,7 +36,7 @@ typedef struct Tank
 	
 	Player *player;
 	
-	SDL_Surface *tankBody;
+    SDL_Texture *tankBody;
 	
 	vec2 pos;
 	float bounding_radius;
@@ -85,6 +81,6 @@ void Tank_Destroy ( Tank* tank );
 void Tank_Free ( Tank* tank );
 
 /* Drawing function */
-void Tank_Draw( const Tank *tank, SDL_Surface *screen, vec2 offset );
+void Tank_Draw( const Tank *tank, vec2 offset );
 
 #endif

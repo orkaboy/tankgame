@@ -23,7 +23,7 @@ void SendSyncPlayers()
 
 	char* ptr = (char*)PrepareHeader(&header, MT_SYNC_PLAYERS, MC_PLAYERS, size);
 
-	for ( int i = 0; i < players.size(); i++ )
+    for (unsigned int i = 0; i < players.size(); i++ )
 	{
 		Player* player = players[i];
 		Net_Player nplayer;

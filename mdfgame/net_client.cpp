@@ -110,7 +110,7 @@ void SyncWorldRecieved(MessageHeader* header, void* data)
 		memcpy(&nplanet, ptr, sizeof(Net_Planet));
 		Net_Planet_Read(&nplanet);
 		SpawnOrSync(nplanet.id, ET_PLANET, &nplanet);
-		Planet* planet = (Planet*)id2mem[nplanet.id];
+        //Planet* planet = (Planet*)id2mem[nplanet.id];
 		ptr += sizeof(Net_Planet);
 	}
 

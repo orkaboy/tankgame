@@ -2,17 +2,10 @@
 #include "resources.h"
 #include "graphics.h"
 
-#ifdef _WIN32
-#include "SDL_ttf.h"
-#include "SDL_image.h"
-#include "SDL_gfxPrimitives.h"
-#include "SDL_rotozoom.h"
-#else
-#include "SDL/SDL_ttf.h"
-#include "SDL/SDL_image.h"
-#include "SDL/SDL_gfxPrimitives.h"
-#include "SDL/SDL_rotozoom.h"
-#endif
+#include "SDL2/SDL_ttf.h"
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL2_gfxPrimitives.h"
+#include "SDL2/SDL2_rotozoom.h"
 
 #include <string>
 #include <stdio.h>
@@ -21,15 +14,17 @@
 
 using namespace std;
 
-static SDL_Surface* screen;
-static SDL_Surface* background;
-static map<string, SDL_Surface *> images;
+static SDL_Window* screen;
+static SDL_Surface* screenSurface;
+static SDL_Renderer *renderer;
+static SDL_Texture* background;
+static map<string, SDL_Texture *> images;
 static map<string, TTF_Font *> fonts;
-static map<TankColors,SDL_Surface*> tankParts;
-static SDL_Surface* LoadImage(const char *s);
+static map<TankColors,SDL_Texture*> tankParts;
+static SDL_Texture* LoadImage(const char *s);
 static void	LoadImages();
 
-SDL_Surface * getImage(string id)
+SDL_Texture * getImage(string id)
 {
 	return images[id];
 }
@@ -57,14 +52,32 @@ bool Graphics_Init(void)
 	atexit(TTF_Quit);
 	atexit(SDL_Quit);
 	// create a new window
-	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP,
-						SDL_HWSURFACE|SDL_DOUBLEBUF);
+    screen = SDL_CreateWindow("Tank game",
+                              SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED,
+                              0,
+                              0,
+                              SDL_WINDOW_FULLSCREEN_DESKTOP);
 	if ( !screen )
 	{
 		printf("Unable to set %dx%d video: %s\n", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_GetError());
 		return 0;
 	}
-	
+
+    int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
+    if(!(IMG_Init(imgFlags) & imgFlags))
+    {
+        printf("Unable to initialize SDL_Image: %s\n", IMG_GetError());
+        return 0;
+    }
+
+    screenSurface = SDL_GetWindowSurface(screen);
+
+    renderer = SDL_CreateRenderer(screen, -1, 0);
+
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
+    SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	SDL_ShowCursor(SDL_DISABLE);
 
 	LoadImages();
@@ -75,17 +88,13 @@ bool Graphics_Init(void)
 	return 1;
 }
 
-void Graphics_ApplySurface(SDL_Surface *source, SDL_Surface *destination, int x, int y, float scaling, float angle)
+void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, float angle)
 {
-	SDL_Rect offset;
+    int w, h;
+    SDL_QueryTexture(source, NULL, NULL, &w, &h);
+    SDL_Rect renderQuad = { x, y, w*scaling, h*scaling };
 
-	SDL_Surface *rotated = rotozoomSurface(source, (angle * 180) / M_PI, scaling, 0);
-
-	offset.x = x - rotated->w / 2;
-	offset.y = y - rotated->h / 2;
-	SDL_BlitSurface(rotated, NULL, destination, &offset);
-	SDL_FreeSurface(rotated);
-//		SDL_BlitSurface(source, NULL, destination, &offset);
+    SDL_RenderCopyEx(renderer, source, NULL, &renderQuad, (angle * 180) / M_PI, NULL, SDL_FLIP_NONE);
 }
 
 #include <iostream>
@@ -104,43 +113,47 @@ void Graphics_DrawScene(World &world)
 	offset = world.camera.GetCorner();
 	/** Fix bg **/
 	
-	Graphics_ApplySurface(background, screen, (screen->w / 2), (screen->h / 2));
+    int w, h;
+    SDL_GetWindowSize(screen, &w, &h);
+    Graphics_ApplySurface(background, (w / 2), (h / 2));
 
-	hlineRGBA(screen, -offset.x, world.size.width - offset.x, -offset.y, 255, 0, 0, 128);
-	hlineRGBA(screen, -offset.x, world.size.width - offset.x, world.size.height - offset.y, 255, 0, 0, 128);
-	vlineRGBA(screen, -offset.x, -offset.y + 1, (world.size.height - 1) - offset.y, 255, 0, 0, 128);
-	vlineRGBA(screen, world.size.width - offset.x, -offset.y + 1, (world.size.height - 1) - offset.y, 255, 0, 0, 128);
+    hlineRGBA(renderer, -offset.x, world.size.width - offset.x, -offset.y, 255, 0, 0, 128);
+    hlineRGBA(renderer, -offset.x, world.size.width - offset.x, world.size.height - offset.y, 255, 0, 0, 128);
+    vlineRGBA(renderer, -offset.x, -offset.y + 1, (world.size.height - 1) - offset.y, 255, 0, 0, 128);
+    vlineRGBA(renderer, world.size.width - offset.x, -offset.y + 1, (world.size.height - 1) - offset.y, 255, 0, 0, 128);
 	
 	/* fix score board text */
 	TTF_Font *font = fonts["Text"];
 	string p1score, p2score, p1deaths, p2deaths;
 	if( font == NULL )
 	    printf("no font\n");
-	SDL_Surface *score1 = NULL;
+//	SDL_Surface *score1 = NULL;
 // 	SDL_Surface *score2 = NULL;
 	
 	/* set scoreboard text color */
-	SDL_Color col;
+/*	SDL_Color col;
 	col.r = 255;
 	col.g = 255;
 	col.b = 255;
-	
+*/
 	for (unsigned int l = 0; l < world.planets.size(); l++)
 	{
-		SDL_Surface* img = world.planets[l]->image;
+        SDL_Texture* img = world.planets[l]->image;
+        int w;
+        SDL_QueryTexture(img, NULL, NULL, &w, NULL);
 
-		float scaling = 2 * world.planets[l]->radius / (img->w * (1 - 0.1176f));
-		Graphics_ApplySurface(img, screen, world.planets[l]->pos.x - offset.x, world.planets[l]->pos.y - offset.y, scaling, world.planets[l]->rot);
+        float scaling = 2 * world.planets[l]->radius / (w * (1 - 0.1176f));
+        Graphics_ApplySurface(img, world.planets[l]->pos.x - offset.x, world.planets[l]->pos.y - offset.y, scaling, world.planets[l]->rot);
 	}
 	
 	for (unsigned int l = 0; l < world.tanks.size(); l++)
 	{
 		const Tank *tank = world.tanks[l];
-		Tank_Draw(tank, screen, offset);
+        Tank_Draw(tank, offset);
 	}
 	
 	/* Draw projectiles */
-	Projectile_Draw(world.projectiles, screen, offset);
+    Projectile_Draw(world.projectiles, renderer, offset);
 	
 	/** Maiden, please clean this up... /orka **/
 
@@ -150,40 +163,41 @@ void Graphics_DrawScene(World &world)
 	{
 		
 		/* life tank 1 */
-		rectangleRGBA( screen, 8, 8, 162, 32, 0, 255, 0, 100 );
-		boxRGBA( screen, 10, 10, 10 + ((150.0*world.player->tank->hitPoints)/MAX_HITPOINTS), 30, 255 - (255.0*world.player->tank->hitPoints)/MAX_HITPOINTS, (255.0*world.player->tank->hitPoints)/MAX_HITPOINTS, 0, 100 );
+        rectangleRGBA( renderer, 8, 8, 162, 32, 0, 255, 0, 100 );
+        boxRGBA( renderer, 10, 10, 10 + ((150.0*world.player->tank->hitPoints)/MAX_HITPOINTS), 30, 255 - (255.0*world.player->tank->hitPoints)/MAX_HITPOINTS, (255.0*world.player->tank->hitPoints)/MAX_HITPOINTS, 0, 100 );
 		
 		/* reload teleport timer*/
-		rectangleRGBA( screen, 8, 33, 162, 39, 0, 100, 0, 100);
+        rectangleRGBA( renderer, 8, 33, 162, 39, 0, 100, 0, 100);
 		
 		if( world.player->tank->teleportTimer > 0 )
-			boxRGBA( screen, 10, 35, 10 + 150/30*(30-world.player->tank->teleportTimer),37,255,0,100,100);
+            boxRGBA( renderer, 10, 35, 10 + 150/30*(30-world.player->tank->teleportTimer),37,255,0,100,100);
 		
 		if( world.player->tank->teleportTimer < 0 )
-			boxRGBA( screen, 10, 35, 160,37,255,0,255,100);
+            boxRGBA( renderer, 10, 35, 160,37,255,0,255,100);
 		
-		rectangleRGBA( screen, 8, 40, 162, 45, 0, 100, 0, 100);
+        rectangleRGBA( renderer, 8, 40, 162, 45, 0, 100, 0, 100);
 		/* reload gun timer */
 		float delay = Weapon_GetDelay(world.player->tank->weapon);
 		
 		if( world.player->tank->timeSinceLastFire > 0 )
-			boxRGBA( screen, 10, 42, 10 + 150/delay*(delay-world.player->tank->timeSinceLastFire),43,255,0,100,100);
+            boxRGBA( renderer, 10, 42, 10 + 150/delay*(delay-world.player->tank->timeSinceLastFire),43,255,0,100,100);
 		
 		if( world.player->tank->timeSinceLastFire < 0 )
-			boxRGBA( screen, 10, 42, 160,43,255,0,255,100);
+            boxRGBA( renderer, 10, 42, 160,43,255,0,255,100);
 		
 		/* life tank 2 */
 		//rectangleRGBA( screen, (screen->w -162), 8, (screen->w -8), 32, 0, 255, 0, 255 );
 		//boxRGBA( screen, (screen->w -160), 10, (screen->w -160) + ((150.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS), 30, 255 - (255.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS, (255.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS, 0, 255 );
 	}
-	Effect_Draw(world.effects, screen, offset);
+    Effect_Draw(world.effects, offset);
 	
-	
+    /*
 	if( score1 != NULL )
 	{
-	    Graphics_ApplySurface(score1, screen, 90, 20);
+        Graphics_ApplySurface(score1, 90, 20);
 	    SDL_FreeSurface(score1);
 	}
+    */
 	
 	/*if( score2 != NULL )
 	{
@@ -195,12 +209,13 @@ void Graphics_DrawScene(World &world)
 
 void Graphics_BeginScene()
 {
-	
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 }
 
 void Graphics_EndScene()
 {
-	SDL_Flip(screen);
+    SDL_RenderPresent(renderer);
 }
 
 void Graphics_DrawString(std::string str, int x, int y)
@@ -208,18 +223,25 @@ void Graphics_DrawString(std::string str, int x, int y)
 	TTF_Font *font = fonts["Text"];
 	SDL_Color c = {255, 255, 255};
 	SDL_Surface *txt = TTF_RenderText_Solid( font, str.c_str(), c);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface( renderer, txt );
 	
-	Graphics_ApplySurface(txt, screen, x + txt->w / 2, y + txt->h / 2);
+    Graphics_ApplySurface(texture, x + txt->w / 2, y + txt->h / 2);
 	SDL_FreeSurface(txt);
+    SDL_DestroyTexture(texture);
 }
 
 // static functions
-SDL_Surface* LoadImage(const char *s)
+SDL_Texture* LoadImage(const char *s)
 {
+    SDL_Texture* newTexture = NULL;
+
 	SDL_Surface *loaded = IMG_Load( s );
-	SDL_Surface *ret = SDL_DisplayFormatAlpha( loaded );
-	SDL_FreeSurface(loaded);
-	return ret;
+    if(loaded)
+    {
+        newTexture = SDL_CreateTextureFromSurface(renderer, loaded);
+        SDL_FreeSurface(loaded);
+    }
+    return newTexture;
 }
 
 #include <iostream>
@@ -270,24 +292,26 @@ TTF_Font * Graphics_LoadFont(const string &s, int fontsize)
 void Menu_Draw(Menu* menu)
 {
     unsigned int i;
-    
-    Graphics_ApplySurface(menu->bg, screen, screen->w / 2, screen->h / 2);
+
+    int w, h;
+    SDL_GetWindowSize(screen, &w, &h);
+    Graphics_ApplySurface(menu->bg, w / 2, h / 2);
     
     for(i=0; i<menu->list.size(); i++)
-	Button_Draw(screen,menu->list[i]);
+    Button_Draw(renderer,menu->list[i]);
 }
 
-SDL_Surface* ReturnScreen()
+SDL_Renderer* ReturnScreen()
 {
-	return screen;
+    return renderer;
 }
 
-SDL_Surface* ReturnBg()
+SDL_Texture* ReturnBg()
 {
 	return background;
 }
 
-SDL_Surface* ReturnCursor()
+SDL_Texture* ReturnCursor()
 {	
 	return LoadImage("data/images/Cursor.png");
 }

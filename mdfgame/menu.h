@@ -1,23 +1,19 @@
 #ifndef MENU_H
 #define MENU_H
 
-#ifdef _WIN32
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include "SDL2/SDL.h"
 
 #include <vector>
 #include "button.h"
 
 typedef struct Menu
 {
-	SDL_Surface *bg;
-	SDL_Surface *cursor;
+    SDL_Texture *bg;
+    SDL_Texture *cursor;
 	vector <Button*> list;
 }Menu;
 
-Menu* Menu_Init(SDL_Surface* bg, SDL_Surface* cursor);
+Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor);
 
 void Menu_AddButton(Menu* menu,int x, int y,int ret, string text, TTF_Font *font);
 

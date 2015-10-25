@@ -146,44 +146,46 @@ void Tank_Teleport ( Tank* tank, World& world)
 	tank->planet = world.planets[planet];
 }
 
-void Tank_Draw( const Tank *tank, SDL_Surface *screen, vec2 offset )
+void Tank_Draw( const Tank *tank, vec2 offset )
 {
-	SDL_Surface *body = tank->tankBody;
-	SDL_Surface *turret = weapons[tank->weapon].tankTurret;
+    SDL_Texture *body = tank->tankBody;
+    SDL_Texture *turret = weapons[tank->weapon].tankTurret;
 		
 	float tank_rot = tank->angular_position + tank->planet->rot;
-	Graphics_ApplySurface(body, screen, (int)tank->pos.x - offset.x, (int)tank->pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
+    Graphics_ApplySurface(body, (int)tank->pos.x - offset.x, (int)tank->pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
 	
 	float turretX, turretY;
 	turretX = (tank->turret.x + 2*tank->pos.x) / 2;
 	turretY = (tank->turret.y + 2*tank->pos.y) / 2;
 		
-	Graphics_ApplySurface(turret, screen, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + tank->turret_angle);
+    Graphics_ApplySurface(turret, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + tank->turret_angle);
 	
-	SDL_Surface *cursor = weapons[tank->weapon].tankCursor;
+    SDL_Texture *cursor = weapons[tank->weapon].tankCursor;
 	
 	if(cursor != NULL)
 	{
 		int cursorX, cursorY;
+        int w, h;
+        SDL_QueryTexture(cursor, NULL, NULL, &w, &h);
 		//cursorX = (tank->turret.x*4 + 2*tank->pos.x) / 2;
 		//cursorY = (tank->turret.y*4 + 2*tank->pos.y) / 2;
 		SDL_GetMouseState(&cursorX, &cursorY);
-		cursorX -= cursor->w / 2;
-		cursorY -= cursor->h / 2;
-		
-		Graphics_ApplySurface(cursor, screen, cursorX, cursorY, 1, 0);
+        cursorX -= w / 2;
+        cursorY -= h / 2;
+
+        Graphics_ApplySurface(cursor, cursorX, cursorY, 1, 0);
 	}
 	
 	if(tank->firing)
 	{
-		SDL_Surface *fireAnim = GetFrame(weapons[tank->weapon].FireAnimation, tank->fireFrame);
+        SDL_Texture *fireAnim = GetFrame(weapons[tank->weapon].FireAnimation, tank->fireFrame);
 		
 		if(fireAnim != NULL)
 		{
 			float fireX = (tank->turret.x*4 + 2*tank->pos.x) / 2;
 			float fireY = (tank->turret.y*4 + 2*tank->pos.y) / 2;
 			
-			Graphics_ApplySurface(fireAnim, screen, (int)fireX - offset.x, (int)fireY - offset.y, 1, tank_rot + tank->turret_angle);
+            Graphics_ApplySurface(fireAnim, (int)fireX - offset.x, (int)fireY - offset.y, 1, tank_rot + tank->turret_angle);
 		}
 	}
 }

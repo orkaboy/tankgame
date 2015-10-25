@@ -19,7 +19,7 @@ static void DefaultTeleportHandler ( Player* player, World& world );
 static void DefaultChangeWepHandler ( Player* player, World& world );
 
 typedef std::map<PlayerAction, ActionHandler> HandlerMap;
-typedef std::map<SDLKey, std::pair<Player*, PlayerAction> > BindsMap;
+typedef std::map<SDL_Scancode, std::pair<Player*, PlayerAction> > BindsMap;
 
 static std::map<KeyStroke, KeyHandler> strokehandlers;
 
@@ -32,24 +32,17 @@ static BindsMap up_binds;
 static BindsMap down_binds;
 static BindsMap hold_binds;
 
-static Uint8 *curstate;
 static World* world;
 
 void Input_Grab()
 {
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 void Input_Release()
 {
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+    SDL_SetRelativeMouseMode(SDL_FALSE);
 }
-
-bool Input_HasFocus()
-{
-	return SDL_WM_GrabInput(SDL_GRAB_QUERY) == SDL_GRAB_ON;
-}
-
 
 void Input_Init(World& w)
 {
@@ -78,11 +71,6 @@ void Input_BindMouseHandler(Player *player)
 	mouse_bind.first = player;
 }
 
-bool Input_KeyIsDown(SDLKey key)
-{
-	return curstate[key] != 0;
-}
-
 void Input_SetHandler(KeyStroke stroke, KeyHandler handler)
 {
 	strokehandlers[stroke] = handler;
@@ -97,7 +85,7 @@ void Input_HandleEvents()
 		//if ( event.button.button == SDL_BUTTON_LEFT )
 		//	Input_Grab();
 
-		if(event.type == SDL_KEYDOWN)
+        if(event.type == SDL_SCANCODE_DOWN)
 		{
 			for ( BindsMap::iterator it = down_binds.begin(); it != down_binds.end(); it++ )
 			{
@@ -105,9 +93,9 @@ void Input_HandleEvents()
 					handlers[it->second.second](it->second.first, *world);
 			}
 			if ( strokehandlers[KEY_DOWN] )
-				strokehandlers[KEY_DOWN](event.key.keysym.sym, *world);
+                strokehandlers[KEY_DOWN](event.key.keysym.scancode, *world);
 		}	
-		else if(event.type == SDL_KEYUP)
+        else if(event.type == SDL_SCANCODE_UP)
 		{
 			for ( BindsMap::iterator it = up_binds.begin(); it != up_binds.end(); it++ )
 			{
@@ -115,7 +103,7 @@ void Input_HandleEvents()
 					handlers[it->second.second](it->second.first, *world);
 			}
 			if ( strokehandlers[KEY_UP] )
-				strokehandlers[KEY_UP](event.key.keysym.sym, *world);
+                strokehandlers[KEY_UP](event.key.keysym.scancode, *world);
 		}
 	}
 // 	SDL_GetRelativeMouseState(&mx, &my);
@@ -124,7 +112,7 @@ void Input_HandleEvents()
 	if ( mouse_bind.second )
 		mouse_bind.second(mouse_bind.first, *world, mx, my, button);
 	
-	curstate = SDL_GetKeyState(NULL);
+    const Uint8* curstate = SDL_GetKeyboardState(NULL);
 	
 	for ( BindsMap::iterator it = hold_binds.begin(); it != hold_binds.end(); it++ )
 	{
@@ -132,7 +120,7 @@ void Input_HandleEvents()
 			handlers[it->second.second](it->second.first, *world);
 	}
 	if ( strokehandlers[KEY_HOLD] )
-		strokehandlers[KEY_HOLD](event.key.keysym.sym, *world);
+        strokehandlers[KEY_HOLD](event.key.keysym.scancode, *world);
 }
 
 void Input_SetActionHandler(PlayerAction action, ActionHandler handler)
@@ -140,7 +128,7 @@ void Input_SetActionHandler(PlayerAction action, ActionHandler handler)
 	handlers[action] = handler;
 }
 
-void Input_BindKey(SDLKey key, Player* player, PlayerAction action, KeyStroke keystroke)
+void Input_BindKey(SDL_Scancode key, Player* player, PlayerAction action, KeyStroke keystroke)
 {
 	switch(keystroke)
 	{

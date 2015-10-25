@@ -31,6 +31,6 @@ typedef struct Effect
 Effect * Effect_Create(EffectType type, vec2 pos);
 void Effect_Delete(Effect *e);
 void Effect_Update(vector<Effect*> &effects, float dt);
-void Effect_Draw(vector<Effect*> &effects, SDL_Surface *screen, vec2 offset);
+void Effect_Draw(vector<Effect*> &effects, vec2 offset);
 
 #endif

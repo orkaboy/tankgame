@@ -1,11 +1,7 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 
-#ifdef _WIN32
-#include "SDL.h"
-#else
-#include "SDL/SDL.h"
-#endif
+#include "SDL2/SDL.h"
 
 #include "utility.h"
 #include "animation.h"
@@ -42,7 +38,7 @@ typedef struct Projectile
 	ProjectileType type;
 	float LifeTime;
 	Animation *animation;
-	SDL_Surface *surface;
+    SDL_Texture *surface;
 	unsigned int animFrame;
 	float animTimer;
 	float damage;
@@ -58,6 +54,6 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 /* removes projectile from the game */
 void Projectile_Destroy(Projectile *projectile);
 
-void Projectile_Draw(vector<Projectile*> &proj, SDL_Surface *screen, vec2 offset);
+void Projectile_Draw(vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset);
 
 #endif

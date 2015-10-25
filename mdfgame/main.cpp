@@ -19,23 +19,23 @@ using namespace std;
 bool quit = false;
 bool gquit = false;
 
-void KeyDown ( SDLKey key, World& world )
+void KeyDown ( SDL_Scancode key, World& world )
 {
 	switch ( key )
 	{
-	case SDLK_1:
+    case SDL_SCANCODE_1:
 		Net_Join(Net_GetAvailableServers()[0].iid, world);
 		break;
-	case SDLK_2:
+    case SDL_SCANCODE_2:
 		Net_Join(Net_GetAvailableServers()[1].iid, world);
 		break;
-	case SDLK_F1:
+    case SDL_SCANCODE_F1:
 		Net_StartServer(world);
 		break;
-	case SDLK_F2:
+    case SDL_SCANCODE_F2:
 		Net_RefreshServers();
 		break;
-	case SDLK_ESCAPE:
+    case SDL_SCANCODE_ESCAPE:
 		gquit = true;
 		break;
 	default: break;
@@ -46,10 +46,9 @@ void KeyDown ( SDLKey key, World& world )
 int TheMenu ( void )
 {
 	SDL_Event event;
-     
-	SDL_Surface* screen = ReturnScreen();
-	SDL_Surface* bg = ReturnBg();
-	SDL_Surface* cursor = ReturnCursor();
+
+    SDL_Texture* bg = ReturnBg();
+    SDL_Texture* cursor = ReturnCursor();
 	Menu* menu = Menu_Init(bg,cursor);
 	Menu_AddButton(menu,60,100,1,"Host Game", getFont("Text"));
 	Menu_AddButton(menu,290,100,2,"Join Game", getFont("Text"));
@@ -79,10 +78,10 @@ int TheMenu ( void )
 			{
 				switch ( event.key.keysym.sym )
 				{
-				case SDLK_e:
+                case SDL_SCANCODE_E:
 					mquit = true;
 				break;
-				case SDLK_ESCAPE:
+                case SDL_SCANCODE_ESCAPE:
 					mquit = true;
 					quit = true;
 				break;
@@ -112,11 +111,15 @@ int TheMenu ( void )
 			accumulator -= dt;
 		}
 		
-		SDL_GetMouseState(&mx, &my);		
+        SDL_GetMouseState(&mx, &my);
+
+        Graphics_BeginScene();
+
 		Menu_CheckButton(menu,mx,my);
 		Menu_Draw(menu);
-		Graphics_ApplySurface(cursor, screen, mx, my,1,0);
-		SDL_Flip(screen);
+        Graphics_ApplySurface(cursor, mx, my,1,0);
+
+        Graphics_EndScene();
 	}
 	return 0;
 }
@@ -136,6 +139,8 @@ int main(int argc, char **argv)
 	LoadAnimations();
 	LoadWeapons();
 	
+    //TODO Clean this horrid mess
+
 	while(!quit)
 	{
 		chosen = TheMenu();
@@ -170,25 +175,25 @@ int main(int argc, char **argv)
 			
 			player = Player_Init();
 			
-			Input_BindKey(SDLK_a, player, PA_MOVE_BACKWARD, KEY_HOLD);
-			Input_BindKey(SDLK_d, player, PA_MOVE_FORWARD, KEY_HOLD);
-			//Input_BindKey(SDLK_w, player, PA_TURRET_UP, KEY_HOLD);
-			//Input_BindKey(SDLK_s, player, PA_TURRET_DOWN, KEY_HOLD);
-			Input_BindKey(SDLK_SPACE, player, PA_FIRE_BEGIN, KEY_DOWN);
-			Input_BindKey(SDLK_SPACE, player, PA_FIRE_END, KEY_UP);
-			Input_BindKey(SDLK_q, player, PA_TELEPORT, KEY_HOLD);
-			Input_BindKey(SDLK_e, player, PA_CHANGE_WEP, KEY_DOWN);
+            Input_BindKey(SDL_SCANCODE_A, player, PA_MOVE_BACKWARD, KEY_HOLD);
+            Input_BindKey(SDL_SCANCODE_D, player, PA_MOVE_FORWARD, KEY_HOLD);
+            //Input_BindKey(SDL_SCANCODE_W, player, PA_TURRET_UP, KEY_HOLD);
+            //Input_BindKey(SDL_SCANCODE_S, player, PA_TURRET_DOWN, KEY_HOLD);
+            Input_BindKey(SDL_SCANCODE_SPACE, player, PA_FIRE_BEGIN, KEY_DOWN);
+            Input_BindKey(SDL_SCANCODE_SPACE, player, PA_FIRE_END, KEY_UP);
+            Input_BindKey(SDL_SCANCODE_Q, player, PA_TELEPORT, KEY_HOLD);
+            Input_BindKey(SDL_SCANCODE_E, player, PA_CHANGE_WEP, KEY_DOWN);
 
 			Input_BindMouseHandler(player);
 			
-			/*Input_BindKey(SDLK_LEFT, player2, PA_MOVE_BACKWARD, KEY_HOLD);
-			Input_BindKey(SDLK_RIGHT, player2, PA_MOVE_FORWARD, KEY_HOLD);
-			Input_BindKey(SDLK_UP, player2, PA_TURRET_UP, KEY_HOLD);
-			Input_BindKey(SDLK_DOWN, player2, PA_TURRET_DOWN, KEY_HOLD);
-			Input_BindKey(SDLK_RCTRL, player2, PA_FIRE_BEGIN, KEY_DOWN);
-			Input_BindKey(SDLK_RCTRL, player2, PA_FIRE_END, KEY_UP);
-			Input_BindKey(SDLK_RSHIFT, player2, PA_TELEPORT, KEY_HOLD);
-			Input_BindKey(SDLK_RETURN, player2, PA_CHANGE_WEP, KEY_DOWN);*/
+            /*Input_BindKey(SDL_SCANCODE_LEFT, player2, PA_MOVE_BACKWARD, KEY_HOLD);
+            Input_BindKey(SDL_SCANCODE_RIGHT, player2, PA_MOVE_FORWARD, KEY_HOLD);
+            Input_BindKey(SDL_SCANCODE_UP, player2, PA_TURRET_UP, KEY_HOLD);
+            Input_BindKey(SDL_SCANCODE_DOWN, player2, PA_TURRET_DOWN, KEY_HOLD);
+            Input_BindKey(SDL_SCANCODE_RCTRL, player2, PA_FIRE_BEGIN, KEY_DOWN);
+            Input_BindKey(SDL_SCANCODE_RCTRL, player2, PA_FIRE_END, KEY_UP);
+            Input_BindKey(SDL_SCANCODE_RSHIFT, player2, PA_TELEPORT, KEY_HOLD);
+            Input_BindKey(SDL_SCANCODE_RETURN, player2, PA_CHANGE_WEP, KEY_DOWN);*/
 
 			Input_SetHandler(KEY_DOWN, KeyDown);
 			
@@ -261,6 +266,9 @@ int main(int argc, char **argv)
 	UnloadAnimations();
 	Audio_ShutDown();
 	Net_Quit();
+
+    IMG_Quit();
+    SDL_Quit();
 	
 	return 0;
 }

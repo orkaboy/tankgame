@@ -9,13 +9,10 @@
 
 #include "graphics.h"
 
-#ifdef _WIN32
-#include "SDL_gfxPrimitives.h"
-#else
-#include "SDL/SDL_gfxPrimitives.h"
-#endif
+#include "SDL2/SDL2_gfxPrimitives.h"
 
-void Projectile_Draw(vector<Projectile*> &proj, SDL_Surface *screen, vec2 offset)
+
+void Projectile_Draw(vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset)
 {
 	for (unsigned int l = 0; l < proj.size(); l++)
 	{
@@ -39,7 +36,7 @@ void Projectile_Draw(vector<Projectile*> &proj, SDL_Surface *screen, vec2 offset
 			else
 				alpha = -theta;
 			
-			Graphics_ApplySurface(proj[l]->surface, screen, proj[l]->pos.x - offset.x,
+            Graphics_ApplySurface(proj[l]->surface, proj[l]->pos.x - offset.x,
 						proj[l]->pos.y - offset.y, 1.0, alpha);
 		}
 		else
@@ -153,13 +150,19 @@ void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* 
 				target->ammo[2] += 1;
 				planet = NULL;
 			}
-			break;
-			case AMMO_ROCKET:
-			{
-				target->ammo[3] += 1;
-				planet = NULL;
-			}
-			break;
+            break;
+            case AMMO_ROCKET:
+            {
+                target->ammo[3] += 1;
+                planet = NULL;
+            }
+            break;
+            case AMMO_NUKE:
+            {
+                target->ammo[4] += 1;
+                planet = NULL;
+            }
+            break;
 		}
 	}
 	
@@ -195,8 +198,9 @@ void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* 
 		break;
 		case AMMO_TURRET:
 		case AMMO_FLAMER:
-		case AMMO_CLUSTER:
-		case AMMO_ROCKET:
+        case AMMO_CLUSTER:
+        case AMMO_ROCKET:
+        case AMMO_NUKE:
 		{
 			if (planet) {
 				vec2 distance = vec2Sub( projectile->pos, planet->pos );

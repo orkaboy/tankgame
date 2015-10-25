@@ -1,10 +1,6 @@
 #include "button.h"
 
-#ifdef _WIN32
-#include "SDL_gfxPrimitives.h"
-#else
-#include "SDL/SDL_gfxPrimitives.h"
-#endif
+#include "SDL2/SDL2_gfxPrimitives.h"
 
 #include "graphics.h"
 
@@ -30,7 +26,7 @@ Button* Button_Init(int x, int y, int ret, string txt, TTF_Font *font)
 	return button;
 }
 
-void Button_Draw(SDL_Surface *screen, Button *button)
+void Button_Draw(SDL_Renderer *screen, Button *button)
 {
 	if(!button->over)
 	{
@@ -42,8 +38,10 @@ void Button_Draw(SDL_Surface *screen, Button *button)
 	}
 	
 	SDL_Color c = {255, 255, 255};
-	SDL_Surface *txt = TTF_RenderText_Solid( button->font, button->text.c_str(), c);
-	
-	Graphics_ApplySurface(txt, screen, (button->pos.x) + (button->pos.w / 2), button->pos.y + (button->pos.h / 2));
-	SDL_FreeSurface(txt);
+    SDL_Surface *txt = TTF_RenderText_Solid( button->font, button->text.c_str(), c);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface( screen, txt );
+
+    Graphics_ApplySurface(texture, (button->pos.x) + (button->pos.w / 2), button->pos.y + (button->pos.h / 2));
+    SDL_FreeSurface(txt);
+    SDL_DestroyTexture(texture);
 }

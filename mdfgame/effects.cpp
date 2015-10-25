@@ -68,15 +68,15 @@ void Effect_Update(vector<Effect*> &effects, float dt)
 	}
 }
 
-void Effect_Draw(vector<Effect*> &effects, SDL_Surface *screen, vec2 offset)
+void Effect_Draw(vector<Effect*> &effects, vec2 offset)
 {
 	for(unsigned int i = 0; i < effects.size(); i++)
 	{
 		const Effect *e = effects[i];
 		
-		SDL_Surface *img = GetFrame(e->anim, e->curFrame);
+        SDL_Texture *img = GetFrame(e->anim, e->curFrame);
 		
 		if(img != NULL)
-			Graphics_ApplySurface(img, screen, e->pos.x - offset.x, e->pos.y - offset.y, e->scale, e->rot);
+            Graphics_ApplySurface(img, e->pos.x - offset.x, e->pos.y - offset.y, e->scale, e->rot);
 	}
 }

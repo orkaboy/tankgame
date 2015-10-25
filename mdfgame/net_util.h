@@ -8,13 +8,8 @@
 #include <climits>
 #include <iostream>
 
-#ifdef _WIN32
-#include <unordered_map>
-#include "SDL_net.h"
-#else
 #include <tr1/unordered_map>
-#include "SDL/SDL_net.h"
-#endif
+#include "SDL2/SDL_net.h"
 
 #include "player.h"
 #include "tank.h"

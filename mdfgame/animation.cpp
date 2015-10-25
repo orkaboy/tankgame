@@ -23,7 +23,7 @@ Animation * LoadAnimation(const char *filepath)
 	
 	file >> anim->numFrames;
 	
-	anim->frames = new SDL_Surface*[anim->numFrames];
+    anim->frames = new SDL_Texture*[anim->numFrames];
 	anim->frameTimer = new float[anim->numFrames];
 	
 	for(unsigned int i = 0; i < anim->numFrames; i++)
@@ -64,10 +64,10 @@ Animation * GetAnimation(string id)
 	return animations[id];
 }
 
-SDL_Surface * GetFrame(Animation *anim, unsigned int frame)
+SDL_Texture * GetFrame(Animation *anim, unsigned int frame)
 {
 	if(anim == NULL) return NULL;
-	SDL_Surface *ret = NULL;
+    SDL_Texture *ret = NULL;
 	
 	if(frame < anim->numFrames)
 		ret = anim->frames[frame];
