@@ -1,0 +1,46 @@
+NumPlanets	9
+
+PlanetColor	LavaPlanet
+Position	100 100
+Radius		15
+Mass		50000
+
+PlanetColor	IcePlanet
+Position	100 350
+Radius		17
+Mass		75000
+
+PlanetColor	WaterPlanet
+Position	100 600
+Radius		18
+Mass		80000
+
+PlanetColor	RockyPlanet
+Position	700 250
+Radius		30
+Mass		90000
+
+PlanetColor	HabitablePlanet
+Position	600 100
+Radius		16
+Mass		100000
+
+PlanetColor	LavaPlanet
+Position	600 600
+Radius		30
+Mass		200000
+
+PlanetColor	HabitablePlanet
+Position	300 550
+Radius		75
+Mass		300000
+
+PlanetColor	WaterPlanet
+Position	550 475
+Radius		30
+Mass		200000
+
+PlanetColor	IcePlanet
+Position	310 200
+Radius		60
+Mass		250000
