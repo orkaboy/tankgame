@@ -85,7 +85,7 @@ void Input_HandleEvents()
 		//if ( event.button.button == SDL_BUTTON_LEFT )
 		//	Input_Grab();
 
-        if(event.type == SDL_SCANCODE_DOWN)
+        if(event.type == SDL_KEYDOWN)
 		{
 			for ( BindsMap::iterator it = down_binds.begin(); it != down_binds.end(); it++ )
 			{
@@ -95,7 +95,7 @@ void Input_HandleEvents()
 			if ( strokehandlers[KEY_DOWN] )
                 strokehandlers[KEY_DOWN](event.key.keysym.scancode, *world);
 		}	
-        else if(event.type == SDL_SCANCODE_UP)
+        else if(event.type == SDL_KEYUP)
 		{
 			for ( BindsMap::iterator it = up_binds.begin(); it != up_binds.end(); it++ )
 			{

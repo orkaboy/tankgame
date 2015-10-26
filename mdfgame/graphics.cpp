@@ -92,9 +92,11 @@ void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, flo
 {
     int w, h;
     SDL_QueryTexture(source, NULL, NULL, &w, &h);
-    SDL_Rect renderQuad = { x, y, w*scaling, h*scaling };
+    w *= scaling;
+    h *= scaling;
+    SDL_Rect renderQuad = { x-w/2, y-h/2, w, h };
 
-    SDL_RenderCopyEx(renderer, source, NULL, &renderQuad, (angle * 180) / M_PI, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, source, NULL, &renderQuad, -(angle * 180) / M_PI, NULL, SDL_FLIP_NONE);
 }
 
 #include <iostream>

@@ -108,7 +108,7 @@ Projectile* Projectile_Create(Player* player, float kraft, vec2 pos, float vinke
 }
 
 void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* planet, bool &removal, float dt )
-{			vec2 velMod = projectile->vel;
+{
 	if (target) {
 		switch(projectile->type)
 		{
