@@ -128,16 +128,8 @@ void Graphics_DrawScene(World &world)
 	TTF_Font *font = fonts["Text"];
 	string p1score, p2score, p1deaths, p2deaths;
 	if( font == NULL )
-	    printf("no font\n");
-//	SDL_Surface *score1 = NULL;
-// 	SDL_Surface *score2 = NULL;
-	
-	/* set scoreboard text color */
-/*	SDL_Color col;
-	col.r = 255;
-	col.g = 255;
-	col.b = 255;
-*/
+        printf("no font\n");
+
 	for (unsigned int l = 0; l < world.planets.size(); l++)
 	{
         SDL_Texture* img = world.planets[l]->image;
@@ -157,32 +149,11 @@ void Graphics_DrawScene(World &world)
 	/* Draw projectiles */
     Projectile_Draw(world.projectiles, renderer, offset);
 
-    //TODO CLEAN UP
-
 	if ( world.player )
 	{
         Player_DrawHud(renderer, world.player, 8, 8);
-
-		/* life tank 2 */
-		//rectangleRGBA( screen, (screen->w -162), 8, (screen->w -8), 32, 0, 255, 0, 255 );
-		//boxRGBA( screen, (screen->w -160), 10, (screen->w -160) + ((150.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS), 30, 255 - (255.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS, (255.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS, 0, 255 );
 	}
     Effect_Draw(world.effects, offset);
-	
-    /*
-	if( score1 != NULL )
-	{
-        Graphics_ApplySurface(score1, 90, 20);
-	    SDL_FreeSurface(score1);
-	}
-    */
-	
-	/*if( score2 != NULL )
-	{
-	    Graphics_ApplySurface(score2, screen, screen->w -80, 20);
-	}*/
-
-	
 }
 
 void Graphics_BeginScene()
