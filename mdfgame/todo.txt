@@ -1,0 +1,24 @@
+Roadmap Tank game
+-----------------
+
+Multiple players - colors
+
+Gamemodes
+* Turnbased
+* Hotseat (fixed screen)
+
+Implement ammo
+
+Implement proper death/respawn
+
+Implement score
+
+Implement bots
+
+Implement menues
+* Settings/keybinds
+* Audio
+* Game mode choice
+* Player setup (game lobby)
+
+* Credits screen
