@@ -156,37 +156,13 @@ void Graphics_DrawScene(World &world)
 	
 	/* Draw projectiles */
     Projectile_Draw(world.projectiles, renderer, offset);
-	
-	/** Maiden, please clean this up... /orka **/
 
-	// FÖR I HELVETE VAD HÄR SER UT!? /Jim
+    //TODO CLEAN UP
 
 	if ( world.player )
 	{
-		
-		/* life tank 1 */
-        rectangleRGBA( renderer, 8, 8, 162, 32, 0, 255, 0, 100 );
-        boxRGBA( renderer, 10, 10, 10 + ((150.0*world.player->tank->hitPoints)/MAX_HITPOINTS), 30, 255 - (255.0*world.player->tank->hitPoints)/MAX_HITPOINTS, (255.0*world.player->tank->hitPoints)/MAX_HITPOINTS, 0, 100 );
-		
-		/* reload teleport timer*/
-        rectangleRGBA( renderer, 8, 33, 162, 39, 0, 100, 0, 100);
-		
-		if( world.player->tank->teleportTimer > 0 )
-            boxRGBA( renderer, 10, 35, 10 + 150/30*(30-world.player->tank->teleportTimer),37,255,0,100,100);
-		
-		if( world.player->tank->teleportTimer < 0 )
-            boxRGBA( renderer, 10, 35, 160,37,255,0,255,100);
-		
-        rectangleRGBA( renderer, 8, 40, 162, 45, 0, 100, 0, 100);
-		/* reload gun timer */
-		float delay = Weapon_GetDelay(world.player->tank->weapon);
-		
-		if( world.player->tank->timeSinceLastFire > 0 )
-            boxRGBA( renderer, 10, 42, 10 + 150/delay*(delay-world.player->tank->timeSinceLastFire),43,255,0,100,100);
-		
-		if( world.player->tank->timeSinceLastFire < 0 )
-            boxRGBA( renderer, 10, 42, 160,43,255,0,255,100);
-		
+        Player_DrawHud(renderer, world.player, 8, 8);
+
 		/* life tank 2 */
 		//rectangleRGBA( screen, (screen->w -162), 8, (screen->w -8), 32, 0, 255, 0, 255 );
 		//boxRGBA( screen, (screen->w -160), 10, (screen->w -160) + ((150.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS), 30, 255 - (255.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS, (255.0*world.players[1]->tank->hitPoints)/MAX_HITPOINTS, 0, 255 );
@@ -300,7 +276,7 @@ void Menu_Draw(Menu* menu)
     Graphics_ApplySurface(menu->bg, w / 2, h / 2);
     
     for(i=0; i<menu->list.size(); i++)
-    Button_Draw(renderer,menu->list[i]);
+        Button_Draw(renderer,menu->list[i]);
 }
 
 SDL_Renderer* ReturnScreen()

@@ -27,10 +27,12 @@ void Player_SetName(Player *player, char *name);
 /* increse/decrese player points by points */
 void Player_ModPoints(Player *player,int points);
 
-/* kills a player */
+/* Call when player gets a kill */
 void Player_Kill(Player *Player);
 
-/* get killed */
+/* Call when player gets killed */
 void Player_Killed(Player * Player);
+
+void Player_DrawHud(SDL_Renderer* renderer, Player* player, int x, int y);
 
 #endif

@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 					Physics(world, dt);
 					/* Animtions */
 					Effect_Update(world.effects, dt);
-				}
+                }
 				
 				/* Graphics */
 				Graphics_BeginScene();
