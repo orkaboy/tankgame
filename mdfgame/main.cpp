@@ -7,7 +7,6 @@
 #include "audio.h"
 #include "resources.h"
 #include "weapon.h"
-#include "net.h"
 #include "button.h"
 
 #include <ctime>
@@ -21,19 +20,7 @@ bool gquit = false;
 void KeyDown ( SDL_Scancode key, World& world )
 {
 	switch ( key )
-	{
-    case SDL_SCANCODE_1:
-		Net_Join(Net_GetAvailableServers()[0].iid, world);
-		break;
-    case SDL_SCANCODE_2:
-		Net_Join(Net_GetAvailableServers()[1].iid, world);
-		break;
-    case SDL_SCANCODE_F1:
-		Net_StartServer(world);
-		break;
-    case SDL_SCANCODE_F2:
-		Net_RefreshServers();
-		break;
+    {
     case SDL_SCANCODE_ESCAPE:
 		gquit = true;
 		break;
@@ -113,9 +100,7 @@ int main(int argc, char **argv)
             Input_BindKey(SDL_SCANCODE_RETURN, player2, PA_CHANGE_WEP, KEY_DOWN);*/
 
 			Input_SetHandler(KEY_DOWN, KeyDown);
-			
-			// If we create a player whom is active in the world, we HAVE to register it in the network:
-			Net_RegisterEntity(player);
+
 			//world.players.push_back(player); // DEPRECATED! THERE SHALL BE NO HARDCODING OF INDICES!
 			world.player = player;
 			
@@ -127,8 +112,6 @@ int main(int argc, char **argv)
 			//Tank_Spawn(world, player2, world.planets[4]);
 			//Tank_SetImages(player2->tank, player2->col);
 
-			Net_Init(player);
-			
 			// Time variables
 			float timestamp = 0.0f;
 			const float dt = (float)(1.0 / FPS);
@@ -139,9 +122,7 @@ int main(int argc, char **argv)
 			Audio_PlayMusic(0, -1);
 			
 			while (!gquit)
-			{
-				Net_Update();
-
+            {
 				/* Timer phase */
 				float newTime = (float)SDL_GetTicks();
 				float deltaTime = (newTime - currentTime) / 1000.f;
@@ -167,12 +148,10 @@ int main(int argc, char **argv)
 				/* Graphics */
 				Graphics_BeginScene();
 
-				Graphics_DrawScene(world);
-				
-				std::vector<ServerInfo> servers = Net_GetAvailableServers();
-				for ( unsigned int i = 0; i < servers.size(); i++ )
-					Graphics_DrawString("[" + convertToStr(i + 1) + "]:" + servers[i].name, 0, 200 + (i * 30));
-				
+                Graphics_DrawScene(world);
+
+                //TODO Draw HUD
+
 				Graphics_EndScene();
 			}
 			
@@ -181,8 +160,7 @@ int main(int argc, char **argv)
     }
 
 	UnloadAnimations();
-	Audio_ShutDown();
-	Net_Quit();
+    Audio_ShutDown();
 
     IMG_Quit();
     SDL_Quit();

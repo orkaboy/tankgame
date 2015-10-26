@@ -3,7 +3,6 @@
 #include "graphics.h"
 #include "resources.h"
 #include "projectile.h"
-#include "net.h"
 
 #include <fstream>
 #include <map>
@@ -46,8 +45,7 @@ World World_Init(string findpath)
 		
 		Planet_SetImage(planet, tempid);
 		
-		world.planets.push_back(planet);
-		Net_RegisterEntity(planet);
+        world.planets.push_back(planet);
 	}
 	
 	/** TEMP **/
@@ -81,8 +79,7 @@ void World_SpawnAmmo(World &world, float dt)
 		
 		Projectile* p = Projectile_Create(NULL, 0.0, pos, 0.0, type);
 		
-		world.projectiles.push_back(p);
-		Net_RegisterEntity(p);
+        world.projectiles.push_back(p);
 		world.timeSinceLastAmmo = 0.0;
 	}
 }

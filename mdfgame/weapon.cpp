@@ -1,7 +1,6 @@
 #include "weapon.h"
 #include "world.h"
 #include "graphics.h"
-#include "net.h"
 
 #include <cmath>
 
@@ -82,8 +81,7 @@ void Weapon_Fire( Player *player, Weapon &weapon, World &world )
 			
 			p->pos = vec2Add(player->tank->pos, player->tank->turret);
 			
-			world.projectiles.push_back(p);
-			Net_RegisterEntity(p);
+            world.projectiles.push_back(p);
 			
 			Audio_PlayCanonFire();
 		}
@@ -96,8 +94,7 @@ void Weapon_Fire( Player *player, Weapon &weapon, World &world )
 			
 			p->pos = vec2Add(player->tank->pos, player->tank->turret);
 			
-			world.projectiles.push_back(p);
-			Net_RegisterEntity(p);
+            world.projectiles.push_back(p);
 			
 			Audio_PlayCanonFire();
 		}
@@ -110,8 +107,7 @@ void Weapon_Fire( Player *player, Weapon &weapon, World &world )
 			
 			p->pos = vec2Add(player->tank->pos, player->tank->turret);
 			
-			world.projectiles.push_back(p);
-			Net_RegisterEntity(p);
+            world.projectiles.push_back(p);
 			
 			Audio_PlayCanonFire();
 		}
@@ -124,8 +120,7 @@ void Weapon_Fire( Player *player, Weapon &weapon, World &world )
 			
 			p->pos = vec2Add(player->tank->pos, player->tank->turret);
 			
-			world.projectiles.push_back(p);
-			Net_RegisterEntity(p);
+            world.projectiles.push_back(p);
 			
 			Audio_PlayCanonFire();
 		}

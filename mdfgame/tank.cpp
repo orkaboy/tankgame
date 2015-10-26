@@ -4,7 +4,6 @@
 #include "audio.h"
 #include "world.h"
 #include "graphics.h"
-#include "net.h"
 
 #include <cmath>
 
@@ -111,8 +110,7 @@ void Tank_Spawn ( World& world, Player* player, Planet* planet )
 	player->tank = tank;
 	tank->player = player;
 	
-	world.tanks.push_back(tank);
-	Net_RegisterEntity(tank);
+    world.tanks.push_back(tank);
 }
 
 void Tank_Destroy ( Tank* tank )
@@ -128,7 +126,6 @@ void Tank_Destroy ( Tank* tank )
 
 void Tank_Free ( Tank* tank )
 {
-	Net_UnRegisterEntity(tank);
 	delete tank;
 }
 

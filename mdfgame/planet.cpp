@@ -1,5 +1,4 @@
 #include "planet.h"
-#include "net.h"
 
 Planet *Planet_Init(float x, float y, float radius, float mass)
 {
@@ -17,6 +16,5 @@ Planet *Planet_Init(float x, float y, float radius, float mass)
 
 void Planet_Free(Planet *planet)
 {
-	Net_UnRegisterEntity(planet);
 	delete planet;
 }

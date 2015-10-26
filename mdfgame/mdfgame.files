@@ -17,15 +17,6 @@ map.cpp
 map.h
 menu.cpp
 menu.h
-net.cpp
-net.h
-net_client.cpp
-net_client.h
-net_server.cpp
-net_server.h
-net_translations.h
-net_util.cpp
-net_util.h
 physics.cpp
 physics.h
 planet.cpp

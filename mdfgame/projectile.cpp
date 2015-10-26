@@ -4,7 +4,6 @@
 #include "planet.h"
 #include "physics.h"
 #include "world.h"
-#include "net.h"
 #include <cmath>
 
 #include "graphics.h"
@@ -297,6 +296,5 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 /* removes projectile from the game */
 void Projectile_Destroy(Projectile* projectile)
 {
-	Net_UnRegisterEntity(projectile);
   	delete projectile;
 }
