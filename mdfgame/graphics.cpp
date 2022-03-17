@@ -219,7 +219,7 @@ void Tank_SetImages(Tank *tank, TankColors col)
 void Planet_SetImage(Planet *planet, std::string id)
 {
 	if( (planet->image = images[id] ) == NULL)
-		fmt::print("Couldn't load image {} from \"images\"\n", id);
+		fmt::print("Couldn't load image {} from 'images'\n", id);
 }
 
 
@@ -252,5 +252,5 @@ SDL_Texture* ReturnBg()
 
 SDL_Texture* ReturnCursor()
 {	
-	return LoadImage("data/images/Cursor.png");
+	return images["Cursor"];
 }

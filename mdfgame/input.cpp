@@ -191,12 +191,12 @@ void DefaultMouseHandler ( Player* player, World &world, Sint16 x, Sint16 y, Uin
 
 void DefaultMoveForwardHandler ( Player* player, World& world )
 {
-	Tank_Move(player->tank, DIR_RIGHT);
+	Tank_Move(player->tank, Direction::RIGHT);
 }
 
 void DefaultMoveBackwardHandler ( Player* player, World& world )
 {
-	Tank_Move(player->tank, DIR_LEFT);
+	Tank_Move(player->tank, Direction::LEFT);
 }
 
 void DefaultFireBeginHandler ( Player* player, World& world )
@@ -211,12 +211,12 @@ void DefaultFireEndHandler ( Player* player, World& world )
 
 void DefaultTurretUpHandler ( Player* player, World& world )
 {
-	Tank_RotateTurret(player->tank, DIR_RIGHT);
+	Tank_RotateTurret(player->tank, Direction::RIGHT);
 }
 
 void DefaultTurretDownHandler ( Player* player, World& world )
 {
-	Tank_RotateTurret(player->tank, DIR_LEFT);
+	Tank_RotateTurret(player->tank, Direction::LEFT);
 }
 
 void DefaultTeleportHandler ( Player* player, World& world )

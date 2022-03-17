@@ -23,10 +23,10 @@ enum TankColors
 	TANK_YELLOW,
 };
 
-enum Direction
+enum class Direction
 {
-	DIR_RIGHT,
-	DIR_LEFT
+	RIGHT,
+	LEFT
 };
 
 typedef struct Tank

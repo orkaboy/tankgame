@@ -11,8 +11,9 @@
 void Tank_FireWeapon ( Player *player, World &world, float dt )
 {
 	Tank *tank = player->tank;
-	Weapon_Fire( player, weapons[tank->weapon], world );
-	UpdateAnimation(weapons[tank->weapon].FireAnimation, tank->fireFrame, tank->fireTimer, dt);
+	auto& weapon = weapons[tank->weapon];
+	Weapon_Fire( player, weapon, world );
+	UpdateAnimation(weapon.FireAnimation, tank->fireFrame, tank->fireTimer, dt);
 }
 
 void Tank_SetTurretRotation(Tank *tank, Sint16 x, Sint16 y)
@@ -59,7 +60,7 @@ void Tank_RotateTurret ( Tank* tank, Direction dir )
 {
 	assert(false && "Fail");
 
-	float mod = dir == DIR_RIGHT ? -1.0f : 1.0f;
+	float mod = dir == Direction::RIGHT ? -1.0f : 1.0f;
 	float nextang = tank->turret_angle + mod * 4 * (float)(M_PI / 180);
 	
 	if ( nextang > -(M_PI / 2) && nextang < M_PI / 2 )
@@ -75,7 +76,7 @@ void Tank_Move ( Tank* tank, Direction dir )
 {
 	if(tank->dying)
 		return;
-	float mod = dir == DIR_RIGHT ? -1.0f : 1.0f;
+	float mod = dir == Direction::RIGHT ? -1.0f : 1.0f;
 	
 	tank->angular_position += mod * (float)(M_PI / 180);
 	while(tank->angular_position > 2 * M_PI) tank->angular_position -= 2*(float)M_PI;
@@ -146,7 +147,8 @@ void Tank_Teleport ( Tank* tank, World& world)
 void Tank_Draw( const Tank *tank, vec2 offset )
 {
     SDL_Texture *body = tank->tankBody;
-    SDL_Texture *turret = weapons[tank->weapon].tankTurret;
+	const auto& weapon = weapons[tank->weapon];
+    SDL_Texture *turret = weapon.tankTurret;
 		
 	float tank_rot = tank->angular_position + tank->planet->rot;
     Graphics_ApplySurface(body, (int)tank->pos.x - offset.x, (int)tank->pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
@@ -157,7 +159,7 @@ void Tank_Draw( const Tank *tank, vec2 offset )
 		
     Graphics_ApplySurface(turret, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + tank->turret_angle);
 	
-    SDL_Texture *cursor = weapons[tank->weapon].tankCursor;
+    SDL_Texture *cursor = weapon.tankCursor;
 	
 	if(cursor != NULL)
 	{
@@ -175,7 +177,7 @@ void Tank_Draw( const Tank *tank, vec2 offset )
 	
 	if(tank->firing)
 	{
-        SDL_Texture *fireAnim = GetFrame(weapons[tank->weapon].FireAnimation, tank->fireFrame);
+        SDL_Texture *fireAnim = GetFrame(weapon.FireAnimation, tank->fireFrame);
 		
 		if(fireAnim != NULL)
 		{

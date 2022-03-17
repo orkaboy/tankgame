@@ -5,7 +5,7 @@
 
 #include "animation.h"
 
-#define MAX_WEAPONS 5
+constexpr int MAX_WEAPONS = 5;
 
 struct World;
 struct Player;
