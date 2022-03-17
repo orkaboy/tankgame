@@ -12,7 +12,8 @@
 #include <ctime>
 
 #include <vector>
-#include <iostream>
+
+#include <fmt/core.h>
 
 bool gquit = false;
 
@@ -54,13 +55,13 @@ int main(int argc, char **argv)
 		switch(chosen)
 		{
 			case MenuOption::HostGame:
-				printf("Host game\n");
+				fmt::print("Host game\n");
 			break;
 			case MenuOption::JoinGame:
-				printf("Join game\n");
+				fmt::print("Join game\n");
 			break;
 			case MenuOption::Settings:
-				printf("Settings\n");
+				fmt::print("Settings\n");
 			break;
 			case MenuOption::QuitGame:
 				quit = true;

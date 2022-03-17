@@ -23,4 +23,4 @@ add_library(GAME::lib ALIAS game)
 
 
 add_executable(tank_game main.cpp)
-target_link_libraries(tank_game GAME::lib)
+target_link_libraries(tank_game GAME::lib fmt::fmt)
