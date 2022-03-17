@@ -70,10 +70,8 @@ void Effect_Update(std::vector<Effect*> &effects, float dt)
 
 void Effect_Draw(std::vector<Effect*> &effects, vec2 offset)
 {
-	for(unsigned int i = 0; i < effects.size(); i++)
+	for(auto e : effects)
 	{
-		const Effect *e = effects[i];
-		
         SDL_Texture *img = GetFrame(e->anim, e->curFrame);
 		
 		if(img != NULL)

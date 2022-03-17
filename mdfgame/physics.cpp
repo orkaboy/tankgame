@@ -36,10 +36,8 @@ void Physics_PlanetBounce(Planet *p1, Planet *p2)
 
 void Physics_UpdatePlanets(World &w, float dt)
 {
-	for(unsigned int i = 0; i < w.planets.size(); i++)
+	for(auto planet : w.planets)
 	{
-		Planet *planet = w.planets[i];
-		
 		vec2 oldPos = planet->pos;
 		
 		planet->rot += planet->rotvel * dt;
@@ -78,12 +76,10 @@ void Physics_UpdatePlanets(World &w, float dt)
 		}
 		
 		/* Check for collisions */
-		for(unsigned int j = 0; j < w.planets.size(); j++)
+		for(auto planet2 : w.planets)
 		{
-			if(i == j) continue;
-			
-			Planet* planet2 = w.planets[j];
-			
+			if(planet == planet2) continue;
+
 			float dist = vec2Length(vec2Sub(planet2->pos, planet->pos));
 			float r = planet2->radius + planet->radius;
 			float r2 = r * r;
@@ -165,10 +161,8 @@ void Physics_UpdateProjectiles(World &w, float dt)
 		
 		Projectile_Update( proj, w, removal, dt );
 
-		for(unsigned int j = 0; j < w.planets.size(); j++)
+		for(auto planet : w.planets)
 		{
-			Planet *planet = w.planets[j];
-			
 			float dx, dy;
 			float r, r2;
 			
@@ -192,10 +186,8 @@ void Physics_UpdateProjectiles(World &w, float dt)
 		proj->pos.y += proj->vel.y * dt;
 		
 		/* Collision with planet */
-		for(unsigned int j = 0; j < w.planets.size(); j++)
+		for(auto planet : w.planets)
 		{
-			Planet *planet = w.planets[j];
-			
 			float distance2 = vec2Length2(vec2Sub(proj->pos, planet->pos));
 			float r2 = proj->radius + planet->radius;
 			r2 *= r2;
@@ -209,9 +201,8 @@ void Physics_UpdateProjectiles(World &w, float dt)
 		}
 		
 		/* Calculate collisions for all tanks */
-		for(unsigned int j = 0; j < w.tanks.size(); j++)
+		for(auto tank : w.tanks)
 		{
-			Tank *tank = w.tanks[j];
 			if(tank->dying) continue;
 			
 			float distance2 = vec2Length2(vec2Sub(proj->pos, tank->pos));
@@ -272,9 +263,8 @@ void Physics_UpdateTanks(World &w, float dt)
 		tank->turret.y = 20.0f * -sin(tank->turret_angle + tank->angular_position + tank->planet->rot);
 		
 		/* Check if tank is crushed! */
-		for(unsigned int j = 0; j < w.planets.size(); j++)
+		for(auto planet : w.planets)
 		{
-			Planet *planet = w.planets[j];
 			if(planet == tank->planet) continue;
 			
 			float dist = vec2Length(vec2Sub(planet->pos, tank->pos));

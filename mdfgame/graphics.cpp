@@ -125,19 +125,18 @@ void Graphics_DrawScene(World &world)
 	if( font == NULL )
         fmt::print("no font\n");
 
-	for (unsigned int l = 0; l < world.planets.size(); l++)
+	for (auto planet : world.planets)
 	{
-        SDL_Texture* img = world.planets[l]->image;
+        SDL_Texture* img = planet->image;
         int w;
         SDL_QueryTexture(img, NULL, NULL, &w, NULL);
 
-        float scaling = 2 * world.planets[l]->radius / (w * (1 - 0.1176f));
-        Graphics_ApplySurface(img, world.planets[l]->pos.x - offset.x, world.planets[l]->pos.y - offset.y, scaling, world.planets[l]->rot);
+        float scaling = 2 * planet->radius / (w * (1 - 0.1176f));
+        Graphics_ApplySurface(img, planet->pos.x - offset.x, planet->pos.y - offset.y, scaling, planet->rot);
 	}
 	
-	for (unsigned int l = 0; l < world.tanks.size(); l++)
+	for (const auto tank : world.tanks)
 	{
-		const Tank *tank = world.tanks[l];
         Tank_Draw(tank, offset);
 	}
 	
@@ -233,14 +232,12 @@ TTF_Font * Graphics_LoadFont(const std::string &s, int fontsize)
 
 void Menu_Draw(Menu* menu)
 {
-    unsigned int i;
-
     int w, h;
     SDL_GetWindowSize(screen, &w, &h);
     Graphics_ApplySurface(menu->bg, w / 2, h / 2);
     
-    for(i=0; i<menu->list.size(); i++)
-        Button_Draw(renderer,menu->list[i]);
+    for(auto m : menu->list)
+        Button_Draw(renderer, m);
 }
 
 SDL_Renderer* ReturnScreen()

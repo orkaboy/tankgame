@@ -27,6 +27,8 @@ enum ProjectileType
 	AMMO_NUKE,
 };
 
+constexpr int CLUSTER_COUNT = 12;
+
 typedef struct Projectile
 {
 	vec2 pos;

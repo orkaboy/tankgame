@@ -13,17 +13,17 @@
 
 void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset)
 {
-	for (unsigned int l = 0; l < proj.size(); l++)
+	for (auto p : proj)
 	{
-		if (proj[l]->animation) {
+		if (p->animation) {
 			
-			proj[l]->surface = GetFrame(proj[l]->animation, proj[l]->animFrame);
+			p->surface = GetFrame(p->animation, p->animFrame);
 			
 		}
-		if (proj[l]->surface) {
+		if (p->surface) {
 			vec2 direction;
 			vec2 unit(1,0);
-			direction = proj[l]->vel;
+			direction = p->vel;
 			direction = vec2Normalize(direction);
 			direction.y *= -1;
 			
@@ -35,11 +35,11 @@ void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 
 			else
 				alpha = -theta;
 			
-            Graphics_ApplySurface(proj[l]->surface, proj[l]->pos.x - offset.x,
-						proj[l]->pos.y - offset.y, 1.0, alpha);
+            Graphics_ApplySurface(p->surface, p->pos.x - offset.x,
+						p->pos.y - offset.y, 1.0, alpha);
 		}
 		else
-			filledCircleRGBA(screen, proj[l]->pos.x - offset.x, proj[l]->pos.y - offset.y, 2, 255, 0, 0, 255);
+			filledCircleRGBA(screen, p->pos.x - offset.x, p->pos.y - offset.y, 2, 255, 0, 0, 255);
 	}
 }
 
@@ -170,7 +170,7 @@ void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* 
 		case CLUSTER:
 		{
 			Projectile* newproj;
-			for (int i = 0; i < 12; i++) {
+			for (int i = 0; i < CLUSTER_COUNT; i++) {
 				newproj = Projectile_Create(projectile->player, 150.f,
 					  projectile->pos, float(i * M_PI) / 6.0, CLUSTER_BIT);
 				newproj->pos.x -= projectile->vel.x*dt;
@@ -262,9 +262,7 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 		case AMMO_CLUSTER:
 		case AMMO_ROCKET:
 		{
-			for(unsigned int j = 0; j < world.tanks.size(); j++) {
-				Tank* tank = world.tanks[j];
-				
+			for(auto tank : world.tanks) {
 				float dx, dy;
 				float r, r2;
 				
