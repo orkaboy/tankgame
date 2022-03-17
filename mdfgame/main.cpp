@@ -50,20 +50,20 @@ int main(int argc, char **argv)
 
 	while(!quit)
 	{
-        int chosen = TheMenu(&quit);
+        auto chosen = TheMenu(&quit);
 		
 		switch(chosen)
 		{
-			case 1:
-				printf("start\n");
+			case MenuOption::HostGame:
+				printf("Host game\n");
 			break;
-			case 2:
-				printf("LAN\n");
+			case MenuOption::JoinGame:
+				printf("Join game\n");
 			break;
-			case 3:
+			case MenuOption::Settings:
 				printf("Settings\n");
 			break;
-			case 4:
+			case MenuOption::QuitGame:
 				quit = true;
 			break;
 		}

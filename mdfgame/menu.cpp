@@ -10,12 +10,12 @@ Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor)
 	return menu;
 }
 
-void Menu_AddButton(Menu* menu,int x, int y, int ret, string text, TTF_Font *font)
+void Menu_AddButton(Menu* menu,int x, int y, MenuOption ret, string text, TTF_Font *font)
 {
     menu->list.push_back(Button_Init(x,y,ret,text, font));
 }
 
-int Menu_CheckButton(Menu* menu, int mx, int my)
+MenuOption Menu_CheckButton(Menu* menu, int mx, int my)
 {
 	unsigned int i;
 	int left,right,top,bottom;
@@ -35,21 +35,21 @@ int Menu_CheckButton(Menu* menu, int mx, int my)
 		else
 			menu->list[i]->over = 0;
 	}
-	return -1;
+	return MenuOption::NONE;
 }
 
 
-int TheMenu ( bool *quit )
+MenuOption TheMenu ( bool *quit )
 {
     SDL_Event event;
 
     SDL_Texture* bg = ReturnBg();
     SDL_Texture* cursor = ReturnCursor();
     Menu* menu = Menu_Init(bg,cursor);
-    Menu_AddButton(menu,60,100,1,"Host Game", getFont("Text"));
-    Menu_AddButton(menu,290,100,2,"Join Game", getFont("Text"));
-    Menu_AddButton(menu,510,100,3,"Settings", getFont("Text"));
-    Menu_AddButton(menu,700,100,4,"Quit", getFont("Text"));
+    Menu_AddButton(menu,60,100,MenuOption::HostGame,"Host Game", getFont("Text"));
+    Menu_AddButton(menu,290,100,MenuOption::JoinGame,"Join Game", getFont("Text"));
+    Menu_AddButton(menu,510,100,MenuOption::Settings,"Settings", getFont("Text"));
+    Menu_AddButton(menu,700,100,MenuOption::QuitGame,"Quit", getFont("Text"));
 
 
     bool mquit = false;
@@ -90,7 +90,7 @@ int TheMenu ( bool *quit )
                 for(i=0; i<menu->list.size(); i++)
                 {
                     if(menu->list[i]->over)
-                    return menu->list[i]->ret;
+                        return menu->list[i]->ret;
                 }
             }
         }
@@ -117,5 +117,5 @@ int TheMenu ( bool *quit )
 
         Graphics_EndScene();
     }
-    return 0;
+    return MenuOption::NONE;
 }

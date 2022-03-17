@@ -5,6 +5,7 @@
 
 #include <vector>
 #include "button.h"
+#include "menuoptions.h"
 
 typedef struct Menu
 {
@@ -15,10 +16,10 @@ typedef struct Menu
 
 Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor);
 
-void Menu_AddButton(Menu* menu,int x, int y,int ret, string text, TTF_Font *font);
+void Menu_AddButton(Menu* menu,int x, int y, MenuOption ret, string text, TTF_Font *font);
 
-int Menu_CheckButton(Menu* menu, int mx, int my);
+MenuOption Menu_CheckButton(Menu* menu, int mx, int my);
 
-int TheMenu ( bool* quit );
+MenuOption TheMenu ( bool* quit );
 
 #endif
