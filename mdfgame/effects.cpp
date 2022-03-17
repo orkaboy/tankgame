@@ -38,7 +38,7 @@ void Effect_Delete(Effect *e)
 	delete e;
 }
 
-void Effect_Update(vector<Effect*> &effects, float dt)
+void Effect_Update(std::vector<Effect*> &effects, float dt)
 {
 	for(unsigned int i = 0; i < effects.size(); i++)
 	{
@@ -68,7 +68,7 @@ void Effect_Update(vector<Effect*> &effects, float dt)
 	}
 }
 
-void Effect_Draw(vector<Effect*> &effects, vec2 offset)
+void Effect_Draw(std::vector<Effect*> &effects, vec2 offset)
 {
 	for(unsigned int i = 0; i < effects.size(); i++)
 	{

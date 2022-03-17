@@ -11,8 +11,6 @@
 
 #include <vector>
 
-using namespace std;
-
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
 #define SCREEN_BPP 32
@@ -25,11 +23,11 @@ using namespace std;
 
 typedef struct World
 {
-	vector<Planet*> planets;
-	vector<Tank*> tanks;
+	std::vector<Planet*> planets;
+	std::vector<Tank*> tanks;
 	Player* player;
-	vector<Projectile*> projectiles;
-	vector<Effect*> effects;
+	std::vector<Projectile*> projectiles;
+	std::vector<Effect*> effects;
 	
 	Camera camera;
 	
@@ -49,11 +47,11 @@ typedef struct World
 // } Game;
 
 /* init the game */
-World World_Init(string findpath);
+World World_Init(std::string findpath);
 void World_DeInit(World &world);
 
 void World_SpawnAmmo(World &world, float dt);
 
-World World_GetWorld(string id);
+World World_GetWorld(std::string id);
 
 #endif

@@ -10,7 +10,7 @@ Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor)
 	return menu;
 }
 
-void Menu_AddButton(Menu* menu,int x, int y, MenuOption ret, string text, TTF_Font *font)
+void Menu_AddButton(Menu* menu,int x, int y, MenuOption ret, std::string text, TTF_Font *font)
 {
     menu->list.push_back(Button_Init(x,y,ret,text, font));
 }

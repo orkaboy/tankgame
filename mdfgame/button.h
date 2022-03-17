@@ -8,19 +8,17 @@
 
 #include "menuoptions.h"
 
-using namespace std;
-
 typedef struct Button
 {
 	SDL_Rect pos;
-	string text;
+	std::string text;
 	MenuOption ret;
 	int over;
 	
 	TTF_Font *font;
 } Button;
 
-Button* Button_Init(int x, int y, MenuOption ret, string txt, TTF_Font *font);
+Button* Button_Init(int x, int y, MenuOption ret, std::string txt, TTF_Font *font);
 
 void Button_Draw(SDL_Renderer *screen, Button *button);
 

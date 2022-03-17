@@ -6,27 +6,27 @@
 
 #include <fstream>
 #include <map>
-static map<string, World> worlds;
+static std::map<std::string, World> worlds;
 
-World World_GetWorld(string id)
+World World_GetWorld(std::string id)
 {
 	ResourceMap res = Resources_GetOfType(RT_WORLD);
-	string path = res.find(id)->second;
+	std::string path = res.find(id)->second;
 	
 	return World_Init(path);
 }
 
-World World_Init(string findpath)
+World World_Init(std::string findpath)
 {
-	ifstream pfile;
+	std::ifstream pfile;
 	float tempx, tempy, tempr, tempm;
-	string tempid;
-	string dummy;
+	std::string tempid;
+	std::string dummy;
 	unsigned int num_planets;
 	
 	World world;
 	
-	pfile.open(findpath.c_str(), ios::in);
+	pfile.open(findpath.c_str(), std::ios::in);
 	if(!pfile)
 	{
 		printf("Couldent find Worlddefine file %s\n", findpath.c_str());

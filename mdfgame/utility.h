@@ -7,7 +7,6 @@
 #ifndef M_PI
 #define M_PI 3.141592653589793238
 #endif
-using namespace std;
 
 struct vec2
 {
@@ -34,7 +33,7 @@ float vec2Length2(vec2 v);
 
 
 template<class T>
-string convertToStr(T value)
+std::string convertToStr(T value)
 {
 	std::ostringstream o;
 	if (!(o << value))

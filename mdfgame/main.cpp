@@ -13,7 +13,6 @@
 
 #include <vector>
 #include <iostream>
-using namespace std;
 
 bool gquit = false;
 

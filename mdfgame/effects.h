@@ -5,7 +5,6 @@
 #include "utility.h"
 
 #include <vector>
-using namespace std;
 
 enum EffectType
 {
@@ -30,7 +29,7 @@ typedef struct Effect
 /* Functions */
 Effect * Effect_Create(EffectType type, vec2 pos);
 void Effect_Delete(Effect *e);
-void Effect_Update(vector<Effect*> &effects, float dt);
-void Effect_Draw(vector<Effect*> &effects, vec2 offset);
+void Effect_Update(std::vector<Effect*> &effects, float dt);
+void Effect_Draw(std::vector<Effect*> &effects, vec2 offset);
 
 #endif

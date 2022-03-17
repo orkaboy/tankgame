@@ -18,16 +18,16 @@ void Graphics_DrawScene(World &world);
 void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling = 1, float angle = 0);
 bool Graphics_Init();
 /* funk for load fonts */
-TTF_Font * Graphics_LoadFont( const string &s, int fontsize );
+TTF_Font * Graphics_LoadFont( const std::string &s, int fontsize );
 
 void Graphics_DrawString(std::string str, int x, int y);
 /* set tank color */
-void Planet_SetImage(Planet *planet, string id);
+void Planet_SetImage(Planet *planet, std::string id);
 void Tank_SetImages(Tank *tank, TankColors col);
 void LoadFont(void);
 void Menu_Draw(Menu* menu);
-SDL_Texture * getImage(string id);
-TTF_Font * getFont(string id);
+SDL_Texture * getImage(std::string id);
+TTF_Font * getFont(std::string id);
 
 SDL_Renderer* ReturnScreen();
 SDL_Texture* ReturnBg();

@@ -4,7 +4,6 @@
 #include "SDL2/SDL.h"
 
 #include <string>
-using namespace std;
 
 typedef struct Animation
 {
@@ -17,7 +16,7 @@ void LoadAnimations(void);
 void UnloadAnimations(void);
 
 /* Returns a previously loaded animation */
-Animation * GetAnimation(string id);
+Animation * GetAnimation(std::string id);
 
 /* Return the surface at frame, if there is one */
 SDL_Texture * GetFrame(Animation *anim, unsigned int frame);

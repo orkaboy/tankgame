@@ -4,18 +4,17 @@
 #include "graphics.h"
 #include <fstream>
 #include <iostream>
-using namespace std;
 
-static map<string, Animation*>	animations;
+static std::map<std::string, Animation*>	animations;
 
 Animation * LoadAnimation(const char *filepath)
 {
-	ifstream file;
-	file.open(filepath, ios::in);
+	std::ifstream file;
+	file.open(filepath, std::ios::in);
 	
 	if(!file)
 	{
-		cout << "Couldn't load animation " << filepath << endl;
+		std::cout << "Couldn't load animation " << filepath << std::endl;
 		return NULL;
 	}
 	
@@ -28,7 +27,7 @@ Animation * LoadAnimation(const char *filepath)
 	
 	for(unsigned int i = 0; i < anim->numFrames; i++)
 	{
-		string imgPath;
+		std::string imgPath;
 		file >> imgPath;
 		anim->frames[i] = getImage(imgPath);
 		file >> anim->frameTimer[i];
@@ -47,9 +46,9 @@ void LoadAnimations(void)
 
 void UnloadAnimations(void)
 {
-	for(map<string, Animation*>::iterator it = animations.begin(); it != animations.end(); it++)
+	for(auto anim_pair : animations)
 	{
-		Animation *anim = it->second;
+		auto anim = anim_pair.second;
 		if(anim)
 		{
 			delete[] anim->frameTimer;
@@ -59,7 +58,7 @@ void UnloadAnimations(void)
 	}
 }
 
-Animation * GetAnimation(string id)
+Animation * GetAnimation(std::string id)
 {
 	return animations[id];
 }

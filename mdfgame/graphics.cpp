@@ -12,24 +12,23 @@
 #include <map>
 
 
-using namespace std;
 
 static SDL_Window* screen;
 static SDL_Surface* screenSurface;
 static SDL_Renderer *renderer;
 static SDL_Texture* background;
-static map<string, SDL_Texture *> images;
-static map<string, TTF_Font *> fonts;
-static map<TankColors,SDL_Texture*> tankParts;
+static std::map<std::string, SDL_Texture *> images;
+static std::map<std::string, TTF_Font *> fonts;
+static std::map<TankColors,SDL_Texture*> tankParts;
 static SDL_Texture* LoadImage(const char *s);
 static void	LoadImages();
 
-SDL_Texture * getImage(string id)
+SDL_Texture * getImage(std::string id)
 {
 	return images[id];
 }
 
-TTF_Font * getFont(string id)
+TTF_Font * getFont(std::string id)
 {
 	return fonts[id];
 }
@@ -100,7 +99,6 @@ void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, flo
 }
 
 #include <iostream>
-using namespace std;
 
 void Graphics_DrawScene(World &world)
 {
@@ -126,7 +124,7 @@ void Graphics_DrawScene(World &world)
 	
 	/* fix score board text */
 	TTF_Font *font = fonts["Text"];
-	string p1score, p2score, p1deaths, p2deaths;
+	std::string p1score, p2score, p1deaths, p2deaths;
 	if( font == NULL )
         printf("no font\n");
 
@@ -224,14 +222,14 @@ void Tank_SetImages(Tank *tank, TankColors col)
 	tank->tankBody = tankParts[col];
 }
 
-void Planet_SetImage(Planet *planet, string id)
+void Planet_SetImage(Planet *planet, std::string id)
 {
 	if( (planet->image = images[id] ) == NULL)
 		printf("Couldn't load image %s from \"images\"\n", id.c_str());
 }
 
 
-TTF_Font * Graphics_LoadFont(const string &s, int fontsize)
+TTF_Font * Graphics_LoadFont(const std::string &s, int fontsize)
 {
         return TTF_OpenFont( s.c_str(), fontsize );
 }

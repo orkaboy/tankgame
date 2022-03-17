@@ -11,7 +11,7 @@
 #include "SDL2/SDL2_gfxPrimitives.h"
 
 
-void Projectile_Draw(vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset)
+void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset)
 {
 	for (unsigned int l = 0; l < proj.size(); l++)
 	{

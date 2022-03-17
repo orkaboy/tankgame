@@ -7,8 +7,6 @@
 #include "animation.h"
 #include <vector>
 
-using namespace std;
-
 struct World;
 struct Tank;
 struct Player;
@@ -54,6 +52,6 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 /* removes projectile from the game */
 void Projectile_Destroy(Projectile *projectile);
 
-void Projectile_Draw(vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset);
+void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset);
 
 #endif

@@ -4,7 +4,7 @@
 
 #include "graphics.h"
 
-Button* Button_Init(int x, int y, MenuOption ret, string txt, TTF_Font *font)
+Button* Button_Init(int x, int y, MenuOption ret, std::string txt, TTF_Font *font)
 {
 	Button *button = new Button;
 	

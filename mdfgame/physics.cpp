@@ -2,7 +2,7 @@
 
 #include <cmath>
 #include <iostream>
-using namespace std;
+
 #include "audio.h"
 #include "graphics.h"
 
