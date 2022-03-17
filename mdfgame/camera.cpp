@@ -1,8 +1,6 @@
 #include "camera.h"
 #include "world.h"
 
-#include <iostream>
-
 Camera::Camera() : corner(0,0), screenSize(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
 	

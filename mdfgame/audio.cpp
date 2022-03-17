@@ -1,6 +1,9 @@
 #include "audio.h"
 #include "resources.h"
 
+#include <iostream>
+#include <fmt/ostream.h>
+
 Mix_Chunk *soundBuffer[AUDIO_BUFFERSIZE];
 Mix_Music *musicBuffer[MUSIC_BUFFERSIZE];
 
@@ -14,7 +17,7 @@ bool Audio_Init()
 
 	if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) != 0)
 	{
-		fprintf(stderr, "Unable to initialize audio: %s\n", Mix_GetError());
+		fmt::print(std::cerr, "Unable to initialize audio: {}\n", Mix_GetError());
 		return false;
 	}
 	
@@ -27,7 +30,7 @@ Mix_Chunk* Audio_LoadWav(const char *file)
 	Mix_Chunk *sound = NULL;
 	sound = Mix_LoadWAV(file);
 	if(sound == NULL)
-		fprintf(stderr, "Unable to load WAV file: %s\n\t%s\n\tThey are case sensitive!\n", file, Mix_GetError());
+		fmt::print(std::cerr, "Unable to load WAV file: {}\n\t{}\n\tThey are case sensitive!\n", file, Mix_GetError());
 
 	return sound;
 }
@@ -38,7 +41,7 @@ Mix_Music* Audio_LoadMp3File(const char *file)
 	music = Mix_LoadMUS(file);
 	
 	if(music == NULL)
-		fprintf(stderr, "Unable to load MP3 file: %s\n\t%s\n\tThey are case sensitive!\n", file, Mix_GetError());
+		fmt::print(std::cerr, "Unable to load MP3 file: {}\n\t{}\n\tThey are case sensitive!\n", file, Mix_GetError());
 
 	return music;
 }
@@ -76,7 +79,7 @@ bool Audio_PlayWav(Mix_Chunk *sound)
 	int channel;
 	channel = Mix_PlayChannel(-1, sound, 0);
 	if(channel == -1) 
-		fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
+		fmt::print(std::cerr, "Unable to play WAV file: {}\n", Mix_GetError());
 
 	// if channel == -1, return false, else return true
 	return channel == -1 ? false : true;
@@ -86,7 +89,7 @@ bool Audio_PlayWavOnSpecificChannel(Mix_Chunk *sound, int channel)
 {
 	channel = Mix_PlayChannel(channel, sound, 0);
 	if(channel == -1) 
-		fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
+		fmt::print(std::cerr, "Unable to play WAV file: {}\n", Mix_GetError());
 
 	// if channel == -1, return false, else return true
 	return channel == -1 ? false : true;
@@ -96,12 +99,12 @@ void Audio_PlayMusic(int musicIndex, int playCount)
 {
 	if(musicIndex > MUSIC_BUFFERSIZE)
 	{
-		fprintf(stderr, "Trying to play music outside of music buffer, aborting play attempt 0\n");
+		fmt::print(std::cerr, "Trying to play music outside of music buffer, aborting play attempt 0\n");
 		return;
 	}
 	Mix_VolumeMusic(125); 
 	if(Mix_PlayMusic(musicBuffer[musicIndex], playCount) == -1)
-		 printf("Mix_PlayMusic: %s\n", Mix_GetError());
+		fmt::print("Mix_PlayMusic: {}\n", Mix_GetError());
 }
 
 void Audio_StopMusic()

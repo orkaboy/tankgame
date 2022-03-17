@@ -13,14 +13,14 @@ add_library(resources resources.cpp)
 add_library(GAME::resources ALIAS resources)
 
 add_library(audio audio.cpp)
-target_link_libraries(audio GAME::resources SDL2::Mixer)
+target_link_libraries(audio GAME::resources SDL2::Mixer fmt::fmt)
 add_library(GAME::audio ALIAS audio)
 
 
 add_library(game animation.cpp button.cpp camera.cpp effects.cpp graphics.cpp input.cpp map.cpp menu.cpp physics.cpp planet.cpp player.cpp projectile.cpp tank.cpp weapon.cpp world.cpp)
-target_link_libraries(game GAME::utility GAME::audio SDL2::Main SDL2::Image SDL2::TTF SDL2::GFX)
+target_link_libraries(game GAME::utility GAME::audio SDL2::Main SDL2::Image SDL2::TTF SDL2::GFX fmt::fmt)
 add_library(GAME::lib ALIAS game)
 
 
 add_executable(tank_game main.cpp)
-target_link_libraries(tank_game GAME::lib fmt::fmt)
+target_link_libraries(tank_game GAME::lib)

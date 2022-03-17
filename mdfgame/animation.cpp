@@ -3,7 +3,8 @@
 #include "resources.h"
 #include "graphics.h"
 #include <fstream>
-#include <iostream>
+
+#include <fmt/core.h>
 
 static std::map<std::string, Animation*>	animations;
 
@@ -14,7 +15,7 @@ Animation * LoadAnimation(const char *filepath)
 	
 	if(!file)
 	{
-		std::cout << "Couldn't load animation " << filepath << std::endl;
+		fmt::print("Couldn't load animation {}\n", filepath);
 		return NULL;
 	}
 	

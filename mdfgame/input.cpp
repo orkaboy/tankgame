@@ -2,7 +2,6 @@
 
 #include <map>
 #include <cmath>
-#include <iostream>
 
 #include "physics.h"
 #include "tank.h"

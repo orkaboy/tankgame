@@ -4,6 +4,8 @@
 #include "resources.h"
 #include "projectile.h"
 
+#include <fmt/core.h>
+
 #include <fstream>
 #include <map>
 static std::map<std::string, World> worlds;
@@ -29,7 +31,7 @@ World World_Init(std::string findpath)
 	pfile.open(findpath.c_str(), std::ios::in);
 	if(!pfile)
 	{
-		printf("Couldent find Worlddefine file %s\n", findpath.c_str());
+		fmt::print("Couldent find Worlddefine file {}\n", findpath);
 	}
 	
 	pfile >> dummy >> num_planets;

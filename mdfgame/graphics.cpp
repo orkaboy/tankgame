@@ -8,10 +8,9 @@
 #include "SDL2/SDL2_rotozoom.h"
 
 #include <string>
-#include <stdio.h>
 #include <map>
 
-
+#include <fmt/core.h>
 
 static SDL_Window* screen;
 static SDL_Surface* screenSurface;
@@ -38,13 +37,13 @@ bool Graphics_Init(void)
 	// initialize SDL video
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
-		printf( "Unable to init SDL: %s\n", SDL_GetError() );
+		fmt::print( "Unable to init SDL: {}\n", SDL_GetError() );
 		return 0;
 	}
 	// initialize TTF fonts
 	if (TTF_Init() < 0 )
 	{
-		printf("Unable to init Fonts: %s\n", SDL_GetError() );
+		fmt::print("Unable to init Fonts: {}\n", SDL_GetError() );
 		return 0;
 	}
 	// make sure SDL cleans up before ex
@@ -59,14 +58,14 @@ bool Graphics_Init(void)
                               SDL_WINDOW_FULLSCREEN_DESKTOP);
 	if ( !screen )
 	{
-		printf("Unable to set %dx%d video: %s\n", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_GetError());
+		fmt::print("Unable to set {}x{} video: {}\n", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_GetError());
 		return 0;
 	}
 
     int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
     if(!(IMG_Init(imgFlags) & imgFlags))
     {
-        printf("Unable to initialize SDL_Image: %s\n", IMG_GetError());
+        fmt::print("Unable to initialize SDL_Image: {}\n", IMG_GetError());
         return 0;
     }
 
@@ -98,8 +97,6 @@ void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, flo
     SDL_RenderCopyEx(renderer, source, NULL, &renderQuad, -(angle * 180) / M_PI, NULL, SDL_FLIP_NONE);
 }
 
-#include <iostream>
-
 void Graphics_DrawScene(World &world)
 {
 	int cursorX, cursorY;
@@ -126,7 +123,7 @@ void Graphics_DrawScene(World &world)
 	TTF_Font *font = fonts["Text"];
 	std::string p1score, p2score, p1deaths, p2deaths;
 	if( font == NULL )
-        printf("no font\n");
+        fmt::print("no font\n");
 
 	for (unsigned int l = 0; l < world.planets.size(); l++)
 	{
@@ -191,8 +188,6 @@ SDL_Texture* LoadImage(const char *s)
     return newTexture;
 }
 
-#include <iostream>
-
 void LoadImages()
 {
 	ResourceMap res = Resources_GetOfType(RT_IMAGE);
@@ -225,7 +220,7 @@ void Tank_SetImages(Tank *tank, TankColors col)
 void Planet_SetImage(Planet *planet, std::string id)
 {
 	if( (planet->image = images[id] ) == NULL)
-		printf("Couldn't load image %s from \"images\"\n", id.c_str());
+		fmt::print("Couldn't load image {} from \"images\"\n", id);
 }
 
 

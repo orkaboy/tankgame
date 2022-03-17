@@ -1,7 +1,6 @@
 #include "physics.h"
 
 #include <cmath>
-#include <iostream>
 
 #include "audio.h"
 #include "graphics.h"
