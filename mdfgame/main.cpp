@@ -29,28 +29,129 @@ void KeyDown ( SDL_Scancode key, World& world )
 	
 }
 
+class Game {
+public:
+	Game() {
+		Resources_Init();
+		Graphics_Init();
+		Audio_Init();
+		LoadAnimations();
+		LoadWeapons();
 
-int main(int argc, char **argv)
-{
-    bool quit = false;
-    Player *player;
+		Audio_LoadPresetWavFiles();
+		Audio_LoadPresetMp3Files();
+	}
 
-	//srand((unsigned)time(NULL));
-	
-	Resources_Init();
-	Graphics_Init();
-	Audio_Init();
-	LoadAnimations();
-	LoadWeapons();
+	~Game() {
+		UnloadAnimations();
+		Audio_ShutDown();
 
-    Audio_LoadPresetWavFiles();
-    Audio_LoadPresetMp3Files();
-	
-    //TODO Clean this horrid mess
+		IMG_Quit();
+		SDL_Quit();
+	}
 
-	while(!quit)
-	{
-        auto chosen = TheMenu(&quit);
+	void Run() {
+		//TODO Clean this horrid mess
+
+		while(!quit)
+		{
+			HandleMenu();
+
+			if(!quit)
+			{
+				gquit = false;
+
+				World world = World_GetWorld("WorldOne");
+
+				Input_Init(world);
+
+				auto player = Player_Init();
+
+				Input_BindKey(SDL_SCANCODE_A, player, PA_MOVE_BACKWARD, KEY_HOLD);
+				Input_BindKey(SDL_SCANCODE_D, player, PA_MOVE_FORWARD, KEY_HOLD);
+				//Input_BindKey(SDL_SCANCODE_W, player, PA_TURRET_UP, KEY_HOLD);
+				//Input_BindKey(SDL_SCANCODE_S, player, PA_TURRET_DOWN, KEY_HOLD);
+				Input_BindKey(SDL_SCANCODE_SPACE, player, PA_FIRE_BEGIN, KEY_DOWN);
+				Input_BindKey(SDL_SCANCODE_SPACE, player, PA_FIRE_END, KEY_UP);
+				Input_BindKey(SDL_SCANCODE_Q, player, PA_TELEPORT, KEY_HOLD);
+				Input_BindKey(SDL_SCANCODE_E, player, PA_CHANGE_WEP, KEY_DOWN);
+
+				Input_BindMouseHandler(player);
+
+				/*Input_BindKey(SDL_SCANCODE_LEFT, player2, PA_MOVE_BACKWARD, KEY_HOLD);
+				Input_BindKey(SDL_SCANCODE_RIGHT, player2, PA_MOVE_FORWARD, KEY_HOLD);
+				Input_BindKey(SDL_SCANCODE_UP, player2, PA_TURRET_UP, KEY_HOLD);
+				Input_BindKey(SDL_SCANCODE_DOWN, player2, PA_TURRET_DOWN, KEY_HOLD);
+				Input_BindKey(SDL_SCANCODE_RCTRL, player2, PA_FIRE_BEGIN, KEY_DOWN);
+				Input_BindKey(SDL_SCANCODE_RCTRL, player2, PA_FIRE_END, KEY_UP);
+				Input_BindKey(SDL_SCANCODE_RSHIFT, player2, PA_TELEPORT, KEY_HOLD);
+				Input_BindKey(SDL_SCANCODE_RETURN, player2, PA_CHANGE_WEP, KEY_DOWN);*/
+
+				Input_SetHandler(KEY_DOWN, KeyDown);
+
+				//world.players.push_back(player); // DEPRECATED! THERE SHALL BE NO HARDCODING OF INDICES!
+				world.player = player;
+
+				player->col = TANK_NEUTRAL;
+				//player2->col = TANK_YELLOW;
+
+				Tank_Spawn(world, player, world.planets[0]);
+				Tank_SetImages(player->tank, player->col);
+				//Tank_Spawn(world, player2, world.planets[4]);
+				//Tank_SetImages(player2->tank, player2->col);
+
+				// Time variables
+				float timestamp = 0.0f;
+				const float dt = (float)(1.0 / FPS);
+
+				float currentTime = (float)SDL_GetTicks();
+				float accumulator = 0.0f;
+
+				Audio_PlayMusic(0, -1);
+
+				while (!gquit)
+				{
+					/* Timer phase */
+					float newTime = (float)SDL_GetTicks();
+					float deltaTime = (newTime - currentTime) / 1000.f;
+					currentTime = newTime;
+
+					accumulator += deltaTime;
+
+					while (accumulator>=dt)
+					{
+						Input_HandleEvents();
+
+						timestamp += dt;
+						accumulator -= dt;
+
+						World_SpawnAmmo(world,dt);
+
+						/* Physics */
+						Physics(world, dt);
+						/* Animtions */
+						Effect_Update(world.effects, dt);
+					}
+
+					/* Graphics */
+					Graphics_BeginScene();
+
+					Graphics_DrawScene(world);
+
+					//TODO Draw HUD
+
+					Graphics_EndScene();
+				}
+
+				World_DeInit(world);
+			}
+		}
+	}
+
+private:
+
+	void HandleMenu() {
+		auto chosen = TheMenu(&quit);
 		
 		switch(chosen)
 		{
@@ -67,103 +168,20 @@ int main(int argc, char **argv)
 				quit = true;
 			break;
 		}
-		
-		if(!quit)
-		{
-			gquit = false;
-			
-			World world = World_GetWorld("WorldOne");
-			
-			
-			Input_Init(world);
+	}
 
-			player = Player_Init();
-			
-            Input_BindKey(SDL_SCANCODE_A, player, PA_MOVE_BACKWARD, KEY_HOLD);
-            Input_BindKey(SDL_SCANCODE_D, player, PA_MOVE_FORWARD, KEY_HOLD);
-            //Input_BindKey(SDL_SCANCODE_W, player, PA_TURRET_UP, KEY_HOLD);
-            //Input_BindKey(SDL_SCANCODE_S, player, PA_TURRET_DOWN, KEY_HOLD);
-            Input_BindKey(SDL_SCANCODE_SPACE, player, PA_FIRE_BEGIN, KEY_DOWN);
-            Input_BindKey(SDL_SCANCODE_SPACE, player, PA_FIRE_END, KEY_UP);
-            Input_BindKey(SDL_SCANCODE_Q, player, PA_TELEPORT, KEY_HOLD);
-            Input_BindKey(SDL_SCANCODE_E, player, PA_CHANGE_WEP, KEY_DOWN);
+	bool quit{false};
+};
 
-			Input_BindMouseHandler(player);
-			
-            /*Input_BindKey(SDL_SCANCODE_LEFT, player2, PA_MOVE_BACKWARD, KEY_HOLD);
-            Input_BindKey(SDL_SCANCODE_RIGHT, player2, PA_MOVE_FORWARD, KEY_HOLD);
-            Input_BindKey(SDL_SCANCODE_UP, player2, PA_TURRET_UP, KEY_HOLD);
-            Input_BindKey(SDL_SCANCODE_DOWN, player2, PA_TURRET_DOWN, KEY_HOLD);
-            Input_BindKey(SDL_SCANCODE_RCTRL, player2, PA_FIRE_BEGIN, KEY_DOWN);
-            Input_BindKey(SDL_SCANCODE_RCTRL, player2, PA_FIRE_END, KEY_UP);
-            Input_BindKey(SDL_SCANCODE_RSHIFT, player2, PA_TELEPORT, KEY_HOLD);
-            Input_BindKey(SDL_SCANCODE_RETURN, player2, PA_CHANGE_WEP, KEY_DOWN);*/
 
-			Input_SetHandler(KEY_DOWN, KeyDown);
 
-			//world.players.push_back(player); // DEPRECATED! THERE SHALL BE NO HARDCODING OF INDICES!
-			world.player = player;
-			
-			player->col = TANK_NEUTRAL;
-			//player2->col = TANK_YELLOW;
-			
-			Tank_Spawn(world, player, world.planets[0]);
-			Tank_SetImages(player->tank, player->col);
-			//Tank_Spawn(world, player2, world.planets[4]);
-			//Tank_SetImages(player2->tank, player2->col);
+int main(int argc, char **argv)
+{
+	//srand((unsigned)time(NULL));
 
-			// Time variables
-			float timestamp = 0.0f;
-			const float dt = (float)(1.0 / FPS);
+	Game game;
 
-			float currentTime = (float)SDL_GetTicks();
-			float accumulator = 0.0f;
-			
-			Audio_PlayMusic(0, -1);
-			
-			while (!gquit)
-            {
-				/* Timer phase */
-				float newTime = (float)SDL_GetTicks();
-				float deltaTime = (newTime - currentTime) / 1000.f;
-				currentTime = newTime;
-
-				accumulator += deltaTime;
-
-				while (accumulator>=dt)
-				{
-					Input_HandleEvents();
-
-					timestamp += dt;
-					accumulator -= dt;
-					
-					World_SpawnAmmo(world,dt);
-
-					/* Physics */
-					Physics(world, dt);
-					/* Animtions */
-					Effect_Update(world.effects, dt);
-                }
-				
-				/* Graphics */
-				Graphics_BeginScene();
-
-                Graphics_DrawScene(world);
-
-                //TODO Draw HUD
-
-				Graphics_EndScene();
-			}
-			
-			World_DeInit(world);
-		}
-    }
-
-	UnloadAnimations();
-    Audio_ShutDown();
-
-    IMG_Quit();
-    SDL_Quit();
+	game.Run();
 
 	return 0;
 }
