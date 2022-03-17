@@ -1,11 +1,13 @@
 #include "audio.h"
 #include "resources.h"
 
+#include <array>
+
 #include <iostream>
 #include <fmt/ostream.h>
 
-Mix_Chunk *soundBuffer[AUDIO_BUFFERSIZE];
-Mix_Music *musicBuffer[MUSIC_BUFFERSIZE];
+std::array<Mix_Chunk*, AUDIO_BUFFERSIZE> soundBuffer;
+std::array<Mix_Music*, MUSIC_BUFFERSIZE> musicBuffer;
 
 bool Audio_Init()
 {
@@ -27,8 +29,7 @@ bool Audio_Init()
 
 Mix_Chunk* Audio_LoadWav(const char *file)
 {
-	Mix_Chunk *sound = NULL;
-	sound = Mix_LoadWAV(file);
+	Mix_Chunk *sound = Mix_LoadWAV(file);
 	if(sound == NULL)
 		fmt::print(std::cerr, "Unable to load WAV file: {}\n\t{}\n\tThey are case sensitive!\n", file, Mix_GetError());
 
@@ -37,9 +38,7 @@ Mix_Chunk* Audio_LoadWav(const char *file)
 
 Mix_Music* Audio_LoadMp3File(const char *file)
 {
-	Mix_Music *music = NULL;
-	music = Mix_LoadMUS(file);
-	
+	Mix_Music *music = Mix_LoadMUS(file);
 	if(music == NULL)
 		fmt::print(std::cerr, "Unable to load MP3 file: {}\n\t{}\n\tThey are case sensitive!\n", file, Mix_GetError());
 
@@ -76,8 +75,7 @@ bool Audio_LoadPresetMp3Files()
 
 bool Audio_PlayWav(Mix_Chunk *sound)
 {
-	int channel;
-	channel = Mix_PlayChannel(-1, sound, 0);
+	int channel = Mix_PlayChannel(-1, sound, 0);
 	if(channel == -1) 
 		fmt::print(std::cerr, "Unable to play WAV file: {}\n", Mix_GetError());
 
@@ -134,10 +132,9 @@ void Audio_PlayExplosionBig()
 
 void Audio_ShutDown()
 {
-	int i;
-	for(i = 0; i < AUDIO_BUFFERSIZE; i++)
-		Mix_FreeChunk(soundBuffer[i]); 
+	for(auto sound : soundBuffer)
+		Mix_FreeChunk(sound); 
 	
-	for(i = 0; i < MUSIC_BUFFERSIZE; i++)
-		Mix_FreeMusic(musicBuffer[i]);
+	for(auto music : musicBuffer)
+		Mix_FreeMusic(music);
 }
