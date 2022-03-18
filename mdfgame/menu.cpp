@@ -1,32 +1,28 @@
 #include "menu.h"
 #include "graphics.h"
 
-Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor)
+namespace MDF {
+
+Menu::Menu(SDL_Texture* bg, SDL_Texture* cursor)
 {
-	Menu* menu = new Menu;
-	menu->bg = bg;
-	menu->cursor = cursor;
-	
-	return menu;
+	mBg = bg;
+	mCursor = cursor;
 }
 
-void Menu_AddButton(Menu* menu,int x, int y, MenuOption ret, std::string text, TTF_Font *font)
+void Menu::AddButton(int x, int y, MenuOption ret, std::string text, TTF_Font *font)
 {
-    menu->list.push_back(new MDF::Button(x,y,ret,text, font));
+    mButtons.push_back(new MDF::Button(x, y, ret, text, font));
 }
 
-MenuOption Menu_CheckButton(Menu* menu, int mx, int my)
+MenuOption Menu::CheckButton(int mx, int my)
 {
-	unsigned int i;
-	int left,right,top,bottom;
-	
-	for(auto button : menu->list)
+	for(auto button : mButtons)
 	{
         auto pos = button->Pos();
-		left = pos.x;
-		right = pos.x + pos.w;
-		top = pos.y;
-		bottom = pos.y + pos.h;
+		auto left = pos.x;
+		auto right = pos.x + pos.w;
+		auto top = pos.y;
+		auto bottom = pos.y + pos.h;
 		
 		if(mx > left && mx < right && my > top && my < bottom)
 		{
@@ -46,11 +42,11 @@ MenuOption TheMenu ( bool *quit )
 
     SDL_Texture* bg = ReturnBg();
     SDL_Texture* cursor = ReturnCursor();
-    Menu* menu = Menu_Init(bg,cursor);
-    Menu_AddButton(menu,60,100,MenuOption::HostGame,"Host Game", getFont("Text"));
-    Menu_AddButton(menu,290,100,MenuOption::JoinGame,"Join Game", getFont("Text"));
-    Menu_AddButton(menu,510,100,MenuOption::Settings,"Settings", getFont("Text"));
-    Menu_AddButton(menu,700,100,MenuOption::QuitGame,"Quit", getFont("Text"));
+    Menu menu(bg, cursor);
+    menu.AddButton(60, 100, MenuOption::HostGame, "Host Game", getFont("Text"));
+    menu.AddButton(290, 100, MenuOption::JoinGame, "Join Game", getFont("Text"));
+    menu.AddButton(510, 100, MenuOption::Settings, "Settings", getFont("Text"));
+    menu.AddButton(700, 100, MenuOption::QuitGame, "Quit", getFont("Text"));
 
 
     bool mquit = false;
@@ -88,7 +84,7 @@ MenuOption TheMenu ( bool *quit )
             }
             if( event.type == SDL_MOUSEBUTTONUP )
             {
-                for(auto button : menu->list)
+                for(auto button : menu.Buttons())
                 {
                     if(button->Over())
                         return button->Ret();
@@ -112,11 +108,13 @@ MenuOption TheMenu ( bool *quit )
 
         Graphics_BeginScene();
 
-        Menu_CheckButton(menu,mx,my);
+        menu.CheckButton(mx, my);
         Menu_Draw(menu);
-        Graphics_ApplySurface(cursor, mx, my,1,0);
+        Graphics_ApplySurface(cursor, mx, my, 1, 0);
 
         Graphics_EndScene();
     }
     return MenuOption::NONE;
+}
+
 }

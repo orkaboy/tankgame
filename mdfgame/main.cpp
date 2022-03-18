@@ -19,8 +19,8 @@ bool gquit = false;
 
 class Game {
 public:
-	Game() {
-		MDF::Resource::Init();
+	Game(std::string resource_path) {
+		MDF::Resource::Init(resource_path);
 		Graphics_Init();
 		Audio_Init();
 		LoadAnimations();
@@ -140,7 +140,7 @@ private:
 				/* Physics */
 				MDF::Physics::Process(world, dt);
 				/* Animtions */
-				Effect_Update(world.effects, dt);
+				MDF::Effect::Update(world.effects, dt);
 			}
 
 			/* Graphics */
@@ -157,7 +157,7 @@ private:
 	}
 
 	void HandleMenu() {
-		auto chosen = TheMenu(&quit);
+		auto chosen = MDF::TheMenu(&quit);
 		
 		switch(chosen)
 		{
@@ -180,12 +180,28 @@ private:
 };
 
 
+#include <unistd.h>
 
 int main(int argc, char **argv)
 {
 	//srand((unsigned)time(NULL));
 
-	Game game;
+	std::string resource_path;
+
+	int c;
+	while ((c = getopt(argc, argv, "r:")) != -1) {
+		switch(c) {
+		case 'r': {
+			resource_path = optarg;
+			fmt::print("Setting resource file path:'{}'\n", resource_path);
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	Game game(resource_path);
 
 	game.Run();
 

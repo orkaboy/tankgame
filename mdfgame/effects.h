@@ -5,14 +5,23 @@
 
 #include <vector>
 
-enum EffectType
+namespace MDF {
+
+enum class EffectType
 {
-	FX_EXPLOSION,
-	FX_CRUSHED,
+	EXPLOSION,
+	CRUSHED,
 };
 
-typedef struct Effect
+class Effect
 {
+public:
+	/* Functions */
+	Effect(EffectType type, vec2 pos);
+
+	static void Update(std::vector<Effect*> &effects, float dt);
+	static void Draw(std::vector<Effect*> &effects, vec2 offset);
+private:
 	EffectType type;
 	
 	Animation *anim;
@@ -23,10 +32,6 @@ typedef struct Effect
 	float scale;
 	float rot;
 	vec2 pos;
-} Effect;
+};
 
-/* Functions */
-Effect * Effect_Create(EffectType type, vec2 pos);
-void Effect_Delete(Effect *e);
-void Effect_Update(std::vector<Effect*> &effects, float dt);
-void Effect_Draw(std::vector<Effect*> &effects, vec2 offset);
+}

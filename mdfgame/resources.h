@@ -20,7 +20,7 @@ enum class Type
 
 typedef std::map<std::string, std::string> ResourceMap;
 
-void Init();
+void Init(std::string resource_path);
 
 std::string& GetFileName(Type type, std::string name);
 ResourceMap GetOfType(Type type);

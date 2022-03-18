@@ -2,43 +2,36 @@
 
 #include "graphics.h"
 
-Effect * Effect_Create(EffectType type, vec2 pos)
+namespace MDF {
+
+Effect::Effect(EffectType type, vec2 _pos)
 {
-	Effect *newEffect = new Effect;
-	
 	/* Default Init values */
-	newEffect->scale = 1;
-	newEffect->anim = NULL;
-	newEffect->rot = 0;
-	newEffect->lifetime = 0;
-	newEffect->type = type;
-	newEffect->pos = pos;
-	newEffect->curFrame = 0;
-	newEffect->frameTimer = 0;
+	scale = 1;
+	anim = NULL;
+	rot = 0;
+	lifetime = 0;
+	type = type;
+	pos = _pos;
+	curFrame = 0;
+	frameTimer = 0;
 	
 	/* Do special init based on type */
 	switch(type)
 	{
-		case FX_EXPLOSION:
+		case EffectType::EXPLOSION:
 			break;
-		case FX_CRUSHED:
-			newEffect->lifetime = 1;
-			newEffect->scale = 0.5;
-			newEffect->anim = GetAnimation("Crushed");
+		case EffectType::CRUSHED:
+			lifetime = 1;
+			scale = 0.5;
+			anim = GetAnimation("Crushed");
 			break;
 		default:
 			break;
 	}
-	
-	return newEffect;
 }
 
-void Effect_Delete(Effect *e)
-{
-	delete e;
-}
-
-void Effect_Update(std::vector<Effect*> &effects, float dt)
+void Effect::Update(std::vector<Effect*> &effects, float dt)
 {
 	for(unsigned int i = 0; i < effects.size(); i++)
 	{
@@ -47,7 +40,7 @@ void Effect_Update(std::vector<Effect*> &effects, float dt)
 		e->lifetime -= dt;
 		if(e->lifetime <= 0)
 		{
-			Effect_Delete(e);
+			delete e;
 			effects.erase(effects.begin() + i);
 			i--;
 		}
@@ -57,9 +50,9 @@ void Effect_Update(std::vector<Effect*> &effects, float dt)
 			
 			switch(e->type)
 			{
-				case FX_EXPLOSION:
+				case EffectType::EXPLOSION:
 					break;
-				case FX_CRUSHED:
+				case EffectType::CRUSHED:
 					e->scale *= 1.05;
 					break;
 				default: break;
@@ -68,7 +61,7 @@ void Effect_Update(std::vector<Effect*> &effects, float dt)
 	}
 }
 
-void Effect_Draw(std::vector<Effect*> &effects, vec2 offset)
+void Effect::Draw(std::vector<Effect*> &effects, vec2 offset)
 {
 	for(auto e : effects)
 	{
@@ -77,4 +70,6 @@ void Effect_Draw(std::vector<Effect*> &effects, vec2 offset)
 		if(img != NULL)
             Graphics_ApplySurface(img, e->pos.x - offset.x, e->pos.y - offset.y, e->scale, e->rot);
 	}
+}
+
 }

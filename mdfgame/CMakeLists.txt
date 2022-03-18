@@ -10,6 +10,7 @@ add_library(utility utility.cpp)
 add_library(GAME::utility ALIAS utility)
 
 add_library(resources resources.cpp)
+target_link_libraries(resources fmt::fmt)
 add_library(GAME::resources ALIAS resources)
 
 add_library(audio audio.cpp)

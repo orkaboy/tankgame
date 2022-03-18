@@ -24,7 +24,7 @@ void Graphics_DrawString(std::string str, int x, int y);
 void Planet_SetImage(Planet *planet, std::string id);
 void Tank_SetImages(Tank *tank, TankColors col);
 void LoadFont(void);
-void Menu_Draw(Menu* menu);
+void Menu_Draw(MDF::Menu& menu);
 SDL_Texture * getImage(std::string id);
 TTF_Font * getFont(std::string id);
 

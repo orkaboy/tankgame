@@ -147,7 +147,7 @@ void Graphics_DrawScene(World &world)
 	{
         Player_DrawHud(renderer, world.player, 8, 8);
 	}
-    Effect_Draw(world.effects, offset);
+    MDF::Effect::Draw(world.effects, offset);
 }
 
 void Graphics_BeginScene()
@@ -230,13 +230,13 @@ TTF_Font * Graphics_LoadFont(const std::string &s, int fontsize)
 
 /* MENU STUFFIES ###############################################*/
 
-void Menu_Draw(Menu* menu)
+void Menu_Draw(MDF::Menu& menu)
 {
     int w, h;
     SDL_GetWindowSize(screen, &w, &h);
-    Graphics_ApplySurface(menu->bg, w / 2, h / 2);
+    Graphics_ApplySurface(menu.BG(), w / 2, h / 2);
     
-    for(auto button : menu->list)
+    for(auto button : menu.Buttons())
         button->Draw(renderer);
 }
 

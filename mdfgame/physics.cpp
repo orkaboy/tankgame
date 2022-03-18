@@ -280,7 +280,7 @@ void UpdateTanks(World &w, float dt)
 			if(dist > planet->radius + tank->bounding_radius) continue;
 			
 			if(!tank->dying)
-				w.effects.push_back(Effect_Create(FX_CRUSHED, tank->pos));
+				w.effects.push_back(new Effect(EffectType::CRUSHED, tank->pos));
 			
 			Tank_Destroy(tank);
 		}

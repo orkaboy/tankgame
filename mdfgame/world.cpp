@@ -95,5 +95,5 @@ void World_DeInit(World &world)
 	for(auto proj : world.projectiles)
 		Projectile_Destroy(proj);
 	for(auto effect : world.effects)
-		Effect_Delete(effect);
+		delete effect;
 }

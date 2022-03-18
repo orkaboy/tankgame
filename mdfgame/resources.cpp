@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <cstdio>
+#include <fmt/core.h>
 
 namespace MDF {
 namespace Resource {
@@ -9,7 +10,11 @@ namespace Resource {
 static std::map<Type, ResourceMap> resources;
 static std::map<std::string, Type> resource_type_table;
 
-void Init()
+static std::string ResourceFilename(std::string resource_path, std::string filename) {
+	return resource_path.empty() ? filename : fmt::format("{}/{}", resource_path, filename);
+}
+
+void Init(std::string resource_path)
 {
 	std::map<std::string, Type>::iterator rttitr;
 
@@ -28,7 +33,7 @@ void Init()
 	resources[Type::ANIMATION] = ResourceMap();
 
 	std::ifstream file;
-	file.open(RESOURCES_FILE);
+	file.open(ResourceFilename(resource_path, RESOURCES_FILE));
 
 	if ( !file.fail() )
 	{
@@ -41,7 +46,7 @@ void Init()
 			if ( (rttitr = resource_type_table.find(std::string(type))) != resource_type_table.end() )
 			{
 				Type rt = rttitr->second;
-				resources[rt][std::string(id)] = std::string(filename);
+				resources[rt][std::string(id)] = ResourceFilename(resource_path, filename);
 			}
 		}
 	}

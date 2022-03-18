@@ -25,7 +25,7 @@ typedef struct World
 	std::vector<Tank*> tanks;
 	Player* player;
 	std::vector<Projectile*> projectiles;
-	std::vector<Effect*> effects;
+	std::vector<MDF::Effect*> effects;
 	
 	Camera camera;
 	

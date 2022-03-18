@@ -6,17 +6,25 @@
 #include "button.h"
 #include "menuoptions.h"
 
-typedef struct Menu
+namespace MDF {
+
+class Menu
 {
-    SDL_Texture *bg;
-    SDL_Texture *cursor;
-	std::vector <MDF::Button*> list;
-} Menu;
+public:
+    Menu(SDL_Texture* bg, SDL_Texture* cursor);
 
-Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor);
+    void AddButton(int x, int y, MenuOption ret, std::string text, TTF_Font *font);
+    MenuOption CheckButton(int mx, int my);
 
-void Menu_AddButton(Menu* menu,int x, int y, MenuOption ret, std::string text, TTF_Font *font);
+    auto Buttons() const -> const std::vector<MDF::Button*>& { return mButtons; }
+    auto BG() const -> SDL_Texture* { return mBg; }
 
-MenuOption Menu_CheckButton(Menu* menu, int mx, int my);
+private:
+    SDL_Texture *mBg;
+    SDL_Texture *mCursor;
+	std::vector<MDF::Button*> mButtons;
+};
 
 MenuOption TheMenu ( bool* quit );
+
+}
