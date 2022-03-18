@@ -7,18 +7,27 @@
 
 #include "menuoptions.h"
 
-typedef struct Button
+namespace MDF {
+
+class Button
 {
-	SDL_Rect pos;
-	std::string text;
-	MenuOption ret;
-	int over;
+public:
+	Button(int x, int y, MenuOption ret, std::string txt, TTF_Font *font);
+
+	void Draw(SDL_Renderer *screen) const;
+
+	SDL_Rect Pos() const { return mPos; }
+	MenuOption Ret() const { return mRet; }
+	int Over() const { return mOver; }
+	void SetOver(int over) { mOver = over; }
+
+private:
+	SDL_Rect mPos;
+	std::string mText;
+	MenuOption mRet;
+	int mOver;
 	
-	TTF_Font *font;
-} Button;
+	TTF_Font *mFont;
+};
 
-Button* Button_Init(int x, int y, MenuOption ret, std::string txt, TTF_Font *font);
-
-void Button_Draw(SDL_Renderer *screen, Button *button);
-
-void Menu_GetMouse(int &x, int &y);
+}

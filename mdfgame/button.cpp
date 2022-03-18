@@ -4,44 +4,44 @@
 
 #include "graphics.h"
 
-Button* Button_Init(int x, int y, MenuOption ret, std::string txt, TTF_Font *font)
+namespace MDF {
+
+Button::Button(int x, int y, MenuOption ret, std::string txt, TTF_Font *font)
 {
-	Button *button = new Button;
-	
-	button->ret = ret;
-	button->pos.x = x;
-	button->pos.y = y;
-	button->font = font;
-	button->text = txt;
-	button->over = 0;
+	mRet = ret;
+	mPos.x = x;
+	mPos.y = y;
+	mFont = font;
+	mText = txt;
+	mOver = 0;
 	
 	SDL_Color c = {255, 255, 255};
-	SDL_Surface *text = TTF_RenderText_Solid( button->font, button->text.c_str(), c);
+	SDL_Surface *text = TTF_RenderText_Solid( mFont, mText.c_str(), c);
 	
-	button->pos.w = text->w + 10;
-	button->pos.h = text->h + 4;
+	mPos.w = text->w + 10;
+	mPos.h = text->h + 4;
 	
 	SDL_FreeSurface(text);
-		
-	return button;
 }
 
-void Button_Draw(SDL_Renderer *screen, Button *button)
+void Button::Draw(SDL_Renderer *screen) const
 {
-	if(!button->over)
+	if(!mOver)
 	{
-		rectangleRGBA( screen, button->pos.x, button->pos.y, button->pos.x+button->pos.w, button->pos.y+button->pos.h, 0, 255, 0, 255 );
+		rectangleRGBA( screen, mPos.x, mPos.y, mPos.x+mPos.w, mPos.y+mPos.h, 0, 255, 0, 255 );
 	}
 	else
 	{
-		boxRGBA( screen, button->pos.x, button->pos.y, button->pos.x+button->pos.w, button->pos.y+button->pos.h, 0, 255, 0, 255 );
+		boxRGBA( screen, mPos.x, mPos.y, mPos.x+mPos.w, mPos.y+mPos.h, 0, 255, 0, 255 );
 	}
 	
 	SDL_Color c = {255, 255, 255};
-    SDL_Surface *txt = TTF_RenderText_Solid( button->font, button->text.c_str(), c);
+    SDL_Surface *txt = TTF_RenderText_Solid( mFont, mText.c_str(), c);
     SDL_Texture *texture = SDL_CreateTextureFromSurface( screen, txt );
 
-    Graphics_ApplySurface(texture, (button->pos.x) + (button->pos.w / 2), button->pos.y + (button->pos.h / 2));
+    Graphics_ApplySurface(texture, (mPos.x) + (mPos.w / 2), mPos.y + (mPos.h / 2));
     SDL_FreeSurface(txt);
     SDL_DestroyTexture(texture);
+}
+
 }

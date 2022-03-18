@@ -12,7 +12,7 @@ Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor)
 
 void Menu_AddButton(Menu* menu,int x, int y, MenuOption ret, std::string text, TTF_Font *font)
 {
-    menu->list.push_back(Button_Init(x,y,ret,text, font));
+    menu->list.push_back(new MDF::Button(x,y,ret,text, font));
 }
 
 MenuOption Menu_CheckButton(Menu* menu, int mx, int my)
@@ -20,20 +20,21 @@ MenuOption Menu_CheckButton(Menu* menu, int mx, int my)
 	unsigned int i;
 	int left,right,top,bottom;
 	
-	for(i=0; i<menu->list.size(); i++ )
+	for(auto button : menu->list)
 	{
-		left = menu->list[i]->pos.x;
-		right = menu->list[i]->pos.x + menu->list[i]->pos.w;
-		top = menu->list[i]->pos.y;
-		bottom = menu->list[i]->pos.y + menu->list[i]->pos.h;
+        auto pos = button->Pos();
+		left = pos.x;
+		right = pos.x + pos.w;
+		top = pos.y;
+		bottom = pos.y + pos.h;
 		
 		if(mx > left && mx < right && my > top && my < bottom)
 		{
-			menu->list[i]->over = 1;
-			return menu->list[i]->ret;
+			button->SetOver(1);
+			return button->Ret();
 		}
 		else
-			menu->list[i]->over = 0;
+			button->SetOver(0);
 	}
 	return MenuOption::NONE;
 }
@@ -87,10 +88,10 @@ MenuOption TheMenu ( bool *quit )
             }
             if( event.type == SDL_MOUSEBUTTONUP )
             {
-                for(i=0; i<menu->list.size(); i++)
+                for(auto button : menu->list)
                 {
-                    if(menu->list[i]->over)
-                        return menu->list[i]->ret;
+                    if(button->Over())
+                        return button->Ret();
                 }
             }
         }

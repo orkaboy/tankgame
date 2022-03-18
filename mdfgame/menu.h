@@ -10,7 +10,7 @@ typedef struct Menu
 {
     SDL_Texture *bg;
     SDL_Texture *cursor;
-	std::vector <Button*> list;
+	std::vector <MDF::Button*> list;
 } Menu;
 
 Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor);

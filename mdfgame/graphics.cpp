@@ -236,8 +236,8 @@ void Menu_Draw(Menu* menu)
     SDL_GetWindowSize(screen, &w, &h);
     Graphics_ApplySurface(menu->bg, w / 2, h / 2);
     
-    for(auto m : menu->list)
-        Button_Draw(renderer, m);
+    for(auto button : menu->list)
+        button->Draw(renderer);
 }
 
 SDL_Renderer* ReturnScreen()
