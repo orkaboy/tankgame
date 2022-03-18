@@ -39,9 +39,9 @@ Animation * LoadAnimation(const char *filepath)
 
 void LoadAnimations(void)
 {
-	ResourceMap res = Resources_GetOfType(RT_ANIMATION);
+	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::ANIMATION);
 	
-	for ( ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
+	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
 		animations[it->first] = LoadAnimation(it->second.c_str());
 }
 

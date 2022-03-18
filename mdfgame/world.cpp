@@ -12,7 +12,7 @@ static std::map<std::string, World> worlds;
 
 World World_GetWorld(std::string id)
 {
-	ResourceMap res = Resources_GetOfType(RT_WORLD);
+	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::WORLD);
 	std::string path = res.find(id)->second;
 	
 	return World_Init(path);

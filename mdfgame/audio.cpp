@@ -52,13 +52,13 @@ bool Audio_IsPlayingEngineSound()
 
 bool Audio_LoadPresetWavFiles()
 {
-	soundBuffer[AUDIO_CANONFIRE] = Audio_LoadWav(Resources_GetFileName(RT_SOUND, "CannonFire").c_str());
+	soundBuffer[AUDIO_CANONFIRE] = Audio_LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "CannonFire").c_str());
 	Mix_VolumeChunk(soundBuffer[AUDIO_CANONFIRE], 30); // volum between 0 and 128
-	soundBuffer[AUDIO_ENGINESOUND] = Audio_LoadWav(Resources_GetFileName(RT_SOUND, "Engine").c_str());
+	soundBuffer[AUDIO_ENGINESOUND] = Audio_LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "Engine").c_str());
 	Mix_VolumeChunk(soundBuffer[AUDIO_ENGINESOUND], 30);
-	soundBuffer[AUDIO_EXPLOSIONSMALL] = Audio_LoadWav(Resources_GetFileName(RT_SOUND, "ExplosionSmall").c_str());
+	soundBuffer[AUDIO_EXPLOSIONSMALL] = Audio_LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "ExplosionSmall").c_str());
 	Mix_VolumeChunk(soundBuffer[AUDIO_EXPLOSIONSMALL], 30);
-	soundBuffer[AUDIO_EXPLOSIONBIG] = Audio_LoadWav(Resources_GetFileName(RT_SOUND, "ExplosionBig").c_str());
+	soundBuffer[AUDIO_EXPLOSIONBIG] = Audio_LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "ExplosionBig").c_str());
 	Mix_VolumeChunk(soundBuffer[AUDIO_EXPLOSIONBIG], 30);
 	
 	// this reserves channel 0 for engine sound..
@@ -69,7 +69,7 @@ bool Audio_LoadPresetWavFiles()
 
 bool Audio_LoadPresetMp3Files()
 {
-	musicBuffer[0] = Audio_LoadMp3File(Resources_GetFileName(RT_SOUND, "GravitankMusic").c_str());
+	musicBuffer[0] = Audio_LoadMp3File(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "GravitankMusic").c_str());
 	return true;
 }
 

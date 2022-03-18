@@ -20,7 +20,7 @@ bool gquit = false;
 class Game {
 public:
 	Game() {
-		Resources_Init();
+		MDF::Resource::Init();
 		Graphics_Init();
 		Audio_Init();
 		LoadAnimations();

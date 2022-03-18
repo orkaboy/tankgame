@@ -189,9 +189,9 @@ SDL_Texture* LoadImage(const char *s)
 
 void LoadImages()
 {
-	ResourceMap res = Resources_GetOfType(RT_IMAGE);
+	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::IMAGE);
 	
-	for ( ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
+	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
 		images[it->first] = LoadImage(it->second.c_str());
 	
 	/* Temporary Tank Loading code */
@@ -204,9 +204,9 @@ void LoadImages()
 
 void LoadFont()
 {
-	ResourceMap res = Resources_GetOfType(RT_FONT);
+	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::FONT);
 	
-	for ( ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
+	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
 		fonts[it->first] = Graphics_LoadFont(it->second.c_str(),32);    
 }
 

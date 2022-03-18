@@ -1,7 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <stdio.h>
 #include "utility.h"
 #include "planet.h"
 #include "player.h"
