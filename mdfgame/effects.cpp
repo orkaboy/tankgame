@@ -24,7 +24,7 @@ Effect::Effect(EffectType type, vec2 _pos)
 		case EffectType::CRUSHED:
 			lifetime = 1;
 			scale = 0.5;
-			anim = GetAnimation("Crushed");
+			anim = Animation::GetAnimation("Crushed");
 			break;
 		default:
 			break;
@@ -46,7 +46,7 @@ void Effect::Update(std::vector<Effect*> &effects, float dt)
 		}
 		else
 		{
-			UpdateAnimation(e->anim, e->curFrame, e->frameTimer, dt);
+			e->anim->UpdateAnimation(e->curFrame, e->frameTimer, dt);
 			
 			switch(e->type)
 			{
@@ -65,7 +65,7 @@ void Effect::Draw(std::vector<Effect*> &effects, vec2 offset)
 {
 	for(auto e : effects)
 	{
-        SDL_Texture *img = GetFrame(e->anim, e->curFrame);
+        SDL_Texture *img = e->anim->GetFrame(e->curFrame);
 		
 		if(img != NULL)
             Graphics_ApplySurface(img, e->pos.x - offset.x, e->pos.y - offset.y, e->scale, e->rot);

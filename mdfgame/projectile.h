@@ -36,7 +36,7 @@ typedef struct Projectile
 	float radius;
 	ProjectileType type;
 	float LifeTime;
-	Animation *animation;
+	MDF::Animation *animation;
     SDL_Texture *surface;
 	unsigned int animFrame;
 	float animTimer;

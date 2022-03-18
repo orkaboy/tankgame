@@ -6,9 +6,11 @@
 
 #include <fmt/core.h>
 
+namespace MDF {
+
 static std::map<std::string, Animation*>	animations;
 
-Animation * LoadAnimation(const char *filepath)
+Animation * Animation::LoadAnimation(const char *filepath)
 {
 	std::ifstream file;
 	file.open(filepath, std::ios::in);
@@ -37,7 +39,7 @@ Animation * LoadAnimation(const char *filepath)
 	return anim;
 }
 
-void LoadAnimations(void)
+void Animation::LoadAnimations(void)
 {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::ANIMATION);
 	
@@ -45,7 +47,7 @@ void LoadAnimations(void)
 		animations[it->first] = LoadAnimation(it->second.c_str());
 }
 
-void UnloadAnimations(void)
+void Animation::UnloadAnimations(void)
 {
 	for(auto anim_pair : animations)
 	{
@@ -59,36 +61,36 @@ void UnloadAnimations(void)
 	}
 }
 
-Animation * GetAnimation(std::string id)
+Animation * Animation::GetAnimation(std::string id)
 {
 	return animations[id];
 }
 
-SDL_Texture * GetFrame(Animation *anim, unsigned int frame)
+SDL_Texture * Animation::GetFrame(unsigned int frame)
 {
-	if(anim == NULL) return NULL;
     SDL_Texture *ret = NULL;
-	
-	if(frame < anim->numFrames)
-		ret = anim->frames[frame];
+
+	if(frame < numFrames)
+		ret = frames[frame];
 	
 	return ret;
 }
 
-void UpdateAnimation(Animation *anim, unsigned int &frame, float &timer, float dt)
+void Animation::UpdateAnimation(unsigned int &frame, float &timer, float dt)
 {
-	if(anim == NULL) return;
-	if(anim->numFrames == 0) return;
+	if(numFrames == 0) return;
 	
-	if(frame >= anim->numFrames)
+	if(frame >= numFrames)
 		frame = 0;
 	timer += dt;
-	if(timer >= anim->frameTimer[frame])
+	if(timer >= frameTimer[frame])
 	{
-		timer -= anim->frameTimer[frame];
+		timer -= frameTimer[frame];
 		frame++;
 		
-		if(frame >= anim->numFrames)
+		if(frame >= numFrames)
 			frame = 0;
 	}
+}
+
 }

@@ -25,7 +25,7 @@ typedef struct Weapon
     SDL_Texture *tankTurret;
     SDL_Texture *tankCursor;
 	
-	Animation *FireAnimation;
+	MDF::Animation *FireAnimation;
 	
 	float weaponDelay;
 	float outgoingPower;

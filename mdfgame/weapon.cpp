@@ -55,7 +55,7 @@ void LoadWeapons(void)
 	weapons[WEP_JET].tankCursor = getImage("JetCursor");
 	
 	/* Fire animations */
-	weapons[WEP_JET].FireAnimation = GetAnimation("JetFire");
+	weapons[WEP_JET].FireAnimation = MDF::Animation::GetAnimation("JetFire");
 	
 	weapons[WEP_JET].weaponDelay = 0.05;
 	weapons[WEP_JET].outgoingPower = 20.f;

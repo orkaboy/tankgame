@@ -23,7 +23,7 @@ public:
 		MDF::Resource::Init(resource_path);
 		Graphics_Init();
 		Audio_Init();
-		LoadAnimations();
+		MDF::Animation::LoadAnimations();
 		LoadWeapons();
 
 		Audio_LoadPresetWavFiles();
@@ -31,7 +31,7 @@ public:
 	}
 
 	~Game() {
-		UnloadAnimations();
+		MDF::Animation::UnloadAnimations();
 		Audio_ShutDown();
 
 		IMG_Quit();
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 		switch(c) {
 		case 'r': {
 			resource_path = optarg;
-			fmt::print("Setting resource file path:'{}'\n", resource_path);
+			fmt::print("Setting resource file path: '{}'\n", resource_path);
 			break;
 		}
 		default:

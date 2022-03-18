@@ -13,7 +13,8 @@ void Tank_FireWeapon ( Player *player, World &world, float dt )
 	Tank *tank = player->tank;
 	auto& weapon = weapons[tank->weapon];
 	Weapon_Fire( player, weapon, world );
-	UpdateAnimation(weapon.FireAnimation, tank->fireFrame, tank->fireTimer, dt);
+	if(weapon.FireAnimation)
+		weapon.FireAnimation->UpdateAnimation(tank->fireFrame, tank->fireTimer, dt);
 }
 
 void Tank_SetTurretRotation(Tank *tank, Sint16 x, Sint16 y)
@@ -175,9 +176,9 @@ void Tank_Draw( const Tank *tank, vec2 offset )
         Graphics_ApplySurface(cursor, cursorX, cursorY, 1, 0);
 	}
 	
-	if(tank->firing)
+	if(tank->firing && weapon.FireAnimation)
 	{
-        SDL_Texture *fireAnim = GetFrame(weapon.FireAnimation, tank->fireFrame);
+        SDL_Texture *fireAnim = weapon.FireAnimation->GetFrame(tank->fireFrame);
 		
 		if(fireAnim != NULL)
 		{

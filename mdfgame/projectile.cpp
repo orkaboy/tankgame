@@ -16,9 +16,7 @@ void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 
 	for (auto p : proj)
 	{
 		if (p->animation) {
-			
-			p->surface = GetFrame(p->animation, p->animFrame);
-			
+			p->surface = p->animation->GetFrame(p->animFrame);
 		}
 		if (p->surface) {
 			vec2 direction;
@@ -64,19 +62,19 @@ Projectile* Projectile_Create(Player* player, float kraft, vec2 pos, float vinke
 	{
 		case CLUSTER:
 		{
-			p->animation = GetAnimation("ClusterAnim");
+			p->animation = MDF::Animation::GetAnimation("ClusterAnim");
 			p->LifeTime = 3.0;
 		}
 		break;
 		case FLAMER:
 		{
-			p->animation = GetAnimation("FlamerFire");
+			p->animation = MDF::Animation::GetAnimation("FlamerFire");
 			p->LifeTime = 2.1;
 		}
 		break;
 		case ROCKET:
 		{
-			p->animation = GetAnimation("RocketAnim");
+			p->animation = MDF::Animation::GetAnimation("RocketAnim");
 		}
 		break;
 		case AMMO_TURRET:
@@ -222,8 +220,10 @@ void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* 
 }
 void Projectile_Update(Projectile* projectile, World &world, bool &removal, float dt )
 {
-	if (projectile->animation) UpdateAnimation(projectile->animation, projectile->animFrame,
-						projectile->animTimer, dt);
+	if (projectile->animation) {
+		projectile->animation->UpdateAnimation(projectile->animFrame, projectile->animTimer, dt);
+	}
+
 	switch(projectile->type)
 	{
 		case CLUSTER:

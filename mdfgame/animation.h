@@ -4,21 +4,29 @@
 
 #include <string>
 
-typedef struct Animation
+namespace MDF {
+
+class Animation
 {
-    SDL_Texture **frames;
+public:
+	static void LoadAnimations(void);
+	static void UnloadAnimations(void);
+
+	/* Returns a previously loaded animation */
+	static auto GetAnimation(std::string id) -> Animation*;
+
+	/* Return the surface at frame, if there is one */
+	SDL_Texture * GetFrame(unsigned int frame);
+
+	/* Updates frame and timer */
+	void UpdateAnimation(unsigned int &frame, float &timer, float dt);
+
+private:
+	static Animation* LoadAnimation(const char *filepath);
+
+	SDL_Texture **frames;
 	float *frameTimer;
 	unsigned int numFrames;
-} Animation;
+};
 
-void LoadAnimations(void);
-void UnloadAnimations(void);
-
-/* Returns a previously loaded animation */
-Animation * GetAnimation(std::string id);
-
-/* Return the surface at frame, if there is one */
-SDL_Texture * GetFrame(Animation *anim, unsigned int frame);
-
-/* Updates frame and timer */
-void UpdateAnimation(Animation *anim, unsigned int &frame, float &timer, float dt);
+}
