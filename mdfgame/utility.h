@@ -1,5 +1,4 @@
-#ifndef UTILITY_H
-#define UTILITY_H
+#pragma once
 
 #include <string>
 #include <sstream>
@@ -40,7 +39,3 @@ std::string convertToStr(T value)
 		return "";
 	return o.str();
 };
-
-
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef PLANET_H
-#define PLANET_H
+#pragma once
 
 #include "utility.h"
 
@@ -18,5 +17,3 @@ typedef struct Planet
 
 Planet *Planet_Init(float x, float y, float radius, float mass);
 void Planet_Free(Planet *planet);
-
-#endif

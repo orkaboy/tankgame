@@ -1,5 +1,4 @@
-#ifndef PROJECTILE_H
-#define PROJECTILE_H
+#pragma once
 
 #include "SDL2/SDL.h"
 
@@ -55,5 +54,3 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 void Projectile_Destroy(Projectile *projectile);
 
 void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset);
-
-#endif

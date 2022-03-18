@@ -1,5 +1,4 @@
-#ifndef EFFECTS_H
-#define EFFECTS_H
+#pragma once
 
 #include "animation.h"
 #include "utility.h"
@@ -31,5 +30,3 @@ Effect * Effect_Create(EffectType type, vec2 pos);
 void Effect_Delete(Effect *e);
 void Effect_Update(std::vector<Effect*> &effects, float dt);
 void Effect_Draw(std::vector<Effect*> &effects, vec2 offset);
-
-#endif

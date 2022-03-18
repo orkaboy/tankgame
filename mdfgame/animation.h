@@ -1,5 +1,4 @@
-#ifndef ANIMATION_H
-#define ANIMATION_H
+#pragma once
 
 #include "SDL2/SDL.h"
 
@@ -23,5 +22,3 @@ SDL_Texture * GetFrame(Animation *anim, unsigned int frame);
 
 /* Updates frame and timer */
 void UpdateAnimation(Animation *anim, unsigned int &frame, float &timer, float dt);
-
-#endif

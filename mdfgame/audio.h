@@ -1,5 +1,4 @@
-#ifndef OURGAME_SDL_AUDIO
-#define OURGAME_SDL_AUDIO
+#pragma once
 
 #include "SDL2/SDL_mixer.h"
 
@@ -49,5 +48,3 @@ enum
 	// Do NOT put anything after this, or die...
 	MUSIC_BUFFERSIZE
 };
-
-#endif

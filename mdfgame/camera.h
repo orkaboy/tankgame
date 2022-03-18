@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include "utility.h"
 
@@ -14,5 +13,3 @@ class Camera
 		vec2 corner;
 		vec2 screenSize;
 };
-
-#endif

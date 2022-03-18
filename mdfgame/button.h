@@ -1,5 +1,4 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#pragma once
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_ttf.h"
@@ -23,5 +22,3 @@ Button* Button_Init(int x, int y, MenuOption ret, std::string txt, TTF_Font *fon
 void Button_Draw(SDL_Renderer *screen, Button *button);
 
 void Menu_GetMouse(int &x, int &y);
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include "utility.h"
 #include "planet.h"
@@ -10,10 +9,10 @@
 
 #include <vector>
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
-#define SCREEN_BPP 32
-#define FPS 30
+constexpr int SCREEN_WIDTH = 1024;
+constexpr int SCREEN_HEIGHT = 768;
+constexpr int SCREEN_BPP = 32;
+constexpr int FPS = 30;
 
 // Uncomment to set the server listener port
 //#define NET_SERVER_PORT 1337
@@ -52,5 +51,3 @@ void World_DeInit(World &world);
 void World_SpawnAmmo(World &world, float dt);
 
 World World_GetWorld(std::string id);
-
-#endif

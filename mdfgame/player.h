@@ -1,5 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include <stdio.h>
 
@@ -34,5 +33,3 @@ void Player_Kill(Player *Player);
 void Player_Killed(Player * Player);
 
 void Player_DrawHud(SDL_Renderer* renderer, Player* player, int x, int y);
-
-#endif

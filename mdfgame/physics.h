@@ -1,7 +1,6 @@
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#pragma once
 
-#define GRAVITY 6.67259
+constexpr float GRAVITY = 6.67259;
 
 #include "world.h"
 #include "utility.h"
@@ -15,5 +14,3 @@ void Physics_PlanetBounce(Planet *p1, Planet *p2);
 void Physics_UpdateTanks(World &w, float dt);
 
 void Physics_UpdateProjectiles(World &w, float dt);
-
-#endif

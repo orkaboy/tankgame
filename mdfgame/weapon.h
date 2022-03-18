@@ -1,5 +1,4 @@
-#ifndef WEAPON_H
-#define WEAPON_H
+#pragma once
 
 #include "SDL2/SDL.h"
 
@@ -37,5 +36,3 @@ extern Weapon weapons[MAX_WEAPONS];
 void Weapon_Fire( Player *player, Weapon &weapon, World &world );
 float Weapon_GetDelay(int weapon_index);
 void LoadWeapons(void);
-
-#endif

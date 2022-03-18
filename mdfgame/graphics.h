@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+#pragma once
 
 #include <string>
 
@@ -32,6 +31,3 @@ TTF_Font * getFont(std::string id);
 SDL_Renderer* ReturnScreen();
 SDL_Texture* ReturnBg();
 SDL_Texture* ReturnCursor();
-
-#endif
-

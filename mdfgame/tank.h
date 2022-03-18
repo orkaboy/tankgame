@@ -1,5 +1,4 @@
-#ifndef TANK_H
-#define TANK_H
+#pragma once
 
 #include "projectile.h"
 #include "utility.h"
@@ -8,7 +7,7 @@
 
 #include "SDL2/SDL.h"
 
-#define MAX_HITPOINTS 100
+constexpr int MAX_HITPOINTS = 100;
 
 struct Player;
 struct Planet;
@@ -82,5 +81,3 @@ void Tank_Free ( Tank* tank );
 
 /* Drawing function */
 void Tank_Draw( const Tank *tank, vec2 offset );
-
-#endif

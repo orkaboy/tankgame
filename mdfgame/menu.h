@@ -1,5 +1,4 @@
-#ifndef MENU_H
-#define MENU_H
+#pragma once
 
 #include "SDL2/SDL.h"
 
@@ -12,7 +11,7 @@ typedef struct Menu
     SDL_Texture *bg;
     SDL_Texture *cursor;
 	std::vector <Button*> list;
-}Menu;
+} Menu;
 
 Menu* Menu_Init(SDL_Texture* bg, SDL_Texture* cursor);
 
@@ -21,5 +20,3 @@ void Menu_AddButton(Menu* menu,int x, int y, MenuOption ret, std::string text, T
 MenuOption Menu_CheckButton(Menu* menu, int mx, int my);
 
 MenuOption TheMenu ( bool* quit );
-
-#endif

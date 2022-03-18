@@ -1,5 +1,4 @@
-#ifndef INPUT_H
-#define INPUT_H
+#pragma once
 
 #include "SDL2/SDL.h"
 
@@ -37,5 +36,3 @@ void Input_SetHandler(KeyStroke stroke, KeyHandler handler);
 void Input_BindMouseHandler(Player* player);
 void Input_Grab();
 void Input_Release();
-
-#endif
