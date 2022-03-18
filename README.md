@@ -19,8 +19,14 @@ make -j
 
 # Running
 
-The game must be run from this directory (in order to access the data files). If built using cmake, run:
+The game must be run from the directory containing the resources.mdf file (in order to access the data files). If built using cmake, run:
 
 ```
 ./build/mdfgame/tank_game
+```
+
+It's also possible to specify the path to the folder containing resources.mdf with the -r option:
+
+```
+./tank_game -r ../..
 ```
