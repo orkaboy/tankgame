@@ -5,7 +5,16 @@
 #include "audio.h"
 #include "graphics.h"
 
-void Physics_PlanetBounce(Planet *p1, Planet *p2)
+namespace MDF {
+namespace Physics {
+
+void UpdatePlanets(World &w, float dt);
+void PlanetBounce(Planet *p1, Planet *p2);
+void UpdateTanks(World &w, float dt);
+void UpdateProjectiles(World &w, float dt);
+
+
+void PlanetBounce(Planet *p1, Planet *p2)
 {
 	// First, find the normalized vector n from the center of
 	// circle1 to the center of circle2
@@ -34,7 +43,7 @@ void Physics_PlanetBounce(Planet *p1, Planet *p2)
 	p2->vel = vec2Add(p2->vel, vec2Multiply(n, optimizedP * p1->mass));
 }
 
-void Physics_UpdatePlanets(World &w, float dt)
+void UpdatePlanets(World &w, float dt)
 {
 	for(auto planet : w.planets)
 	{
@@ -141,12 +150,12 @@ void Physics_UpdatePlanets(World &w, float dt)
 
 			planet->pos = vec2Add(oldPos, moveVec);
 			
-			Physics_PlanetBounce(planet, planet2);
+			PlanetBounce(planet, planet2);
 		}
 	}
 }
 
-void Physics_UpdateProjectiles(World &w, float dt)
+void UpdateProjectiles(World &w, float dt)
 {
 	/* For all bullets */
 	for(unsigned int i = 0; i < w.projectiles.size(); i++)
@@ -237,16 +246,16 @@ void Physics_UpdateProjectiles(World &w, float dt)
 	}
 }
 
-void Physics(World &w, float dt)
+void Process(World &w, float dt)
 {
-	Physics_UpdatePlanets(w, dt);
+	UpdatePlanets(w, dt);
 	
-	Physics_UpdateTanks(w, dt);
+	UpdateTanks(w, dt);
 
-	Physics_UpdateProjectiles(w, dt);
+	UpdateProjectiles(w, dt);
 }
 
-void Physics_UpdateTanks(World &w, float dt)
+void UpdateTanks(World &w, float dt)
 {
 	/* For all tanks */
 	for(unsigned int i = 0; i < w.tanks.size(); i++)
@@ -301,3 +310,7 @@ void Physics_UpdateTanks(World &w, float dt)
 		}
 	}
 }
+
+
+} // namespace Physics
+} // namespace MDF

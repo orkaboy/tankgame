@@ -138,7 +138,7 @@ private:
 				World_SpawnAmmo(world,dt);
 
 				/* Physics */
-				Physics(world, dt);
+				MDF::Physics::Process(world, dt);
 				/* Animtions */
 				Effect_Update(world.effects, dt);
 			}
