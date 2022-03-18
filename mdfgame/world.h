@@ -23,7 +23,7 @@ typedef struct World
 {
 	std::vector<Planet*> planets;
 	std::vector<Tank*> tanks;
-	Player* player;
+	MDF::Player* player;
 	std::vector<Projectile*> projectiles;
 	std::vector<MDF::Effect*> effects;
 	

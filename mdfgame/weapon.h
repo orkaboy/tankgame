@@ -7,7 +7,10 @@
 constexpr int MAX_WEAPONS = 5;
 
 struct World;
-struct Player;
+
+namespace MDF {
+	class Player;
+}
 
 enum TankWeapon
 {
@@ -33,6 +36,6 @@ typedef struct Weapon
 
 extern Weapon weapons[MAX_WEAPONS];
 
-void Weapon_Fire( Player *player, Weapon &weapon, World &world );
+void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world );
 float Weapon_GetDelay(int weapon_index);
 void LoadWeapons(void);

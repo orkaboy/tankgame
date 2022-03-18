@@ -1,6 +1,7 @@
 
 #include "resources.h"
 #include "graphics.h"
+#include "player.h"
 
 #include "SDL2/SDL_ttf.h"
 #include "SDL2/SDL_image.h"
@@ -105,7 +106,7 @@ void Graphics_DrawScene(World &world)
 	offset.x += cursorX;
 	offset.y += cursorY;
 	
-	world.camera.PositionCorner(world.player ? world.player->tank->pos : vec2(0, 0), offset, world.size);
+	world.camera.PositionCorner(world.player ? world.player->GetTank()->pos : vec2(0, 0), offset, world.size);
 	
 	offset = world.camera.GetCorner();
 	/** Fix bg **/
@@ -145,7 +146,7 @@ void Graphics_DrawScene(World &world)
 
 	if ( world.player )
 	{
-        Player_DrawHud(renderer, world.player, 8, 8);
+        world.player->DrawHud(renderer, 8, 8);
 	}
     MDF::Effect::Draw(world.effects, offset);
 }

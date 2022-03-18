@@ -9,7 +9,9 @@
 
 constexpr int MAX_HITPOINTS = 100;
 
-struct Player;
+namespace MDF {
+	class Player;
+}
 struct Planet;
 struct World;
 
@@ -33,7 +35,7 @@ typedef struct Tank
 	bool dying, firing;
 	float barrel_pressure;
 	
-	Player *player;
+	MDF::Player *player;
 	
     SDL_Texture *tankBody;
 	
@@ -58,10 +60,10 @@ typedef struct Tank
 } Tank;
 
 /* New fire function */
-void Tank_FireWeapon ( Player *player, World &world, float dt );
+void Tank_FireWeapon ( MDF::Player *player, World &world, float dt );
 
 /* spawn tank */
-void Tank_Spawn ( World& world, Player* player, Planet* planet );
+void Tank_Spawn ( World& world, MDF::Player* player, Planet* planet );
 
 /* move tank in dir */
 void Tank_Move ( Tank* tank, Direction dir );

@@ -7,22 +7,22 @@
 #include "tank.h"
 #include "graphics.h"
 
-static void DefaultMouseHandler ( Player* player, World &world, Sint16 x, Sint16 y, Uint8 button );
-static void DefaultMoveForwardHandler ( Player* player, World& world );
-static void DefaultMoveBackwardHandler ( Player* player, World& world );
-static void DefaultFireBeginHandler ( Player* player, World& world );
-static void DefaultFireEndHandler ( Player* player, World& world );
-static void DefaultTurretUpHandler ( Player* player, World& world );
-static void DefaultTurretDownHandler ( Player* player, World& world );
-static void DefaultTeleportHandler ( Player* player, World& world );
-static void DefaultChangeWepHandler ( Player* player, World& world );
+static void DefaultMouseHandler ( MDF::Player* player, World &world, Sint16 x, Sint16 y, Uint8 button );
+static void DefaultMoveForwardHandler ( MDF::Player* player, World& world );
+static void DefaultMoveBackwardHandler ( MDF::Player* player, World& world );
+static void DefaultFireBeginHandler ( MDF::Player* player, World& world );
+static void DefaultFireEndHandler ( MDF::Player* player, World& world );
+static void DefaultTurretUpHandler ( MDF::Player* player, World& world );
+static void DefaultTurretDownHandler ( MDF::Player* player, World& world );
+static void DefaultTeleportHandler ( MDF::Player* player, World& world );
+static void DefaultChangeWepHandler ( MDF::Player* player, World& world );
 
 typedef std::map<PlayerAction, ActionHandler> HandlerMap;
-typedef std::map<SDL_Scancode, std::pair<Player*, PlayerAction> > BindsMap;
+typedef std::map<SDL_Scancode, std::pair<MDF::Player*, PlayerAction> > BindsMap;
 
 static std::map<KeyStroke, KeyHandler> strokehandlers;
 
-static std::pair<Player *, MouseMoveHandler> mouse_bind;
+static std::pair<MDF::Player *, MouseMoveHandler> mouse_bind;
 int mx, my;
 
 static HandlerMap handlers;
@@ -65,7 +65,7 @@ void Input_Init(World& w)
 	strokehandlers[KEY_HOLD] = 0;
 }
 
-void Input_BindMouseHandler(Player *player)
+void Input_BindMouseHandler(MDF::Player *player)
 {
 	mouse_bind.first = player;
 }
@@ -127,29 +127,29 @@ void Input_SetActionHandler(PlayerAction action, ActionHandler handler)
 	handlers[action] = handler;
 }
 
-void Input_BindKey(SDL_Scancode key, Player* player, PlayerAction action, KeyStroke keystroke)
+void Input_BindKey(SDL_Scancode key, MDF::Player* player, PlayerAction action, KeyStroke keystroke)
 {
 	switch(keystroke)
 	{
 		case KEY_UP:
-			up_binds[key] = std::pair<Player*, PlayerAction>(player, action);
+			up_binds[key] = std::pair<MDF::Player*, PlayerAction>(player, action);
 		break;
 		case KEY_DOWN:
-			down_binds[key] = std::pair<Player*, PlayerAction>(player, action);
+			down_binds[key] = std::pair<MDF::Player*, PlayerAction>(player, action);
 		break;
 		case KEY_HOLD:
-			hold_binds[key] = std::pair<Player*, PlayerAction>(player, action);
+			hold_binds[key] = std::pair<MDF::Player*, PlayerAction>(player, action);
 		break;
 	}
 }
 
-void DefaultMouseHandler ( Player* player, World &world, Sint16 x, Sint16 y, Uint8 button )
+void DefaultMouseHandler ( MDF::Player* player, World &world, Sint16 x, Sint16 y, Uint8 button )
 {
 	vec2 offset = world.camera.GetCorner();
 	x += offset.x;
 	y += offset.y;
 	
-	Tank_SetTurretRotation(player->tank, x, y);
+	Tank_SetTurretRotation(player->GetTank(), x, y);
 	
 	static bool l_pressed = false;
 	if(button & SDL_BUTTON(1))
@@ -189,42 +189,42 @@ void DefaultMouseHandler ( Player* player, World &world, Sint16 x, Sint16 y, Uin
 	}
 }
 
-void DefaultMoveForwardHandler ( Player* player, World& world )
+void DefaultMoveForwardHandler ( MDF::Player* player, World& world )
 {
-	Tank_Move(player->tank, Direction::RIGHT);
+	Tank_Move(player->GetTank(), Direction::RIGHT);
 }
 
-void DefaultMoveBackwardHandler ( Player* player, World& world )
+void DefaultMoveBackwardHandler ( MDF::Player* player, World& world )
 {
-	Tank_Move(player->tank, Direction::LEFT);
+	Tank_Move(player->GetTank(), Direction::LEFT);
 }
 
-void DefaultFireBeginHandler ( Player* player, World& world )
+void DefaultFireBeginHandler ( MDF::Player* player, World& world )
 {
-	player->tank->firing = true;
+	player->GetTank()->firing = true;
 }
 
-void DefaultFireEndHandler ( Player* player, World& world )
+void DefaultFireEndHandler ( MDF::Player* player, World& world )
 {
-	player->tank->firing = false;
+	player->GetTank()->firing = false;
 }
 
-void DefaultTurretUpHandler ( Player* player, World& world )
+void DefaultTurretUpHandler ( MDF::Player* player, World& world )
 {
-	Tank_RotateTurret(player->tank, Direction::RIGHT);
+	Tank_RotateTurret(player->GetTank(), Direction::RIGHT);
 }
 
-void DefaultTurretDownHandler ( Player* player, World& world )
+void DefaultTurretDownHandler ( MDF::Player* player, World& world )
 {
-	Tank_RotateTurret(player->tank, Direction::LEFT);
+	Tank_RotateTurret(player->GetTank(), Direction::LEFT);
 }
 
-void DefaultTeleportHandler ( Player* player, World& world )
+void DefaultTeleportHandler ( MDF::Player* player, World& world )
 {
-	Tank_Teleport(player->tank,world);
+	Tank_Teleport(player->GetTank(),world);
 }
 
-void DefaultChangeWepHandler ( Player* player, World& world )
+void DefaultChangeWepHandler ( MDF::Player* player, World& world )
 {
-	Tank_NextWeapon(player->tank);
+	Tank_NextWeapon(player->GetTank());
 }

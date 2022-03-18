@@ -8,7 +8,9 @@
 
 struct World;
 struct Tank;
-struct Player;
+namespace MDF {
+	class Player;
+}
 struct Planet;
 
 enum ProjectileType
@@ -32,7 +34,7 @@ typedef struct Projectile
 {
 	vec2 pos;
 	vec2 vel;
-	Player* player;
+	MDF::Player* player;
 	float radius;
 	ProjectileType type;
 	float LifeTime;
@@ -44,7 +46,7 @@ typedef struct Projectile
 } Projectile;
 
 /* creats a projectile at position for players tank with vinkel and kraft */
-Projectile *Projectile_Create(Player *player, float kraft, vec2 pos, float vinkel, ProjectileType type);
+Projectile *Projectile_Create(MDF::Player *player, float kraft, vec2 pos, float vinkel, ProjectileType type);
 
 void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* planet, bool &removal, float dt );
 

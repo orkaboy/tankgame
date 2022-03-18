@@ -61,25 +61,26 @@ void LoadWeapons(void)
 	weapons[WEP_JET].outgoingPower = 20.f;
 }
 
-void Weapon_Fire( Player *player, Weapon &weapon, World &world )
+void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 {
-	if(player->tank->dying)
+	auto tank = player->GetTank();
+	if(tank->dying)
 		return;
-	if(player->tank->timeSinceLastFire > 0)
+	if(tank->timeSinceLastFire > 0)
 		return;
 	
-	player->tank->timeSinceLastFire = weapon.weaponDelay;
-	//player->tank->fireTimer = 0;
+	tank->timeSinceLastFire = weapon.weaponDelay;
+	//tank->fireTimer = 0;
 	
 	switch(weapon.type)
 	{
 		case WEP_TURRET:
 		{
-			float vinkel = player->tank->turret_angle + player->tank->angular_position + player->tank->planet->rot;
+			float vinkel = tank->turret_angle + tank->angular_position + tank->planet->rot;
 			
-			Projectile* p = Projectile_Create(player, weapon.outgoingPower, player->tank->pos, vinkel, TURRET); // vel in pixels/sec
+			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tank->pos, vinkel, TURRET); // vel in pixels/sec
 			
-			p->pos = vec2Add(player->tank->pos, player->tank->turret);
+			p->pos = vec2Add(tank->pos, tank->turret);
 			
             world.projectiles.push_back(p);
 			
@@ -88,11 +89,11 @@ void Weapon_Fire( Player *player, Weapon &weapon, World &world )
 		break;
 		case WEP_FLAMER:
 		{
-			float vinkel = player->tank->turret_angle + player->tank->angular_position + player->tank->planet->rot + (float)(rand()%10)/20.0 - 0.25;
+			float vinkel = tank->turret_angle + tank->angular_position + tank->planet->rot + (float)(rand()%10)/20.0 - 0.25;
 			
-			Projectile* p = Projectile_Create(player, weapon.outgoingPower, player->tank->pos, vinkel, FLAMER);
+			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tank->pos, vinkel, FLAMER);
 			
-			p->pos = vec2Add(player->tank->pos, player->tank->turret);
+			p->pos = vec2Add(tank->pos, tank->turret);
 			
             world.projectiles.push_back(p);
 			
@@ -101,11 +102,11 @@ void Weapon_Fire( Player *player, Weapon &weapon, World &world )
 		break;
 		case WEP_CLUSTER:
 		{
-			float vinkel = player->tank->turret_angle + player->tank->angular_position + player->tank->planet->rot;
+			float vinkel = tank->turret_angle + tank->angular_position + tank->planet->rot;
 			
-			Projectile* p = Projectile_Create(player, weapon.outgoingPower, player->tank->pos, vinkel, CLUSTER); // vel in pixels/sec
+			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tank->pos, vinkel, CLUSTER); // vel in pixels/sec
 			
-			p->pos = vec2Add(player->tank->pos, player->tank->turret);
+			p->pos = vec2Add(tank->pos, tank->turret);
 			
             world.projectiles.push_back(p);
 			
@@ -114,11 +115,11 @@ void Weapon_Fire( Player *player, Weapon &weapon, World &world )
 		break;
 		case WEP_ROCKET:
 		{
-			float vinkel = player->tank->turret_angle + player->tank->angular_position + player->tank->planet->rot;
+			float vinkel = tank->turret_angle + tank->angular_position + tank->planet->rot;
 			
-			Projectile* p = Projectile_Create(player, weapon.outgoingPower, player->tank->pos, vinkel, ROCKET); // vel in pixels/sec
+			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tank->pos, vinkel, ROCKET); // vel in pixels/sec
 			
-			p->pos = vec2Add(player->tank->pos, player->tank->turret);
+			p->pos = vec2Add(tank->pos, tank->turret);
 			
             world.projectiles.push_back(p);
 			
@@ -128,7 +129,6 @@ void Weapon_Fire( Player *player, Weapon &weapon, World &world )
 		
 		case WEP_JET:
 		{
-			Tank *tank = player->tank;
 			float tankRotation = tank->angular_position + tank->planet->rot;
 			
 			/* x component is rotation, y comp is acc-force */

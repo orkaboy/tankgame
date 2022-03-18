@@ -8,9 +8,9 @@
 #include <cmath>
 
 /* New fire function */
-void Tank_FireWeapon ( Player *player, World &world, float dt )
+void Tank_FireWeapon ( MDF::Player *player, World &world, float dt )
 {
-	Tank *tank = player->tank;
+	Tank *tank = player->GetTank();
 	auto& weapon = weapons[tank->weapon];
 	Weapon_Fire( player, weapon, world );
 	if(weapon.FireAnimation)
@@ -87,7 +87,7 @@ void Tank_Move ( Tank* tank, Direction dir )
 		Audio_PlayEngineSound();
 }
 
-void Tank_Spawn ( World& world, Player* player, Planet* planet )
+void Tank_Spawn ( World& world, MDF::Player* player, Planet* planet )
 {
 	Tank* tank = new Tank;
 	tank->planet = planet;
@@ -109,7 +109,7 @@ void Tank_Spawn ( World& world, Player* player, Planet* planet )
 	tank->fireTimer = 0;
 	tank->fireFrame = 0;
 	
-	player->tank = tank;
+	player->SetTank(tank);
 	tank->player = player;
 	
     world.tanks.push_back(tank);
@@ -121,7 +121,7 @@ void Tank_Destroy ( Tank* tank )
 	if(tank->dying) return;
 
 	Audio_PlayExplosionBig();
-	tank->player->deaths++;
+	tank->player->Deaths()++;
 	tank->dying = true;
 	tank->dyingTimer = 1; //Animlength
 }

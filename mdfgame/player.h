@@ -4,32 +4,45 @@
 
 #include "tank.h"
 
-typedef struct Player
+namespace MDF {
+
+class Player
 {
-	char *name;
-	Tank *tank;
-	int points;
-	int kills;
-	int deaths;
-	int id;
+public:
+	/* Init a new player */
+	Player();
+	/* set player name */
+	void SetName(const char *name);
 
-	TankColors col;
+	/* increse/decrese player points by points */
+	void ModPoints(int points);
+
+	/* Call when player gets a kill */
+	void Kill();
+
+	/* Call when player gets killed */
+	void Killed();
+
+	void DrawHud(SDL_Renderer* renderer, int x, int y);
+
+	void SetTank(Tank* tank) { mTank = tank; }
+	auto GetTank() -> Tank* { return mTank; }
+
+	int& Deaths() { return mDeaths; }
+
+	void SetCol(TankColors col) { mCol = col; }
+	TankColors Col() const { return mCol; }
+
+private:
+	std::string mName;
+	Tank *mTank{};
+	int mPoints{};
+	int mKills{};
+	int mDeaths{};
+	int id{};
+
+	TankColors mCol;
 	/* control settings */
-} Player;
+};
 
-/* Init a new player */
-Player *Player_Init();
-void Player_Free(Player *player);
-/* set player name */
-void Player_SetName(Player *player, char *name);
-
-/* increse/decrese player points by points */
-void Player_ModPoints(Player *player,int points);
-
-/* Call when player gets a kill */
-void Player_Kill(Player *Player);
-
-/* Call when player gets killed */
-void Player_Killed(Player * Player);
-
-void Player_DrawHud(SDL_Renderer* renderer, Player* player, int x, int y);
+}

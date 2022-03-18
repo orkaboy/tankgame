@@ -49,20 +49,20 @@ public:
 			{
 				World world = World_GetWorld("WorldOne");
 
-				auto player = Player_Init();
+				auto player = new MDF::Player;
 
 				InitializeInput(world, player);
 
 				//world.players.push_back(player); // DEPRECATED! THERE SHALL BE NO HARDCODING OF INDICES!
 				world.player = player;
 
-				player->col = TANK_NEUTRAL;
-				//player2->col = TANK_YELLOW;
+				player->SetCol(TANK_NEUTRAL);
+				//player2->SetCol(TANK_YELLOW);
 
 				Tank_Spawn(world, player, world.planets[0]);
-				Tank_SetImages(player->tank, player->col);
+				Tank_SetImages(player->GetTank(), player->Col());
 				//Tank_Spawn(world, player2, world.planets[4]);
-				//Tank_SetImages(player2->tank, player2->col);
+				//Tank_SetImages(player2->GetTank(), player2->Col());
 
 				GameLoop(world);
 			}
@@ -82,7 +82,7 @@ private:
 		}
 	}
 
-	void InitializeInput(World& world, Player* player) {
+	void InitializeInput(World& world, MDF::Player* player) {
 		Input_Init(world);
 
 		Input_BindKey(SDL_SCANCODE_A, player, PA_MOVE_BACKWARD, KEY_HOLD);

@@ -42,7 +42,7 @@ void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 
 }
 
 /* creats a projectile at position for players tank with vinkel and kraft */
-Projectile* Projectile_Create(Player* player, float kraft, vec2 pos, float vinkel, ProjectileType type)
+Projectile* Projectile_Create(MDF::Player* player, float kraft, vec2 pos, float vinkel, ProjectileType type)
 {
 	Projectile* p = new Projectile;
 
@@ -121,10 +121,10 @@ void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* 
 				target->hitPoints -= projectile->damage;
 				if(target->hitPoints <= 0) {
 					Tank_Destroy(target);
-					if(projectile->player->tank == target)
-						Player_ModPoints(projectile->player,-1);
+					if(projectile->player->GetTank() == target)
+						projectile->player->ModPoints(-1);
 					else
-						Player_ModPoints(projectile->player,1);
+						projectile->player->ModPoints(1);
 				}
 				else
 					Audio_PlayExplosionSmall();

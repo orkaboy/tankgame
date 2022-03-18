@@ -302,10 +302,11 @@ void UpdateTanks(World &w, float dt)
 				w.tanks.erase(w.tanks.begin() + i);
 				
 				Tank_Spawn(w, player, w.planets[0]);
-				Tank_SetImages(player->tank, player->col);
-				Tank_Teleport(player->tank, w);
+
+				tank = player->GetTank();
+				Tank_SetImages(tank, player->Col());
+				Tank_Teleport(tank, w);
 				i--;
-				tank = player->tank;
 			}
 		}
 	}

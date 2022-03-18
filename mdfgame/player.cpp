@@ -2,69 +2,64 @@
 
 #include "SDL2/SDL2_gfxPrimitives.h"
 
-Player *Player_Init()
-{
-	Player *newPlayer = new Player;
-	
-	newPlayer->points = 0;
-	newPlayer->kills = 0;
-	newPlayer->deaths = 0;
+namespace MDF {
 
-	return newPlayer;
+Player::Player()
+{
+	mPoints = 0;
+	mKills = 0;
+	mDeaths = 0;
 }
 
-void Player_Free(Player *player)
+void Player::SetName(const char *name)
 {
-	delete player;
+	mName = name;
 }
 
-void Player_SetName(Player *player, char *name)
-{
-	player->name = name;
-}
-
-void Player_ModPoints(Player *player,int points)
+void Player::ModPoints(int points)
 {
 	/* set the points */
-	player->points += points;
+	mPoints += points;
 	/* i do not want negative points when i play..  */
-	if(player->points < 0)
-		player->points = 0;
+	if(mPoints < 0)
+		mPoints = 0;
 }
 
 
-void Player_Kill(Player* player)
+void Player::Kill()
 {
-	player->kills++;
+	mKills++;
 }
 
-void Player_Killed(Player* player)
+void Player::Killed()
 {
-	player->deaths++;
+	mDeaths++;
 }
 
-void Player_DrawHud(SDL_Renderer* renderer, Player* player, int x, int y)
+void Player::DrawHud(SDL_Renderer* renderer, int x, int y)
 {
     /* life tank 1 */
     rectangleRGBA( renderer, x, y, x+154, y+24, 0, 255, 0, 100 );
-    boxRGBA( renderer, x+2, y+2, x + 2 + ((150.0*player->tank->hitPoints)/MAX_HITPOINTS), y+22, 255 - (255.0*player->tank->hitPoints)/MAX_HITPOINTS, (255.0*player->tank->hitPoints)/MAX_HITPOINTS, 0, 100 );
+    boxRGBA( renderer, x+2, y+2, x + 2 + ((150.0*mTank->hitPoints)/MAX_HITPOINTS), y+22, 255 - (255.0*mTank->hitPoints)/MAX_HITPOINTS, (255.0*mTank->hitPoints)/MAX_HITPOINTS, 0, 100 );
 
     /* reload teleport timer*/
     rectangleRGBA( renderer, x, y+25, x+154, y+31, 0, 100, 0, 100);
 
-    if( player->tank->teleportTimer > 0 )
-        boxRGBA( renderer, x+2, y+27, x+2+ 150/30*(30-player->tank->teleportTimer),y+29,255,0,100,100);
+    if( mTank->teleportTimer > 0 )
+        boxRGBA( renderer, x+2, y+27, x+2+ 150/30*(30-mTank->teleportTimer),y+29,255,0,100,100);
 
-    if( player->tank->teleportTimer < 0 )
+    if( mTank->teleportTimer < 0 )
         boxRGBA( renderer, x+2, y+27, x+152,y+29,255,0,255,100);
 
     rectangleRGBA( renderer, x, y+32, x+154, y+37, 0, 100, 0, 100);
     /* reload gun timer */
-    float delay = Weapon_GetDelay(player->tank->weapon);
+    float delay = Weapon_GetDelay(mTank->weapon);
 
-    if( player->tank->timeSinceLastFire > 0 )
-        boxRGBA( renderer, x+2, y+34, x+2+ 150/delay*(delay-player->tank->timeSinceLastFire),y+35,255,0,100,100);
+    if( mTank->timeSinceLastFire > 0 )
+        boxRGBA( renderer, x+2, y+34, x+2+ 150/delay*(delay-mTank->timeSinceLastFire),y+35,255,0,100,100);
 
-    if( player->tank->timeSinceLastFire < 0 )
+    if( mTank->timeSinceLastFire < 0 )
         boxRGBA( renderer, x+2, y+34, x+152,y+35,255,0,255,100);
+}
+
 }
