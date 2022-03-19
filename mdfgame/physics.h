@@ -8,7 +8,7 @@ constexpr float GRAVITY = 6.67259;
 namespace MDF {
 namespace Physics {
 
-void Process(World &w, float dt);
+void Process(World* w, float dt);
 
 }
 }

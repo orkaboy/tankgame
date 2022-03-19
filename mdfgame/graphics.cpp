@@ -104,11 +104,11 @@ void ApplySurface(SDL_Texture *source, int x, int y, float scaling, float angle)
     SDL_RenderCopyEx(renderer, source, NULL, &renderQuad, -(angle * 180) / M_PI, NULL, SDL_FLIP_NONE);
 }
 
-void DrawScene(MDF::World &world)
+void DrawScene(MDF::World* world)
 {
 	auto cursor = MDF::Input::GetMousePos();
-	world.camera.PositionCorner(world.player ? world.player->GetTank()->Pos() : MDF::vec2(0, 0), cursor);
-	MDF::vec2 offset = world.camera.GetCorner();
+	world->camera.PositionCorner(world->player ? world->player->GetTank()->Pos() : MDF::vec2(0, 0), cursor);
+	MDF::vec2 offset = world->camera.GetCorner();
 
 	/** Fix bg **/
 	
@@ -116,10 +116,10 @@ void DrawScene(MDF::World &world)
     SDL_GetWindowSize(screen, &w, &h);
     ApplySurface(background, (w / 2), (h / 2));
 
-    hlineRGBA(renderer, -offset.x, world.size.width - offset.x, -offset.y, 255, 0, 0, 128);
-    hlineRGBA(renderer, -offset.x, world.size.width - offset.x, world.size.height - offset.y, 255, 0, 0, 128);
-    vlineRGBA(renderer, -offset.x, -offset.y + 1, (world.size.height - 1) - offset.y, 255, 0, 0, 128);
-    vlineRGBA(renderer, world.size.width - offset.x, -offset.y + 1, (world.size.height - 1) - offset.y, 255, 0, 0, 128);
+    hlineRGBA(renderer, -offset.x, world->size.width - offset.x, -offset.y, 255, 0, 0, 128);
+    hlineRGBA(renderer, -offset.x, world->size.width - offset.x, world->size.height - offset.y, 255, 0, 0, 128);
+    vlineRGBA(renderer, -offset.x, -offset.y + 1, (world->size.height - 1) - offset.y, 255, 0, 0, 128);
+    vlineRGBA(renderer, world->size.width - offset.x, -offset.y + 1, (world->size.height - 1) - offset.y, 255, 0, 0, 128);
 	
 	/* fix score board text */
 	TTF_Font *font = fonts["Text"];
@@ -127,7 +127,7 @@ void DrawScene(MDF::World &world)
 	if( font == NULL )
         fmt::print("no font\n");
 
-	for (auto planet : world.planets)
+	for (auto planet : world->planets)
 	{
         auto img = planet->Image();
         int w;
@@ -137,19 +137,19 @@ void DrawScene(MDF::World &world)
         Graphics::ApplySurface(img, planet->Pos().x - offset.x, planet->Pos().y - offset.y, scaling, planet->Rot());
 	}
 	
-	for (const auto tank : world.tanks)
+	for (const auto tank : world->tanks)
 	{
         tank->Draw(offset);
 	}
 	
 	/* Draw projectiles */
-    Projectile::Draw(world.projectiles, renderer, offset);
+    Projectile::Draw(world->projectiles, renderer, offset);
 
-	if ( world.player )
+	if ( world->player )
 	{
-        world.player->DrawHud(renderer, vec2(8, 8));
+        world->player->DrawHud(renderer, vec2(8, 8));
 	}
-    MDF::Effect::Draw(world.effects, offset);
+    MDF::Effect::Draw(world->effects, offset);
 }
 
 void BeginScene()
@@ -232,13 +232,13 @@ void Planet_SetImage(MDF::Planet *planet, std::string id)
 
 /* MENU STUFFIES ###############################################*/
 
-void Menu_Draw(MDF::Menu& menu)
+void Menu_Draw(MDF::Menu* menu)
 {
     int w, h;
     SDL_GetWindowSize(screen, &w, &h);
-    Graphics::ApplySurface(menu.BG(), w / 2, h / 2);
+    Graphics::ApplySurface(menu->BG(), w / 2, h / 2);
     
-    for(auto button : menu.Buttons())
+    for(auto button : menu->Buttons())
         button->Draw(renderer);
 }
 

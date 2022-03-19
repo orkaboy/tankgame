@@ -11,7 +11,7 @@
 namespace MDF {
 
 /* New fire function */
-void Tank::FireWeapon ( MDF::Player *player, World &world, float dt )
+void Tank::FireWeapon ( MDF::Player *player, World* world, float dt )
 {
 	Tank *tank = player->GetTank();
 	auto& weapon = weapons[tank->weapon];
@@ -90,7 +90,7 @@ void Tank::Move ( MDF::Direction dir )
 		Audio::PlayEngineSound();
 }
 
-void Tank::Spawn ( World& world, MDF::Player* player_, Planet* planet_ )
+void Tank::Spawn ( World* world, MDF::Player* player_, Planet* planet_ )
 {
 	Tank* tank = new Tank;
 	tank->planet = planet_;
@@ -115,7 +115,7 @@ void Tank::Spawn ( World& world, MDF::Player* player_, Planet* planet_ )
 	player_->SetTank(tank);
 	tank->player = player_;
 	
-    world.tanks.push_back(tank);
+    world->tanks.push_back(tank);
 }
 
 void Tank::Destroy ()
@@ -129,7 +129,7 @@ void Tank::Destroy ()
 	dyingTimer = 1; //Animlength
 }
 
-void Tank::Teleport ( World& world)
+void Tank::Teleport ( World* world)
 {
 	if(dying) return;
 	if(teleportTimer > 0) return;
@@ -137,10 +137,10 @@ void Tank::Teleport ( World& world)
 	teleportTimer = 30;
 	int planet_, size;
 	/* get number of planets */
-	size = world.planets.size();
+	size = world->planets.size();
 	/* get random planet */
 	planet_ = rand() % size;
-	planet = world.planets[planet_];
+	planet = world->planets[planet_];
 }
 
 void Tank::Draw( vec2 offset ) const

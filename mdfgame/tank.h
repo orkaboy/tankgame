@@ -35,15 +35,15 @@ class Tank
 {
 public:
 	/* New fire function */
-	static void FireWeapon ( MDF::Player *player, World &world, float dt );
+	static void FireWeapon ( MDF::Player *player, World* world, float dt );
 
 	/* spawn tank */
-	static void Spawn ( World& world, MDF::Player* player, Planet* planet );
+	static void Spawn ( World* world, MDF::Player* player, Planet* planet );
 
 	/* move tank in dir */
 	void Move ( MDF::Direction dir );
 	/* teleport tank to planet */
-	void Teleport ( World& world);
+	void Teleport ( World* world);
 	/* rotate tank turrent */
 	void SetTurretRotation(vec2 target);
 	void RotateTurret ( MDF::Direction dir );
