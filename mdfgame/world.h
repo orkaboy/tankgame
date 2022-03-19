@@ -14,7 +14,6 @@ namespace MDF {
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
 constexpr int SCREEN_BPP = 32;
-constexpr int FPS = 30;
 
 // Uncomment to set the server listener port
 //#define NET_SERVER_PORT 1337

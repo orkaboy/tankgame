@@ -8,6 +8,7 @@
 #include "resources.h"
 #include "weapon.h"
 #include "button.h"
+#include "gamestate.h"
 
 #include <ctime>
 

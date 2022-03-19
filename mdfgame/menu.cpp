@@ -2,6 +2,7 @@
 #include "graphics.h"
 
 #include "input.h"
+#include "gamestate.h"
 
 namespace MDF {
 
