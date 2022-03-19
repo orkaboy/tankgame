@@ -23,7 +23,7 @@ class Game {
 public:
 	Game(std::string resource_path) {
 		Resource::Init(resource_path);
-		Graphics_Init();
+		Graphics::Init();
 		Audio::Init();
 		Animation::LoadAnimations();
 		Weapon::LoadWeapons();
@@ -146,13 +146,13 @@ private:
 			}
 
 			/* Graphics */
-			Graphics_BeginScene();
+			Graphics::BeginScene();
 
-			Graphics_DrawScene(world);
+			Graphics::DrawScene(world);
 
 			//TODO Draw HUD
 
-			Graphics_EndScene();
+			Graphics::EndScene();
 		}
 
 		World_DeInit(world);

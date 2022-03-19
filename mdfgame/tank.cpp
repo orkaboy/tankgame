@@ -150,13 +150,13 @@ void Tank::Draw( vec2 offset ) const
     SDL_Texture *turret_ = weapon_.TankTurret();
 	
 	float tank_rot = angular_position + planet->Rot();
-    Graphics_ApplySurface(body, (int)pos.x - offset.x, (int)pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
+    Graphics::ApplySurface(body, (int)pos.x - offset.x, (int)pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
 
 	float turretX, turretY;
 	turretX = (turret.x + 2*pos.x) / 2;
 	turretY = (turret.y + 2*pos.y) / 2;
 
-    Graphics_ApplySurface(turret_, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + turret_angle);
+    Graphics::ApplySurface(turret_, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + turret_angle);
 
     SDL_Texture *cursor_tex = weapon_.TankCursor();
 
@@ -170,7 +170,7 @@ void Tank::Draw( vec2 offset ) const
         cursor.x -= w / 2;
         cursor.y -= h / 2;
 
-        Graphics_ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
+        Graphics::ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
 	}
 
 	auto anim = weapon_.FireAnimation();
@@ -183,7 +183,7 @@ void Tank::Draw( vec2 offset ) const
 			float fireX = (turret.x*4 + 2*pos.x) / 2;
 			float fireY = (turret.y*4 + 2*pos.y) / 2;
 
-            Graphics_ApplySurface(fireAnim, (int)fireX - offset.x, (int)fireY - offset.y, 1, tank_rot + turret_angle);
+            Graphics::ApplySurface(fireAnim, (int)fireX - offset.x, (int)fireY - offset.y, 1, tank_rot + turret_angle);
 		}
 	}
 }

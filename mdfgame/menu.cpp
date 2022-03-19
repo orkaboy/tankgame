@@ -107,13 +107,13 @@ MenuOption TheMenu ( bool *quit )
 
         auto cursor = Input::GetMousePos();
 
-        Graphics_BeginScene();
+        Graphics::BeginScene();
 
         menu.CheckButton(cursor.x, cursor.y);
         Menu_Draw(menu);
-        Graphics_ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
+        Graphics::ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
 
-        Graphics_EndScene();
+        Graphics::EndScene();
     }
     return MenuOption::NONE;
 }

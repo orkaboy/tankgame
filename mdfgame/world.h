@@ -9,6 +9,8 @@
 
 #include <vector>
 
+namespace MDF {
+
 constexpr int SCREEN_WIDTH = 1024;
 constexpr int SCREEN_HEIGHT = 768;
 constexpr int SCREEN_BPP = 32;
@@ -51,3 +53,5 @@ void World_DeInit(World &world);
 void World_SpawnAmmo(World &world, float dt);
 
 World World_GetWorld(std::string id);
+
+}

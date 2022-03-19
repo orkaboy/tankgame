@@ -1,6 +1,8 @@
 #include "utility.h"
 #include <cmath>
 
+namespace MDF {
+
 float vec2Length2(vec2 v)
 {
 	return v.x*v.x + v.y*v.y;
@@ -57,4 +59,6 @@ vec2 vec2Sub(vec2 v1, vec2 v2)
 	v1.x -= v2.x;
 	v1.y -= v2.y;
 	return v1;
+}
+
 }

@@ -9,13 +9,12 @@
 
 constexpr int MAX_HITPOINTS = 100;
 
-namespace MDF {
-	class Player;
-	class Planet;
-}
-struct World;
 
 namespace MDF {
+
+struct World;
+class Player;
+class Planet;
 
 enum TankColors
 {

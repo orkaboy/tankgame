@@ -1,5 +1,7 @@
 #pragma once
 
+namespace MDF {
+
 enum class MenuOption {
     HostGame,
     JoinGame,
@@ -8,3 +10,5 @@ enum class MenuOption {
 
     NONE,
 };
+
+}

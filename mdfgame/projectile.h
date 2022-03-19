@@ -6,12 +6,13 @@
 #include "animation.h"
 #include <vector>
 
-struct World;
 namespace MDF {
-	class Tank;
-	class Player;
-	class Planet;
-}
+
+struct World;
+class Tank;
+class Player;
+class Planet;
+
 
 enum ProjectileType
 {
@@ -53,3 +54,5 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF
 void Projectile_Update(Projectile* projectile, World &world, bool &removal, float dt );
 
 void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset);
+
+}

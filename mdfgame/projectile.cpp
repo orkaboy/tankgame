@@ -11,6 +11,7 @@
 
 #include "SDL2/SDL2_gfxPrimitives.h"
 
+namespace MDF {
 
 void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset)
 {
@@ -34,7 +35,7 @@ void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 
 			else
 				alpha = -theta;
 			
-            Graphics_ApplySurface(p->surface, p->pos.x - offset.x,
+            Graphics::ApplySurface(p->surface, p->pos.x - offset.x,
 						p->pos.y - offset.y, 1.0, alpha);
 		}
 		else
@@ -289,4 +290,6 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 		default:
 		break;
 	}
+}
+
 }

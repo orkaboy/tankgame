@@ -3,9 +3,7 @@
 #include <string>
 #include <sstream>
 
-#ifndef M_PI
-#define M_PI 3.141592653589793238
-#endif
+namespace MDF {
 
 struct vec2
 {
@@ -39,3 +37,5 @@ std::string convertToStr(T value)
 		return "";
 	return o.str();
 };
+
+}

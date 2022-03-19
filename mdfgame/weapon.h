@@ -6,10 +6,10 @@
 
 constexpr int MAX_WEAPONS = 5;
 
-struct World;
 
 namespace MDF {
 
+struct World;
 class Player;
 
 enum TankWeapon

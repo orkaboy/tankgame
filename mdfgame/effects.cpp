@@ -68,7 +68,7 @@ void Effect::Draw(std::vector<Effect*> &effects, vec2 offset)
         SDL_Texture *img = e->anim->GetFrame(e->curFrame);
 		
 		if(img != NULL)
-            Graphics_ApplySurface(img, e->pos.x - offset.x, e->pos.y - offset.y, e->scale, e->rot);
+            Graphics::ApplySurface(img, e->pos.x - offset.x, e->pos.y - offset.y, e->scale, e->rot);
 	}
 }
 

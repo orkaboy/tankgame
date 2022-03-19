@@ -8,6 +8,9 @@
 
 #include <fstream>
 #include <map>
+
+namespace MDF {
+
 static std::map<std::string, World> worlds;
 
 World World_GetWorld(std::string id)
@@ -96,4 +99,6 @@ void World_DeInit(World &world)
 		delete proj;
 	for(auto effect : world.effects)
 		delete effect;
+}
+
 }

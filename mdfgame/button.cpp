@@ -39,7 +39,7 @@ void Button::Draw(SDL_Renderer *screen) const
     SDL_Surface *txt = TTF_RenderText_Solid( mFont, mText.c_str(), c);
     SDL_Texture *texture = SDL_CreateTextureFromSurface( screen, txt );
 
-    Graphics_ApplySurface(texture, (mPos.x) + (mPos.w / 2), mPos.y + (mPos.h / 2));
+    Graphics::ApplySurface(texture, (mPos.x) + (mPos.w / 2), mPos.y + (mPos.h / 2));
     SDL_FreeSurface(txt);
     SDL_DestroyTexture(texture);
 }

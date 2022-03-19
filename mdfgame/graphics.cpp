@@ -14,6 +14,8 @@
 
 #include <fmt/core.h>
 
+namespace MDF {
+
 static SDL_Window* screen;
 static SDL_Surface* screenSurface;
 static SDL_Renderer *renderer;
@@ -21,8 +23,6 @@ static SDL_Texture* background;
 static std::map<std::string, SDL_Texture *> images;
 static std::map<std::string, TTF_Font *> fonts;
 static std::map<MDF::TankColors, SDL_Texture*> tankParts;
-static SDL_Texture* LoadImage(const char *s);
-static void	LoadImages();
 
 SDL_Texture * getImage(std::string id)
 {
@@ -34,7 +34,12 @@ TTF_Font * getFont(std::string id)
 	return fonts[id];
 }
 
-bool Graphics_Init(void)
+namespace Graphics {
+
+static SDL_Texture* LoadImage(const char *s);
+static void	LoadImages();
+
+bool Init(void)
 {
 	// initialize SDL video
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -81,14 +86,14 @@ bool Graphics_Init(void)
 	SDL_ShowCursor(SDL_DISABLE);
 
 	LoadImages();
-	LoadFont();
+	LoadFonts();
 	
 	background = images["Background"];
 
 	return 1;
 }
 
-void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, float angle)
+void ApplySurface(SDL_Texture *source, int x, int y, float scaling, float angle)
 {
     int w, h;
     SDL_QueryTexture(source, NULL, NULL, &w, &h);
@@ -99,17 +104,17 @@ void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, flo
     SDL_RenderCopyEx(renderer, source, NULL, &renderQuad, -(angle * 180) / M_PI, NULL, SDL_FLIP_NONE);
 }
 
-void Graphics_DrawScene(World &world)
+void DrawScene(MDF::World &world)
 {
 	auto cursor = MDF::Input::GetMousePos();
-	world.camera.PositionCorner(world.player ? world.player->GetTank()->Pos() : vec2(0, 0), cursor);
-	vec2 offset = world.camera.GetCorner();
+	world.camera.PositionCorner(world.player ? world.player->GetTank()->Pos() : MDF::vec2(0, 0), cursor);
+	MDF::vec2 offset = world.camera.GetCorner();
 
 	/** Fix bg **/
 	
     int w, h;
     SDL_GetWindowSize(screen, &w, &h);
-    Graphics_ApplySurface(background, (w / 2), (h / 2));
+    ApplySurface(background, (w / 2), (h / 2));
 
     hlineRGBA(renderer, -offset.x, world.size.width - offset.x, -offset.y, 255, 0, 0, 128);
     hlineRGBA(renderer, -offset.x, world.size.width - offset.x, world.size.height - offset.y, 255, 0, 0, 128);
@@ -129,7 +134,7 @@ void Graphics_DrawScene(World &world)
         SDL_QueryTexture(img, NULL, NULL, &w, NULL);
 
         float scaling = 2 * planet->Radius() / (w * (1 - 0.1176f));
-        Graphics_ApplySurface(img, planet->Pos().x - offset.x, planet->Pos().y - offset.y, scaling, planet->Rot());
+        Graphics::ApplySurface(img, planet->Pos().x - offset.x, planet->Pos().y - offset.y, scaling, planet->Rot());
 	}
 	
 	for (const auto tank : world.tanks)
@@ -147,25 +152,25 @@ void Graphics_DrawScene(World &world)
     MDF::Effect::Draw(world.effects, offset);
 }
 
-void Graphics_BeginScene()
+void BeginScene()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 }
 
-void Graphics_EndScene()
+void EndScene()
 {
     SDL_RenderPresent(renderer);
 }
 
-void Graphics_DrawString(std::string str, int x, int y)
+void DrawString(std::string str, int x, int y)
 {
 	TTF_Font *font = fonts["Text"];
 	SDL_Color c = {255, 255, 255};
 	SDL_Surface *txt = TTF_RenderText_Solid( font, str.c_str(), c);
     SDL_Texture *texture = SDL_CreateTextureFromSurface( renderer, txt );
 	
-    Graphics_ApplySurface(texture, x + txt->w / 2, y + txt->h / 2);
+    ApplySurface(texture, x + txt->w / 2, y + txt->h / 2);
 	SDL_FreeSurface(txt);
     SDL_DestroyTexture(texture);
 }
@@ -199,13 +204,20 @@ void LoadImages()
 	tankParts[MDF::TANK_YELLOW] = images["TankYellow"];
 }
 
-void LoadFont()
+void LoadFonts()
 {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::FONT);
 	
 	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
-		fonts[it->first] = Graphics_LoadFont(it->second.c_str(),32);    
+		fonts[it->first] = Graphics::LoadFont(it->second.c_str(),32);    
 }
+
+TTF_Font * LoadFont(const std::string &s, int fontsize)
+{
+	return TTF_OpenFont( s.c_str(), fontsize );
+}
+
+} // namespace Graphics
 
 /* set tank color */
 void Tank_SetImages(MDF::Tank *tank, MDF::TankColors col)
@@ -220,18 +232,13 @@ void Planet_SetImage(MDF::Planet *planet, std::string id)
 }
 
 
-TTF_Font * Graphics_LoadFont(const std::string &s, int fontsize)
-{
-        return TTF_OpenFont( s.c_str(), fontsize );
-}
-
 /* MENU STUFFIES ###############################################*/
 
 void Menu_Draw(MDF::Menu& menu)
 {
     int w, h;
     SDL_GetWindowSize(screen, &w, &h);
-    Graphics_ApplySurface(menu.BG(), w / 2, h / 2);
+    Graphics::ApplySurface(menu.BG(), w / 2, h / 2);
     
     for(auto button : menu.Buttons())
         button->Draw(renderer);
@@ -255,4 +262,6 @@ SDL_Texture* ReturnBg()
 SDL_Texture* ReturnCursor()
 {	
 	return images["Cursor"];
+}
+
 }
