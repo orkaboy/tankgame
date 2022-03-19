@@ -52,7 +52,4 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, Pla
 
 void Projectile_Update(Projectile* projectile, World &world, bool &removal, float dt );
 
-/* removes projectile from the game */
-void Projectile_Destroy(Projectile *projectile);
-
 void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset);

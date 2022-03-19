@@ -290,9 +290,3 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 		break;
 	}
 }
-
-/* removes projectile from the game */
-void Projectile_Destroy(Projectile* projectile)
-{
-  	delete projectile;
-}

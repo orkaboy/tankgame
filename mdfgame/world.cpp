@@ -88,12 +88,12 @@ void World_SpawnAmmo(World &world, float dt)
 void World_DeInit(World &world)
 {
 	for(auto planet : world.planets)
-		Planet_Free(planet);
+		delete planet;
 	for(auto tank : world.tanks)
 		delete tank;
 
 	for(auto proj : world.projectiles)
-		Projectile_Destroy(proj);
+		delete proj;
 	for(auto effect : world.effects)
 		delete effect;
 }

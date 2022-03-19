@@ -13,8 +13,3 @@ Planet *Planet_Init(float x, float y, float radius, float mass)
 	tempPlanet->mass = mass;
 	return tempPlanet;
 }
-
-void Planet_Free(Planet *planet)
-{
-	delete planet;
-}

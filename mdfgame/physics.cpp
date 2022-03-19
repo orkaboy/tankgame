@@ -239,7 +239,7 @@ void UpdateProjectiles(World &w, float dt)
 		if (removal) Projectile_Hit(proj, w, target, tPlanet, removal, dt);
 		if (removal)
 		{
-			Projectile_Destroy(proj);
+			delete proj;
 			w.projectiles.erase(w.projectiles.begin() + i);
 			i--;
 		}

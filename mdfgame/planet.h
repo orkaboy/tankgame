@@ -16,4 +16,3 @@ typedef struct Planet
 } Planet;
 
 Planet *Planet_Init(float x, float y, float radius, float mass);
-void Planet_Free(Planet *planet);
