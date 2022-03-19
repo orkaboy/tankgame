@@ -3,6 +3,7 @@
 
 #include "input.h"
 #include "gamestate.h"
+#include <fmt/core.h>
 
 namespace MDF {
 
@@ -14,7 +15,7 @@ Menu::Menu(SDL_Texture* bg, SDL_Texture* cursor)
 
 void Menu::AddButton(int x, int y, MenuOption ret, std::string text, TTF_Font *font)
 {
-    mButtons.push_back(new MDF::Button(x, y, ret, text, font));
+    mButtons.push_back(new Button(x, y, ret, text, font));
 }
 
 MenuOption Menu::CheckButton(vec2 cursor)
@@ -64,10 +65,12 @@ std::string Main::HandleEvents() {
 
         if(event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.scancode) {
-            case SDL_SCANCODE_ESCAPE:
+            case SDL_SCANCODE_ESCAPE: // TODO Bug in SDL2 2.0.10 in WSL2
+            //case SDL_SCANCODE_2:
                 return "QUIT";
             }
         }
+
         if(event.type == SDL_MOUSEBUTTONUP) {
             for(auto button : mMenu->Buttons()) {
                 if(button->Over()) {

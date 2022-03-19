@@ -111,10 +111,9 @@ void DrawScene(MDF::World* world)
 	MDF::vec2 offset = world->camera.GetCorner();
 
 	/** Fix bg **/
-	
-    int w, h;
-    SDL_GetWindowSize(screen, &w, &h);
-    ApplySurface(background, (w / 2), (h / 2));
+	SDL_Point size;
+    SDL_QueryTexture(background, NULL, NULL, &size.x, &size.y);
+    Graphics::ApplySurface(background, size.x / 2, size.y / 2);
 
     hlineRGBA(renderer, -offset.x, world->size.width - offset.x, -offset.y, 255, 0, 0, 128);
     hlineRGBA(renderer, -offset.x, world->size.width - offset.x, world->size.height - offset.y, 255, 0, 0, 128);
@@ -192,10 +191,10 @@ SDL_Texture* LoadImage(const char *s)
 void LoadImages()
 {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::IMAGE);
-	
+
 	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
 		images[it->first] = LoadImage(it->second.c_str());
-	
+
 	/* Temporary Tank Loading code */
 	tankParts[MDF::TANK_NEUTRAL] = images["TankNeutral"];
 	tankParts[MDF::TANK_BLUE] = images["TankBlue"];
@@ -207,7 +206,7 @@ void LoadImages()
 void LoadFonts()
 {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::FONT);
-	
+
 	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
 		fonts[it->first] = Graphics::LoadFont(it->second.c_str(),32);    
 }
@@ -234,10 +233,11 @@ void Planet_SetImage(MDF::Planet *planet, std::string id)
 
 void Menu_Draw(MDF::Menu* menu)
 {
-    int w, h;
-    SDL_GetWindowSize(screen, &w, &h);
-    Graphics::ApplySurface(menu->BG(), w / 2, h / 2);
-    
+	auto bg = menu->BG();
+	SDL_Point size;
+    SDL_QueryTexture(bg, NULL, NULL, &size.x, &size.y);
+    Graphics::ApplySurface(bg, size.x / 2, size.y / 2);
+
     for(auto button : menu->Buttons())
         button->Draw(renderer);
 }

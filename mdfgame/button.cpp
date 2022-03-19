@@ -34,7 +34,7 @@ void Button::Draw(SDL_Renderer *screen) const
 	{
 		boxRGBA( screen, mPos.x, mPos.y, mPos.x+mPos.w, mPos.y+mPos.h, 0, 255, 0, 255 );
 	}
-	
+
 	SDL_Color c = {255, 255, 255};
     SDL_Surface *txt = TTF_RenderText_Solid( mFont, mText.c_str(), c);
     SDL_Texture *texture = SDL_CreateTextureFromSurface( screen, txt );

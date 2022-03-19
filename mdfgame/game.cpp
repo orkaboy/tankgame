@@ -12,7 +12,8 @@ static void KeyDown ( SDL_Scancode key, World* world )
 {
     switch ( key )
     {
-    case SDL_SCANCODE_ESCAPE:
+    case SDL_SCANCODE_ESCAPE: //TODO Bug in SDL2 as of 2.0.10 in WSL2
+    //case SDL_SCANCODE_1:
         gquit = true;
         break;
     default: break;

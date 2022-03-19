@@ -20,7 +20,7 @@ Content
 
 Implement score
 ---------------
-* Display in HUD
+* Display in HUD - Done
 * After match screen (who killed who how many times?)
 
 Implement bots

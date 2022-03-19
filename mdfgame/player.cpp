@@ -1,6 +1,8 @@
 #include "player.h"
 
 #include "SDL2/SDL2_gfxPrimitives.h"
+#include <fmt/core.h>
+#include "graphics.h"
 
 namespace MDF {
 
@@ -38,7 +40,7 @@ void Player::Killed()
 
 void Player::DrawHud(SDL_Renderer* renderer, vec2 pos)
 {
-    /* life tank 1 */
+    /* life tank */
     rectangleRGBA( renderer, pos.x, pos.y, pos.x+154, pos.y+24, 0, 255, 0, 100 );
     boxRGBA( renderer, pos.x+2, pos.y+2,
         pos.x + 2 + ((150.0*mTank->HP())/MAX_HITPOINTS), pos.y+22,
@@ -62,6 +64,10 @@ void Player::DrawHud(SDL_Renderer* renderer, vec2 pos)
         boxRGBA( renderer, pos.x+2, pos.y+34, pos.x+2+ 150/delay*(delay-tslf),pos.y+35,255,0,100,100);
     else if( tslf < 0 )
         boxRGBA( renderer, pos.x+2, pos.y+34, pos.x+152,pos.y+35,255,0,255,100);
+    
+    /* Draw Kill/Deaths */
+    std::string scoreStr = fmt::format("K/D: {}/{}", mKills, mDeaths);
+    Graphics::DrawString(scoreStr, pos.x + 10, pos.y + 45);
 }
 
 }
