@@ -84,7 +84,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 	{
 		case WEP_TURRET:
 		{
-			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->rot;
+			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
 
 			Projectile* p = Projectile_Create(player, outgoingPower, tankPos, vinkel, TURRET); // vel in pixels/sec
 
@@ -97,7 +97,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		break;
 		case WEP_FLAMER:
 		{
-			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->rot + (float)(rand()%10)/20.0 - 0.25;
+			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot() + (float)(rand()%10)/20.0 - 0.25;
 			
 			Projectile* p = Projectile_Create(player, outgoingPower, tankPos, vinkel, FLAMER);
 			
@@ -110,7 +110,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		break;
 		case WEP_CLUSTER:
 		{
-			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->rot;
+			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
 			
 			Projectile* p = Projectile_Create(player, outgoingPower, tankPos, vinkel, CLUSTER); // vel in pixels/sec
 			
@@ -123,7 +123,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		break;
 		case WEP_ROCKET:
 		{
-			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->rot;
+			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
 			
 			Projectile* p = Projectile_Create(player, outgoingPower, tankPos, vinkel, ROCKET); // vel in pixels/sec
 			
@@ -137,7 +137,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		
 		case WEP_JET:
 		{
-			float tankRotation = tank->AngularPos() + planet->rot;
+			float tankRotation = tank->AngularPos() + planet->Rot();
 			
 			/* x component is rotation, y comp is acc-force */
 			vec2 force;
@@ -149,10 +149,9 @@ void Weapon::Fire( MDF::Player *player, World &world )
 			finalforce.x = -cos(tankRotation) * force.y;
 			finalforce.y = sin(tankRotation) * force.y;
 			/* Apply vel to planet */
-			planet->vel.x += finalforce.x;
-			planet->vel.y += finalforce.y;
+			planet->Vel() = vec2Add(planet->Vel(), finalforce);
 			/* Rotate planet */
-			planet->rotvel += force.x;
+			planet->RotVel() += force.x;
 		}
 		break;
 		

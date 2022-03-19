@@ -105,7 +105,7 @@ Projectile* Projectile_Create(MDF::Player* player, float kraft, vec2 pos, float 
 	return p;
 }
 
-void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, Planet* planet, bool &removal, float dt )
+void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt )
 {
 	if (target) {
 		switch(projectile->type)
@@ -178,9 +178,9 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, Pla
 			}
 			if (planet) {
 				vec2 velMod = projectile->vel;
-				velMod.x = velMod.x/planet->mass*10000.0;
-				velMod.y = velMod.y/planet->mass*10000.0;
-				planet->vel = vec2Add( planet->vel, velMod );
+				velMod.x = velMod.x/planet->Mass()*10000.0;
+				velMod.y = velMod.y/planet->Mass()*10000.0;
+				planet->Vel() = vec2Add( planet->Vel(), velMod );
 			}
 		}
 		break;
@@ -188,9 +188,9 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, Pla
 		{
 			if (planet) {
 				vec2 velMod = projectile->vel;
-				velMod.x = velMod.x/planet->mass*10000.0;
-				velMod.y = velMod.y/planet->mass*10000.0;
-				planet->vel = vec2Add( planet->vel, velMod );
+				velMod.x = velMod.x/planet->Mass()*10000.0;
+				velMod.y = velMod.y/planet->Mass()*10000.0;
+				planet->Vel() = vec2Add( planet->Vel(), velMod );
 			}
 		}
 		break;
@@ -201,15 +201,15 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, Pla
         case AMMO_NUKE:
 		{
 			if (planet) {
-				vec2 distance = vec2Sub( projectile->pos, planet->pos );
+				vec2 distance = vec2Sub( projectile->pos, planet->Pos() );
 				distance = vec2Normalize(distance);
 				
-				distance.x *= planet->radius;
-				distance.y *= planet->radius;
+				distance.x *= planet->Radius();
+				distance.y *= planet->Radius();
 				
 				projectile->vel = distance;
 				
-				projectile->pos = vec2Add( planet->pos, distance );
+				projectile->pos = vec2Add( planet->Pos(), distance );
 				
 				removal = false;
 			}

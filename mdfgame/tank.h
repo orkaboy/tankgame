@@ -11,8 +11,8 @@ constexpr int MAX_HITPOINTS = 100;
 
 namespace MDF {
 	class Player;
+	class Planet;
 }
-struct Planet;
 struct World;
 
 namespace MDF {

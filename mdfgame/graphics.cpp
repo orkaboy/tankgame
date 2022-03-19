@@ -124,12 +124,12 @@ void Graphics_DrawScene(World &world)
 
 	for (auto planet : world.planets)
 	{
-        SDL_Texture* img = planet->image;
+        auto img = planet->Image();
         int w;
         SDL_QueryTexture(img, NULL, NULL, &w, NULL);
 
-        float scaling = 2 * planet->radius / (w * (1 - 0.1176f));
-        Graphics_ApplySurface(img, planet->pos.x - offset.x, planet->pos.y - offset.y, scaling, planet->rot);
+        float scaling = 2 * planet->Radius() / (w * (1 - 0.1176f));
+        Graphics_ApplySurface(img, planet->Pos().x - offset.x, planet->Pos().y - offset.y, scaling, planet->Rot());
 	}
 	
 	for (const auto tank : world.tanks)
@@ -213,9 +213,9 @@ void Tank_SetImages(MDF::Tank *tank, MDF::TankColors col)
 	tank->SetTankBody(tankParts[col]);
 }
 
-void Planet_SetImage(Planet *planet, std::string id)
+void Planet_SetImage(MDF::Planet *planet, std::string id)
 {
-	if( (planet->image = images[id] ) == NULL)
+	if( (planet->SetImage(images[id]) ) == NULL)
 		fmt::print("Couldn't load image {} from 'images'\n", id);
 }
 

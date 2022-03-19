@@ -18,70 +18,70 @@ void PlanetBounce(Planet *p1, Planet *p2)
 {
 	// First, find the normalized vector n from the center of
 	// circle1 to the center of circle2
-	vec2 n = vec2Sub(p2->pos, p1->pos);
+	vec2 n = vec2Sub(p2->Pos(), p1->Pos());
 	n = vec2Normalize(n);
 
 	// Find the length of the component of each of the movement
 	// vectors along n.
 	// a1 = v1 . n
 	// a2 = v2 . n
-	float a1 = vec2DotProd(p1->vel, n);
-	float a2 = vec2DotProd(p2->vel, n);
+	float a1 = vec2DotProd(p1->Vel(), n);
+	float a2 = vec2DotProd(p2->Vel(), n);
 
 	// Using the optimized version,
 	// optimizedP =  2(a1 - a2)
 	//              -----------
 	//                m1 + m2
-	float optimizedP = (2.0 * (a1 - a2)) / (p1->mass + p2->mass);
+	float optimizedP = (2.0 * (a1 - a2)) / (p1->Mass() + p2->Mass());
 
 	// Calculate v1', the new movement vector of circle1
 	// v1' = v1 - optimizedP * m2 * n
-	p1->vel = vec2Sub(p1->vel, vec2Multiply(n, optimizedP * p2->mass)); 
+	p1->Vel() = vec2Sub(p1->Vel(), vec2Multiply(n, optimizedP * p2->Mass())); 
 
 	// Calculate v2', the new movement vector of circle2
 	// v2' = v2 + optimizedP * m1 * n
-	p2->vel = vec2Add(p2->vel, vec2Multiply(n, optimizedP * p1->mass));
+	p2->Vel() = vec2Add(p2->Vel(), vec2Multiply(n, optimizedP * p1->Mass()));
 }
 
 void UpdatePlanets(World &w, float dt)
 {
 	for(auto planet : w.planets)
 	{
-		vec2 oldPos = planet->pos;
+		vec2 oldPos = planet->Pos();
 		
-		planet->rot += planet->rotvel * dt;
-		while(planet->rot > 2 * M_PI) planet->rot -= 2*M_PI;
-		while(planet->rot < 0) planet->rot += 2*M_PI;
+		planet->Rot() += planet->RotVel() * dt;
+		while(planet->Rot() > 2 * M_PI) planet->Rot() -= 2*M_PI;
+		while(planet->Rot() < 0) planet->Rot() += 2*M_PI;
 
-		planet->pos.x += planet->vel.x * dt;
-		planet->pos.y += planet->vel.y * dt;
+		planet->Pos().x += planet->Vel().x * dt;
+		planet->Pos().y += planet->Vel().y * dt;
 		
-		vec2 moveVec = vec2Sub(planet->pos, oldPos);
+		vec2 moveVec = vec2Sub(planet->Pos(), oldPos);
 		
-		planet->vel.x *= 0.99;
-		planet->vel.y *= 0.99;
+		planet->Vel().x *= 0.99;
+		planet->Vel().y *= 0.99;
 		
-		planet->rotvel *= 0.97;
+		planet->RotVel() *= 0.97;
 		
-		if(planet->pos.x - planet->radius < 0)
+		if(planet->Pos().x - planet->Radius() < 0)
 		{
-			planet->vel.x = -planet->vel.x;
-			planet->pos.x = planet->radius;
+			planet->Vel().x = -planet->Vel().x;
+			planet->Pos().x = planet->Radius();
 		}
-		if(planet->pos.x + planet->radius > w.size.width)
+		if(planet->Pos().x + planet->Radius() > w.size.width)
 		{
-			planet->vel.x = -planet->vel.x;
-			planet->pos.x = w.size.width - planet->radius;
+			planet->Vel().x = -planet->Vel().x;
+			planet->Pos().x = w.size.width - planet->Radius();
 		}
-		if(planet->pos.y - planet->radius < 0) 
+		if(planet->Pos().y - planet->Radius() < 0) 
 		{
-			planet->vel.y = -planet->vel.y;
-			planet->pos.y = planet->radius;
+			planet->Vel().y = -planet->Vel().y;
+			planet->Pos().y = planet->Radius();
 		}
-		if(planet->pos.y + planet->radius > w.size.height)
+		if(planet->Pos().y + planet->Radius() > w.size.height)
 		{
-			planet->vel.y = -planet->vel.y;
-			planet->pos.y = w.size.height - planet->radius;
+			planet->Vel().y = -planet->Vel().y;
+			planet->Pos().y = w.size.height - planet->Radius();
 		}
 		
 		/* Check for collisions */
@@ -89,18 +89,18 @@ void UpdatePlanets(World &w, float dt)
 		{
 			if(planet == planet2) continue;
 
-			float dist = vec2Length(vec2Sub(planet2->pos, planet->pos));
-			float r = planet2->radius + planet->radius;
+			float dist = vec2Length(vec2Sub(planet2->Pos(), planet->Pos()));
+			float r = planet2->Radius() + planet->Radius();
 			float r2 = r * r;
 			dist -= r;
 			if(vec2Length(moveVec) < dist) continue;
 
 			// Normalize the movevec
-			vec2 n = vec2Normalize(planet->vel);
+			vec2 n = vec2Normalize(planet->Vel());
 
 			// Find C, the vector from the center of the moving
 			// circle A to the center of B
-			vec2 C = vec2Sub(planet2->pos, oldPos);
+			vec2 C = vec2Sub(planet2->Pos(), oldPos);
 
 			// D = N . C = ||C|| * cos(angle between N and C)
 			float D = vec2DotProd(n, C);
@@ -148,7 +148,7 @@ void UpdatePlanets(World &w, float dt)
 			moveVec = vec2Normalize(moveVec);
 			moveVec = vec2Multiply(moveVec, distance);
 
-			planet->pos = vec2Add(oldPos, moveVec);
+			planet->Pos() = vec2Add(oldPos, moveVec);
 			
 			PlanetBounce(planet, planet2);
 		}
@@ -175,13 +175,13 @@ void UpdateProjectiles(World &w, float dt)
 			float dx, dy;
 			float r, r2;
 			
-			dx = planet->pos.x - proj->pos.x;
-			dy = planet->pos.y - proj->pos.y;
+			dx = planet->Pos().x - proj->pos.x;
+			dy = planet->Pos().y - proj->pos.y;
 			
 			r2 = dx*dx + dy*dy;
 			r = sqrt(r2);
 			
-			float acc = GRAVITY * planet->mass;
+			float acc = GRAVITY * planet->Mass();
 			acc /= r2;
 			
 			accx += acc * (dx / r);
@@ -197,8 +197,8 @@ void UpdateProjectiles(World &w, float dt)
 		/* Collision with planet */
 		for(auto planet : w.planets)
 		{
-			float distance2 = vec2Length2(vec2Sub(proj->pos, planet->pos));
-			float r2 = proj->radius + planet->radius;
+			float distance2 = vec2Length2(vec2Sub(proj->pos, planet->Pos()));
+			float r2 = proj->radius + planet->Radius();
 			r2 *= r2;
 
 			if(r2 >= distance2)
@@ -267,19 +267,19 @@ void UpdateTanks(World &w, float dt)
 		tank->TimeSinceLastFire() -= dt;
 		tank->TeleportTimer() -= dt;
 		
-		tank->Pos().x = planet->pos.x + (planet->radius * cos(tank->AngularPos() + planet->rot));
-		tank->Pos().y = planet->pos.y + (planet->radius  * -sin(tank->AngularPos() + planet->rot));
+		tank->Pos().x = planet->Pos().x + (planet->Radius() * cos(tank->AngularPos() + planet->Rot()));
+		tank->Pos().y = planet->Pos().y + (planet->Radius()  * -sin(tank->AngularPos() + planet->Rot()));
 		
-		tank->Turret().x = 20.0f * cos(tank->TurretAngle() + tank->AngularPos() + planet->rot);
-		tank->Turret().y = 20.0f * -sin(tank->TurretAngle() + tank->AngularPos() + planet->rot);
+		tank->Turret().x = 20.0f * cos(tank->TurretAngle() + tank->AngularPos() + planet->Rot());
+		tank->Turret().y = 20.0f * -sin(tank->TurretAngle() + tank->AngularPos() + planet->Rot());
 		
 		/* Check if tank is crushed! */
 		for(auto planet : w.planets)
 		{
 			if(planet == tank->GetPlanet()) continue;
 			
-			float dist = vec2Length(vec2Sub(planet->pos, tank->Pos()));
-			if(dist > planet->radius + tank->BoundingRadius()) continue;
+			float dist = vec2Length(vec2Sub(planet->Pos(), tank->Pos()));
+			if(dist > planet->Radius() + tank->BoundingRadius()) continue;
 			
 			if(!tank->Dying())
 				w.effects.push_back(new Effect(EffectType::CRUSHED, tank->Pos()));

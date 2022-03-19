@@ -43,7 +43,7 @@ World World_Init(std::string findpath)
 		pfile >> dummy >> tempr;
 		pfile >> dummy >> tempm;
 
-		Planet *planet = Planet_Init(tempx, tempy, tempr, tempm);
+		auto planet = new MDF::Planet(tempx, tempy, tempr, tempm);
 
 		Planet_SetImage(planet, tempid);
 

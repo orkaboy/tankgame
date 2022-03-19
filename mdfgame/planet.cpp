@@ -1,15 +1,17 @@
 #include "planet.h"
 
-Planet *Planet_Init(float x, float y, float radius, float mass)
+namespace MDF {
+
+Planet::Planet(float x, float y, float radius, float mass)
 {
-	Planet* tempPlanet = new Planet;
-	tempPlanet->pos.x = x;
-	tempPlanet->pos.y = y;
-	tempPlanet->rot = 0;
-	tempPlanet->rotvel = 0;
-	tempPlanet->vel.x = 0;
-	tempPlanet->vel.y = 0;
-	tempPlanet->radius = radius;
-	tempPlanet->mass = mass;
-	return tempPlanet;
+	mPos.x = x;
+	mPos.y = y;
+	mRot = 0;
+	mRotvel = 0;
+	mVel.x = 0;
+	mVel.y = 0;
+	mRadius = radius;
+	mMass = mass;
+}
+
 }

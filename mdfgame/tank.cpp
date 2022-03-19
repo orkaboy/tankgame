@@ -33,7 +33,7 @@ void Tank::SetTurretRotation(vec2 target)
 	
 	float theta = acos(vec2DotProd(direction, unit));
 	
-	float beta = planet->rot + angular_position;
+	float beta = planet->Rot() + angular_position;
 	
 	float alpha;
 	if(direction.y > 0)
@@ -149,7 +149,7 @@ void Tank::Draw( vec2 offset ) const
 	const auto& weapon_ = weapons[weapon];
     SDL_Texture *turret_ = weapon_.TankTurret();
 	
-	float tank_rot = angular_position + planet->rot;
+	float tank_rot = angular_position + planet->Rot();
     Graphics_ApplySurface(body, (int)pos.x - offset.x, (int)pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
 
 	float turretX, turretY;

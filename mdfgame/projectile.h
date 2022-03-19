@@ -10,8 +10,8 @@ struct World;
 namespace MDF {
 	class Tank;
 	class Player;
+	class Planet;
 }
-struct Planet;
 
 enum ProjectileType
 {
@@ -48,7 +48,7 @@ typedef struct Projectile
 /* creats a projectile at position for players tank with vinkel and kraft */
 Projectile *Projectile_Create(MDF::Player *player, float kraft, vec2 pos, float vinkel, ProjectileType type);
 
-void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, Planet* planet, bool &removal, float dt );
+void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt );
 
 void Projectile_Update(Projectile* projectile, World &world, bool &removal, float dt );
 
