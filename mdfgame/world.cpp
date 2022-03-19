@@ -78,7 +78,7 @@ void World::SpawnAmmo(float dt)
 			case 3: type = AMMO_ROCKET; break;
 		}
 
-        projectiles.emplace_back(Projectile::Create(NULL, 0.0, pos, 0.0, type));
+        projectiles.emplace_back(new Projectile(NULL, 0.0, pos, 0.0, type));
 		timeSinceLastAmmo = 0.0;
 	}
 }

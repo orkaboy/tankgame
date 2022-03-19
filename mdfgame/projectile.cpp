@@ -44,66 +44,61 @@ void Projectile::Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2
 }
 
 /* creats a projectile at position for players tank with vinkel and kraft */
-Projectile* Projectile::Create(MDF::Player* player, float kraft, vec2 pos, float vinkel, ProjectileType type)
+Projectile::Projectile(MDF::Player* player_, float kraft, vec2 pos_, float vinkel, ProjectileType type_)
 {
-	Projectile* p = new Projectile;
-
-	p->player = player;
-	p->pos.x = pos.x;
-	p->pos.y = pos.y;
-	p->vel.x = cos(vinkel) * kraft;
-	p->vel.y = -sin(vinkel) * kraft;
+	player = player_;
+	pos = pos_;
+	vel.x = cos(vinkel) * kraft;
+	vel.y = -sin(vinkel) * kraft;
 	/* TEMP */
-	p->radius = 1;
-	p->animation = NULL;
-	p->surface = NULL;
-	p->type = type;
-	p->damage = 20.0;
+	radius = 1;
+	animation = NULL;
+	surface = NULL;
+	type = type_;
+	damage = 20.0;
 
-	switch(p->type)
+	switch(type)
 	{
 		case CLUSTER:
 		{
-			p->animation = MDF::Animation::GetAnimation("ClusterAnim");
-			p->LifeTime = 3.0;
+			animation = MDF::Animation::GetAnimation("ClusterAnim");
+			LifeTime = 3.0;
 		}
 		break;
 		case FLAMER:
 		{
-			p->animation = MDF::Animation::GetAnimation("FlamerFire");
-			p->LifeTime = 2.1;
+			animation = MDF::Animation::GetAnimation("FlamerFire");
+			LifeTime = 2.1;
 		}
 		break;
 		case ROCKET:
 		{
-			p->animation = MDF::Animation::GetAnimation("RocketAnim");
+			animation = MDF::Animation::GetAnimation("RocketAnim");
 		}
 		break;
 		case AMMO_TURRET:
 		{
-			p->surface = getImage("TurretAmmo");
+			surface = getImage("TurretAmmo");
 		}
 		break;
 		case AMMO_FLAMER:
 		{
-			p->surface = getImage("FlamerAmmo");
+			surface = getImage("FlamerAmmo");
 		}
 		break;
 		case AMMO_CLUSTER:
 		{
-			p->surface = getImage("ClusterAmmo");
+			surface = getImage("ClusterAmmo");
 		}
 		break;
 		default:
 		break;
 	}
 	
-	if (p->animation) {
-		p->animTimer = 0;
-		p->animFrame = 0;
+	if (animation) {
+		animTimer = 0;
+		animFrame = 0;
 	}
-
-	return p;
 }
 
 void Projectile::Hit(World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt )
@@ -170,7 +165,7 @@ void Projectile::Hit(World &world, MDF::Tank* target, MDF::Planet* planet, bool 
 		case CLUSTER:
 		{
 			for (int i = 0; i < CLUSTER_COUNT; i++) {
-				auto newproj = Projectile::Create(player, 150.f,
+				auto newproj = new Projectile(player, 150.f,
 					  pos, float(i * M_PI) / 6.0, CLUSTER_BIT);
 				newproj->pos.x -= vel.x*dt;
 				newproj->pos.y -= vel.y*dt;

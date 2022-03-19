@@ -86,7 +86,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		{
 			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
 
-			auto p = Projectile::Create(player, outgoingPower, tankPos, vinkel, TURRET); // vel in pixels/sec
+			auto p = new Projectile(player, outgoingPower, tankPos, vinkel, TURRET); // vel in pixels/sec
 
 			p->pos = vec2Add(tankPos, tank->Turret());
 
@@ -99,7 +99,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		{
 			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot() + (float)(rand()%10)/20.0 - 0.25;
 			
-			auto p = Projectile::Create(player, outgoingPower, tankPos, vinkel, FLAMER);
+			auto p = new Projectile(player, outgoingPower, tankPos, vinkel, FLAMER);
 			
 			p->pos = vec2Add(tankPos, tank->Turret());
 			
@@ -112,7 +112,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		{
 			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
 			
-			auto p = Projectile::Create(player, outgoingPower, tankPos, vinkel, CLUSTER); // vel in pixels/sec
+			auto p = new Projectile(player, outgoingPower, tankPos, vinkel, CLUSTER); // vel in pixels/sec
 			
 			p->pos = vec2Add(tankPos, tank->Turret());
 			
@@ -125,7 +125,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		{
 			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
 
-			auto p = Projectile::Create(player, outgoingPower, tankPos, vinkel, ROCKET); // vel in pixels/sec
+			auto p = new Projectile(player, outgoingPower, tankPos, vinkel, ROCKET); // vel in pixels/sec
 
 			p->pos = vec2Add(tankPos, tank->Turret());
 
