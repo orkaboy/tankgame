@@ -3,7 +3,7 @@
 
 namespace MDF {
 
-void GameState::Run() {
+void GameSM::Run() {
     const float dt = 1.0 / FPS;
     float currentTime = SDL_GetTicks();
     float accumulator = 0.0f;
@@ -18,18 +18,38 @@ void GameState::Run() {
         while (accumulator >= dt)
         {
             accumulator -= dt;
+            /* Handle event loop */
+            auto stateName = mCurState->HandleEvents();
 
-            HandleEvents();
+            /* Handle State transition */
+            if(!stateName.empty()) {
+                auto newState = mStates[stateName];
+                if(newState) {
+                    TransitionState(newState);
+                    break;
+                }
+            }
 
-            Update(dt);
+            /* Run Update based on deltatime in seconds */
+            mCurState->Update(dt);
         }
 
+        /* Draw scene */
         Graphics::BeginScene();
-        Draw();
+        mCurState->Draw();
         Graphics::EndScene();
 
         // TODO wait
     }
+}
+
+
+void GameSM::TransitionState(GameState* newState) {
+    if(mCurState) {
+        mCurState->ExitState();
+    }
+    mCurState = newState;
+    mCurState->EnterState();
 }
 
 }
