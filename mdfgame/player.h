@@ -23,7 +23,7 @@ public:
 	/* Call when player gets killed */
 	void Killed();
 
-	void DrawHud(SDL_Renderer* renderer, int x, int y);
+	void DrawHud(SDL_Renderer* renderer, vec2 pos);
 
 	void SetTank(Tank* tank) { mTank = tank; }
 	auto GetTank() -> Tank* { return mTank; }

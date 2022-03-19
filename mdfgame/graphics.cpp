@@ -147,7 +147,7 @@ void DrawScene(MDF::World &world)
 
 	if ( world.player )
 	{
-        world.player->DrawHud(renderer, 8, 8);
+        world.player->DrawHud(renderer, vec2(8, 8));
 	}
     MDF::Effect::Draw(world.effects, offset);
 }
