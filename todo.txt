@@ -4,6 +4,7 @@ Roadmap Tank game
 * Implement teleport SFX
 * Implement aiming with keyboard
 * Implement GameState structure (input/loop/transitions) and refactor Menu and main Game into it
+* Implement Settings file for keybinds, graphics, audio etc.
 
 Multiple players - colors
 
@@ -13,10 +14,13 @@ Gamemodes
 * Hotseat (fixed screen)
 
 Implement ammo
+Implement more weapons
 
 Implement proper death/respawn, + SFX
 
 Implement score
+* Display in HUD
+* After match screen (who killed who how many times?)
 
 Implement bots
 
@@ -25,5 +29,8 @@ Implement menues
 * Audio
 * Game mode choice
 * Player setup (game lobby)
+    - Player name
+    - Player colors
 
 * Credits screen
+
