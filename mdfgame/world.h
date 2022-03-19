@@ -27,7 +27,7 @@ typedef struct World
 	std::vector<Projectile*> projectiles;
 	std::vector<MDF::Effect*> effects;
 	
-	Camera camera;
+	MDF::Camera camera;
 	
 	vec2	size;
 	float timeSinceLastAmmo;

@@ -1,6 +1,8 @@
 #include "camera.h"
 #include "world.h"
 
+namespace MDF {
+
 Camera::Camera() : corner(0,0), screenSize(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
 	
@@ -24,4 +26,6 @@ void Camera::PositionCorner(vec2 tankPos, vec2 mouse)
 // 		newCorner.y = worldSize.height - screenSize.height;
 	
 	corner = newCorner;
+}
+
 }

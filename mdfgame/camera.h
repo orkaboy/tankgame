@@ -2,6 +2,8 @@
 
 #include "utility.h"
 
+namespace MDF {
+
 class Camera
 {
 	public:
@@ -13,3 +15,5 @@ class Camera
 		vec2 corner;
 		vec2 screenSize;
 };
+
+}
