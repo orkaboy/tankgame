@@ -28,6 +28,7 @@ void Menu_Draw(MDF::Menu& menu);
 SDL_Texture * getImage(std::string id);
 TTF_Font * getFont(std::string id);
 
-SDL_Renderer* ReturnScreen();
+SDL_Renderer* ReturnRenderer();
+SDL_Window* ReturnScreen();
 SDL_Texture* ReturnBg();
 SDL_Texture* ReturnCursor();

@@ -1,6 +1,8 @@
 #include "menu.h"
 #include "graphics.h"
 
+#include "input.h"
+
 namespace MDF {
 
 Menu::Menu(SDL_Texture* bg, SDL_Texture* cursor)
@@ -41,8 +43,8 @@ MenuOption TheMenu ( bool *quit )
     SDL_Event event;
 
     SDL_Texture* bg = ReturnBg();
-    SDL_Texture* cursor = ReturnCursor();
-    Menu menu(bg, cursor);
+    SDL_Texture* cursor_tex = ReturnCursor();
+    Menu menu(bg, cursor_tex);
     menu.AddButton(60, 100, MenuOption::HostGame, "Host Game", getFont("Text"));
     menu.AddButton(290, 100, MenuOption::JoinGame, "Join Game", getFont("Text"));
     menu.AddButton(510, 100, MenuOption::Settings, "Settings", getFont("Text"));
@@ -50,7 +52,6 @@ MenuOption TheMenu ( bool *quit )
 
 
     bool mquit = false;
-    int mx,my;
     unsigned int i;
     float timestamp = 0.0f;
     const float dt = 1.0 / FPS;
@@ -104,13 +105,13 @@ MenuOption TheMenu ( bool *quit )
             accumulator -= dt;
         }
 
-        SDL_GetMouseState(&mx, &my);
+        auto cursor = Input_GetMousePos();
 
         Graphics_BeginScene();
 
-        menu.CheckButton(mx, my);
+        menu.CheckButton(cursor.x, cursor.y);
         Menu_Draw(menu);
-        Graphics_ApplySurface(cursor, mx, my, 1, 0);
+        Graphics_ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
 
         Graphics_EndScene();
     }

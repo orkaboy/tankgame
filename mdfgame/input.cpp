@@ -75,6 +75,45 @@ void Input_SetHandler(KeyStroke stroke, KeyHandler handler)
 	strokehandlers[stroke] = handler;
 }
 
+/* Code to transform raw mouse position to the logical rendering scale */
+vec2 Input_GetMousePos() {
+	auto renderer = ReturnRenderer();
+
+	int windowX, windowY;
+	SDL_GetMouseState(&windowX, &windowY);
+
+	int logical_w, logical_h;
+	SDL_RenderGetLogicalSize(renderer, &logical_w, &logical_h);
+
+	int window_w, window_h;
+    SDL_GetWindowSize(ReturnScreen(), &window_w, &window_h);
+
+    int window_midpoint_x = window_w>>1;
+    int window_midpoint_y = window_h>>1;
+
+	float scale_x, scale_y;
+	SDL_RenderGetScale(renderer, &scale_x, &scale_y);
+    int renderer_real_w = (float)logical_w*scale_x;
+    int renderer_real_h = (float)logical_h*scale_y;
+
+    int renderer_midpoint_x = renderer_real_w>>1;
+    int renderer_midpoint_y = renderer_real_h>>1;
+
+    /* Compare with midpoints because a renderer that is logically sized will be centered and have a border
+     if the window aspect ratio differs from the renderer's.
+    */
+    int window_renderer_midpoint_delta_x = window_midpoint_x - renderer_midpoint_x;
+    int window_renderer_midpoint_delta_y = window_midpoint_y - renderer_midpoint_y;
+
+    int renderer_real_x = windowX - window_renderer_midpoint_delta_x; 
+    int renderer_real_y = windowY - window_renderer_midpoint_delta_y;
+
+	vec2 ret;
+    ret.x = (float)renderer_real_x / (float)renderer_real_w * (float)logical_w;
+    ret.y = (float)renderer_real_y / (float)renderer_real_h * (float)logical_h;
+	return ret;
+}
+
 void Input_HandleEvents()
 {
 	SDL_Event event;

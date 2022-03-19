@@ -36,3 +36,5 @@ void Input_SetHandler(KeyStroke stroke, KeyHandler handler);
 void Input_BindMouseHandler(MDF::Player* player);
 void Input_Grab();
 void Input_Release();
+
+vec2 Input_GetMousePos();

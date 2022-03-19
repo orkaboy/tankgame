@@ -2,6 +2,7 @@
 #include "resources.h"
 #include "graphics.h"
 #include "player.h"
+#include "input.h"
 
 #include "SDL2/SDL_ttf.h"
 #include "SDL2/SDL_image.h"
@@ -100,11 +101,10 @@ void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, flo
 
 void Graphics_DrawScene(World &world)
 {
-	int cursorX, cursorY;
-	SDL_GetMouseState(&cursorX, &cursorY);
+	auto cursor = Input_GetMousePos();
 	vec2 offset = world.camera.GetCorner();
-	offset.x += cursorX;
-	offset.y += cursorY;
+	offset.x += cursor.x;
+	offset.y += cursor.y;
 	
 	world.camera.PositionCorner(world.player ? world.player->GetTank()->Pos() : vec2(0, 0), offset, world.size);
 	
@@ -241,10 +241,15 @@ void Menu_Draw(MDF::Menu& menu)
         button->Draw(renderer);
 }
 
-SDL_Renderer* ReturnScreen()
+SDL_Renderer* ReturnRenderer()
 {
     return renderer;
 }
+
+SDL_Window* ReturnScreen() {
+	return screen;
+}
+
 
 SDL_Texture* ReturnBg()
 {

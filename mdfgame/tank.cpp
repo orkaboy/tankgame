@@ -4,6 +4,7 @@
 #include "audio.h"
 #include "world.h"
 #include "graphics.h"
+#include "input.h"
 
 #include <cmath>
 
@@ -157,20 +158,19 @@ void Tank::Draw( vec2 offset ) const
 		
     Graphics_ApplySurface(turret_, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + turret_angle);
 	
-    SDL_Texture *cursor = weapon_.tankCursor;
+    SDL_Texture *cursor_tex = weapon_.tankCursor;
 	
-	if(cursor != NULL)
+	if(cursor_tex != NULL)
 	{
-		int cursorX, cursorY;
         int w, h;
-        SDL_QueryTexture(cursor, NULL, NULL, &w, &h);
+        SDL_QueryTexture(cursor_tex, NULL, NULL, &w, &h);
 		//cursorX = (turret.x*4 + 2*pos.x) / 2;
 		//cursorY = (turret.y*4 + 2*pos.y) / 2;
-		SDL_GetMouseState(&cursorX, &cursorY);
-        cursorX -= w / 2;
-        cursorY -= h / 2;
+		auto cursor = Input_GetMousePos();
+        cursor.x -= w / 2;
+        cursor.y -= h / 2;
 
-        Graphics_ApplySurface(cursor, cursorX, cursorY, 1, 0);
+        Graphics_ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
 	}
 	
 	if(firing && weapon_.FireAnimation)

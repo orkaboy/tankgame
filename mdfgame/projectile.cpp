@@ -4,6 +4,7 @@
 #include "planet.h"
 #include "physics.h"
 #include "world.h"
+#include "input.h"
 #include <cmath>
 
 #include "graphics.h"
@@ -236,12 +237,11 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 		break;
 		case ROCKET:
 		{
-			int cursorX, cursorY;
-			SDL_GetMouseState(&cursorX, &cursorY);
+			vec2 cursor = Input_GetMousePos();
 			
 			vec2 offset = world.camera.GetCorner();
-			offset.x += cursorX;
-			offset.y += cursorY;
+			offset.x += cursor.x;
+			offset.y += cursor.y;
 			
 			offset = vec2Sub( offset, projectile->pos );
 			offset = vec2Normalize(offset);
