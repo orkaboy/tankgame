@@ -108,7 +108,7 @@ private:
 		Input_SetHandler(KEY_DOWN, KeyDown);
 	}
 
-	void GameLoop(World world) {
+	void GameLoop(World& world) {
 		// Time variables
 		float timestamp = 0.0f;
 		const float dt = (float)(1.0 / FPS);

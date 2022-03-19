@@ -183,10 +183,8 @@ void Input_BindKey(SDL_Scancode key, MDF::Player* player, PlayerAction action, K
 
 void DefaultMouseHandler ( MDF::Player* player, World &world, vec2 cursor, Uint8 button )
 {
-	vec2 offset = world.camera.GetCorner();
-	cursor.x += offset.x;
-	cursor.y += offset.y;
-	
+	cursor = vec2Add(cursor, world.camera.GetCorner());
+
 	player->GetTank()->SetTurretRotation(cursor);
 	
 	static bool l_pressed = false;

@@ -20,7 +20,7 @@ static SDL_Renderer *renderer;
 static SDL_Texture* background;
 static std::map<std::string, SDL_Texture *> images;
 static std::map<std::string, TTF_Font *> fonts;
-static std::map<MDF::TankColors,SDL_Texture*> tankParts;
+static std::map<MDF::TankColors, SDL_Texture*> tankParts;
 static SDL_Texture* LoadImage(const char *s);
 static void	LoadImages();
 
@@ -102,11 +102,9 @@ void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, flo
 void Graphics_DrawScene(World &world)
 {
 	auto cursor = Input_GetMousePos();
-	vec2 offset = vec2Add(world.camera.GetCorner(), cursor);
-	
-	world.camera.PositionCorner(world.player ? world.player->GetTank()->Pos() : vec2(0, 0), offset, world.size);
-	
-	offset = world.camera.GetCorner();
+	world.camera.PositionCorner(world.player ? world.player->GetTank()->Pos() : vec2(0, 0), cursor);
+	vec2 offset = world.camera.GetCorner();
+
 	/** Fix bg **/
 	
     int w, h;

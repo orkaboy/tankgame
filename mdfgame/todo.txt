@@ -1,7 +1,6 @@
 Roadmap Tank game
 -----------------
 
-* Fix aiming issue with mouse
 * Implement aiming with keyboard
 * Implement GameState structure (input/loop/transitions) and refactor Menu and main Game into it
 
