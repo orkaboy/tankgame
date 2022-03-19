@@ -20,12 +20,11 @@ void GameSM::Run() {
             accumulator -= dt;
             /* Handle event loop */
             auto stateName = mCurState->HandleEvents();
-
-            /* Handle State transition */
             TransitionState(stateName);
 
             /* Run Update based on deltatime in seconds */
-            mCurState->Update(dt);
+            stateName = mCurState->Update(dt);
+            TransitionState(stateName);
         }
 
         /* Draw scene */
@@ -39,7 +38,10 @@ void GameSM::Run() {
 
 
 void GameSM::TransitionState(std::string stateName) {
-    if(!stateName.empty()) {
+    if(stateName == "QUIT") {
+        mQuit = true;
+    }
+    else if(!stateName.empty()) {
         auto newState = mStates[stateName];
         if(newState) {
             if(mCurState) {

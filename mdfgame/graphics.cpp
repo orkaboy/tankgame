@@ -232,13 +232,13 @@ void Planet_SetImage(MDF::Planet *planet, std::string id)
 
 /* MENU STUFFIES ###############################################*/
 
-void Menu_Draw(MDF::Menu& menu)
+void Menu_Draw(MDF::Menu* menu)
 {
     int w, h;
     SDL_GetWindowSize(screen, &w, &h);
-    Graphics::ApplySurface(menu.BG(), w / 2, h / 2);
+    Graphics::ApplySurface(menu->BG(), w / 2, h / 2);
     
-    for(auto button : menu.Buttons())
+    for(auto button : menu->Buttons())
         button->Draw(renderer);
 }
 

@@ -13,7 +13,7 @@ public:
     virtual void ExitState() {}
 
     virtual std::string HandleEvents() { return ""; }
-    virtual void Update(float dt) {}
+    virtual std::string Update(float dt) { return ""; }
     virtual void Draw() {}
 };
 

@@ -5,6 +5,8 @@
 #include <vector>
 #include "button.h"
 #include "menuoptions.h"
+#include "gamestate.h"
+#include "utility.h"
 
 namespace MDF {
 
@@ -14,7 +16,7 @@ public:
     Menu(SDL_Texture* bg, SDL_Texture* cursor);
 
     void AddButton(int x, int y, MenuOption ret, std::string text, TTF_Font *font);
-    MenuOption CheckButton(int mx, int my);
+    MenuOption CheckButton(vec2 cursor);
 
     auto Buttons() const -> const std::vector<MDF::Button*>& { return mButtons; }
     auto BG() const -> SDL_Texture* { return mBg; }
@@ -26,5 +28,20 @@ private:
 };
 
 MenuOption TheMenu ( bool* quit );
+
+namespace Menues {
+
+class Main : public GameState {
+public:
+    void EnterState() override;
+    void ExitState() override;
+
+    std::string HandleEvents() override;
+    void Draw() override;
+private:
+    Menu *mMenu{};
+};
+
+}
 
 }

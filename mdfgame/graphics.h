@@ -28,7 +28,7 @@ void DrawString(std::string str, int x, int y);
 /* set tank color */
 void Planet_SetImage(Planet *planet, std::string id);
 void Tank_SetImages(Tank *tank, TankColors col);
-void Menu_Draw(Menu& menu);
+void Menu_Draw(Menu* menu);
 SDL_Texture * getImage(std::string id);
 TTF_Font * getFont(std::string id);
 
