@@ -22,13 +22,7 @@ void GameSM::Run() {
             auto stateName = mCurState->HandleEvents();
 
             /* Handle State transition */
-            if(!stateName.empty()) {
-                auto newState = mStates[stateName];
-                if(newState) {
-                    TransitionState(newState);
-                    break;
-                }
-            }
+            TransitionState(stateName);
 
             /* Run Update based on deltatime in seconds */
             mCurState->Update(dt);
@@ -44,12 +38,17 @@ void GameSM::Run() {
 }
 
 
-void GameSM::TransitionState(GameState* newState) {
-    if(mCurState) {
-        mCurState->ExitState();
+void GameSM::TransitionState(std::string stateName) {
+    if(!stateName.empty()) {
+        auto newState = mStates[stateName];
+        if(newState) {
+            if(mCurState) {
+                mCurState->ExitState();
+            }
+            mCurState = newState;
+            mCurState->EnterState();
+        }
     }
-    mCurState = newState;
-    mCurState->EnterState();
 }
 
 }

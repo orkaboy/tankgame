@@ -24,7 +24,7 @@ public:
     void RegisterState(std::string name, GameState* state) {
         mStates[name] = state;
     }
-    void TransitionState(GameState* newState);
+    void TransitionState(std::string name);
 private:
     std::map<std::string, GameState*> mStates;
 
