@@ -22,7 +22,7 @@ TTF_Font * Graphics_LoadFont( const std::string &s, int fontsize );
 void Graphics_DrawString(std::string str, int x, int y);
 /* set tank color */
 void Planet_SetImage(Planet *planet, std::string id);
-void Tank_SetImages(Tank *tank, TankColors col);
+void Tank_SetImages(MDF::Tank *tank, MDF::TankColors col);
 void LoadFont(void);
 void Menu_Draw(MDF::Menu& menu);
 SDL_Texture * getImage(std::string id);

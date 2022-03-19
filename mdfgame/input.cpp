@@ -149,7 +149,7 @@ void DefaultMouseHandler ( MDF::Player* player, World &world, Sint16 x, Sint16 y
 	x += offset.x;
 	y += offset.y;
 	
-	Tank_SetTurretRotation(player->GetTank(), x, y);
+	player->GetTank()->SetTurretRotation(x, y);
 	
 	static bool l_pressed = false;
 	if(button & SDL_BUTTON(1))
@@ -191,40 +191,40 @@ void DefaultMouseHandler ( MDF::Player* player, World &world, Sint16 x, Sint16 y
 
 void DefaultMoveForwardHandler ( MDF::Player* player, World& world )
 {
-	Tank_Move(player->GetTank(), Direction::RIGHT);
+	player->GetTank()->Move(MDF::Direction::RIGHT);
 }
 
 void DefaultMoveBackwardHandler ( MDF::Player* player, World& world )
 {
-	Tank_Move(player->GetTank(), Direction::LEFT);
+	player->GetTank()->Move(MDF::Direction::LEFT);
 }
 
 void DefaultFireBeginHandler ( MDF::Player* player, World& world )
 {
-	player->GetTank()->firing = true;
+	player->GetTank()->SetFiring(true);
 }
 
 void DefaultFireEndHandler ( MDF::Player* player, World& world )
 {
-	player->GetTank()->firing = false;
+	player->GetTank()->SetFiring(false);
 }
 
 void DefaultTurretUpHandler ( MDF::Player* player, World& world )
 {
-	Tank_RotateTurret(player->GetTank(), Direction::RIGHT);
+	player->GetTank()->RotateTurret(MDF::Direction::RIGHT);
 }
 
 void DefaultTurretDownHandler ( MDF::Player* player, World& world )
 {
-	Tank_RotateTurret(player->GetTank(), Direction::LEFT);
+	player->GetTank()->RotateTurret(MDF::Direction::LEFT);
 }
 
 void DefaultTeleportHandler ( MDF::Player* player, World& world )
 {
-	Tank_Teleport(player->GetTank(),world);
+	player->GetTank()->Teleport(world);
 }
 
 void DefaultChangeWepHandler ( MDF::Player* player, World& world )
 {
-	Tank_NextWeapon(player->GetTank());
+	player->GetTank()->NextWeapon();
 }

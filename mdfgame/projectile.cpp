@@ -104,7 +104,7 @@ Projectile* Projectile_Create(MDF::Player* player, float kraft, vec2 pos, float 
 	return p;
 }
 
-void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* planet, bool &removal, float dt )
+void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, Planet* planet, bool &removal, float dt )
 {
 	if (target) {
 		switch(projectile->type)
@@ -116,11 +116,11 @@ void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* 
 			case CLUSTER_BIT:
 			case NUKE:
 			{
-				planet = target->planet;
+				planet = target->GetPlanet();
 				/* Fix this */
-				target->hitPoints -= projectile->damage;
-				if(target->hitPoints <= 0) {
-					Tank_Destroy(target);
+				target->HP() -= projectile->damage;
+				if(target->HP() <= 0) {
+					target->Destroy();
 					if(projectile->player->GetTank() == target)
 						projectile->player->ModPoints(-1);
 					else
@@ -132,31 +132,31 @@ void Projectile_Hit(Projectile* projectile, World &world, Tank* target, Planet* 
 			break;
 			case AMMO_TURRET:
 			{
-				target->ammo[0] += 1;
+				target->Ammo(0) += 1;
 				planet = NULL;
 			}
 			break;
 			case AMMO_FLAMER:
 			{
-				target->ammo[1] += 1;
+				target->Ammo(1) += 1;
 				planet = NULL;
 			}
 			break;
 			case AMMO_CLUSTER:
 			{
-				target->ammo[2] += 1;
+				target->Ammo(2) += 1;
 				planet = NULL;
 			}
             break;
             case AMMO_ROCKET:
             {
-                target->ammo[3] += 1;
+                target->Ammo(3) += 1;
                 planet = NULL;
             }
             break;
             case AMMO_NUKE:
             {
-                target->ammo[4] += 1;
+                target->Ammo(4) += 1;
                 planet = NULL;
             }
             break;
@@ -266,8 +266,8 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 				float dx, dy;
 				float r, r2;
 				
-				dx = tank->pos.x - projectile->pos.x;
-				dy = tank->pos.y - projectile->pos.y;
+				dx = tank->Pos().x - projectile->pos.x;
+				dy = tank->Pos().y - projectile->pos.y;
 				
 				r2 = dx*dx + dy*dy;
 				r = sqrt(r2);

@@ -7,8 +7,10 @@
 
 #include <cmath>
 
+namespace MDF {
+
 /* New fire function */
-void Tank_FireWeapon ( MDF::Player *player, World &world, float dt )
+void Tank::FireWeapon ( MDF::Player *player, World &world, float dt )
 {
 	Tank *tank = player->GetTank();
 	auto& weapon = weapons[tank->weapon];
@@ -17,12 +19,12 @@ void Tank_FireWeapon ( MDF::Player *player, World &world, float dt )
 		weapon.FireAnimation->UpdateAnimation(tank->fireFrame, tank->fireTimer, dt);
 }
 
-void Tank_SetTurretRotation(Tank *tank, Sint16 x, Sint16 y)
+void Tank::SetTurretRotation(Sint16 x, Sint16 y)
 {
-	if(tank->dying)
+	if(dying)
 		return;
-	vec2 pos(x, y);
-	vec2 direction = vec2Sub(pos, tank->pos);
+	vec2 pos_(x, y);
+	vec2 direction = vec2Sub(pos_, pos);
 	vec2 unit(1,0);
 
 	direction = vec2Normalize(direction);
@@ -30,7 +32,7 @@ void Tank_SetTurretRotation(Tank *tank, Sint16 x, Sint16 y)
 	
 	float theta = acos(vec2DotProd(direction, unit));
 	
-	float beta = tank->planet->rot + tank->angular_position;
+	float beta = planet->rot + angular_position;
 	
 	float alpha;
 	if(direction.y > 0)
@@ -43,54 +45,54 @@ void Tank_SetTurretRotation(Tank *tank, Sint16 x, Sint16 y)
 	
 	if(alpha > M_PI / 2) alpha = (float)M_PI / 2;
 	if(alpha < -M_PI / 2) alpha = -(float)M_PI / 2;
-	tank->turret_angle = alpha;
+	turret_angle = alpha;
 }
 
 #include <cassert>
 
-void Tank_RotateTurret ( Tank* tank, float relangle )
+void Tank::RotateTurret ( float relangle )
 {
 	assert(false && "Fail");
-	float nextang = tank->turret_angle + relangle;
+	float nextang = turret_angle + relangle;
 
 	if ( nextang > -(M_PI / 2) && nextang < M_PI / 2 )
-		tank->turret_angle = nextang;
+		turret_angle = nextang;
 }
 
-void Tank_RotateTurret ( Tank* tank, Direction dir )
+void Tank::RotateTurret ( MDF::Direction dir )
 {
 	assert(false && "Fail");
 
-	float mod = dir == Direction::RIGHT ? -1.0f : 1.0f;
-	float nextang = tank->turret_angle + mod * 4 * (float)(M_PI / 180);
+	float mod = dir == MDF::Direction::RIGHT ? -1.0f : 1.0f;
+	float nextang = turret_angle + mod * 4 * (float)(M_PI / 180);
 	
 	if ( nextang > -(M_PI / 2) && nextang < M_PI / 2 )
-		tank->turret_angle = nextang;
+		turret_angle = nextang;
 }
 
-void Tank_NextWeapon( Tank* tank )
+void Tank::NextWeapon()
 {
-	tank->weapon = (tank->weapon+1) % MAX_WEAPONS;
+	weapon = (weapon+1) % MAX_WEAPONS;
 }
 
-void Tank_Move ( Tank* tank, Direction dir )
+void Tank::Move ( MDF::Direction dir )
 {
-	if(tank->dying)
+	if(dying)
 		return;
-	float mod = dir == Direction::RIGHT ? -1.0f : 1.0f;
+	float mod = dir == MDF::Direction::RIGHT ? -1.0f : 1.0f;
 	
-	tank->angular_position += mod * (float)(M_PI / 180);
-	while(tank->angular_position > 2 * M_PI) tank->angular_position -= 2*(float)M_PI;
-	while(tank->angular_position < 0) tank->angular_position += 2*(float)M_PI;
+	angular_position += mod * (float)(M_PI / 180);
+	while(angular_position > 2 * M_PI) angular_position -= 2*(float)M_PI;
+	while(angular_position < 0) angular_position += 2*(float)M_PI;
 	
 	if(!Audio_IsPlayingEngineSound())
 		Audio_PlayEngineSound();
 }
 
-void Tank_Spawn ( World& world, MDF::Player* player, Planet* planet )
+void Tank::Spawn ( World& world, MDF::Player* player_, Planet* planet_ )
 {
 	Tank* tank = new Tank;
-	tank->planet = planet;
+	tank->planet = planet_;
 	tank->dying = false;
 	tank->firing = false;
 	tank->turret_angle = 0.0f;
@@ -109,66 +111,61 @@ void Tank_Spawn ( World& world, MDF::Player* player, Planet* planet )
 	tank->fireTimer = 0;
 	tank->fireFrame = 0;
 	
-	player->SetTank(tank);
-	tank->player = player;
+	player_->SetTank(tank);
+	tank->player = player_;
 	
     world.tanks.push_back(tank);
 }
 
-void Tank_Destroy ( Tank* tank )
+void Tank::Destroy ()
 {
-	tank->hitPoints = 0;
-	if(tank->dying) return;
+	hitPoints = 0;
+	if(dying) return;
 
 	Audio_PlayExplosionBig();
-	tank->player->Deaths()++;
-	tank->dying = true;
-	tank->dyingTimer = 1; //Animlength
+	player->Deaths()++;
+	dying = true;
+	dyingTimer = 1; //Animlength
 }
 
-void Tank_Free ( Tank* tank )
+void Tank::Teleport ( World& world)
 {
-	delete tank;
-}
-
-void Tank_Teleport ( Tank* tank, World& world)
-{
-	if(tank->dying) return;
-	if(tank->teleportTimer > 0) return;
+	if(dying) return;
+	if(teleportTimer > 0) return;
 	
-	tank->teleportTimer = 30;
-	int planet, size;
+	teleportTimer = 30;
+	int planet_, size;
 	/* get number of planets */
 	size = world.planets.size();
 	/* get random planet */
-	planet = rand() % size;
-	tank->planet = world.planets[planet];
+	planet_ = rand() % size;
+	planet = world.planets[planet_];
 }
 
-void Tank_Draw( const Tank *tank, vec2 offset )
+void Tank::Draw( vec2 offset ) const
 {
-    SDL_Texture *body = tank->tankBody;
-	const auto& weapon = weapons[tank->weapon];
-    SDL_Texture *turret = weapon.tankTurret;
+    SDL_Texture *body = tankBody;
+	const auto& weapon_ = weapons[weapon];
+    SDL_Texture *turret_ = weapon_.tankTurret;
 		
-	float tank_rot = tank->angular_position + tank->planet->rot;
-    Graphics_ApplySurface(body, (int)tank->pos.x - offset.x, (int)tank->pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
+	float tank_rot = angular_position + planet->rot;
+    Graphics_ApplySurface(body, (int)pos.x - offset.x, (int)pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
 	
 	float turretX, turretY;
-	turretX = (tank->turret.x + 2*tank->pos.x) / 2;
-	turretY = (tank->turret.y + 2*tank->pos.y) / 2;
+	turretX = (turret.x + 2*pos.x) / 2;
+	turretY = (turret.y + 2*pos.y) / 2;
 		
-    Graphics_ApplySurface(turret, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + tank->turret_angle);
+    Graphics_ApplySurface(turret_, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + turret_angle);
 	
-    SDL_Texture *cursor = weapon.tankCursor;
+    SDL_Texture *cursor = weapon_.tankCursor;
 	
 	if(cursor != NULL)
 	{
 		int cursorX, cursorY;
         int w, h;
         SDL_QueryTexture(cursor, NULL, NULL, &w, &h);
-		//cursorX = (tank->turret.x*4 + 2*tank->pos.x) / 2;
-		//cursorY = (tank->turret.y*4 + 2*tank->pos.y) / 2;
+		//cursorX = (turret.x*4 + 2*pos.x) / 2;
+		//cursorY = (turret.y*4 + 2*pos.y) / 2;
 		SDL_GetMouseState(&cursorX, &cursorY);
         cursorX -= w / 2;
         cursorY -= h / 2;
@@ -176,16 +173,18 @@ void Tank_Draw( const Tank *tank, vec2 offset )
         Graphics_ApplySurface(cursor, cursorX, cursorY, 1, 0);
 	}
 	
-	if(tank->firing && weapon.FireAnimation)
+	if(firing && weapon_.FireAnimation)
 	{
-        SDL_Texture *fireAnim = weapon.FireAnimation->GetFrame(tank->fireFrame);
+        SDL_Texture *fireAnim = weapon_.FireAnimation->GetFrame(fireFrame);
 		
 		if(fireAnim != NULL)
 		{
-			float fireX = (tank->turret.x*4 + 2*tank->pos.x) / 2;
-			float fireY = (tank->turret.y*4 + 2*tank->pos.y) / 2;
+			float fireX = (turret.x*4 + 2*pos.x) / 2;
+			float fireY = (turret.y*4 + 2*pos.y) / 2;
 			
-            Graphics_ApplySurface(fireAnim, (int)fireX - offset.x, (int)fireY - offset.y, 1, tank_rot + tank->turret_angle);
+            Graphics_ApplySurface(fireAnim, (int)fireX - offset.x, (int)fireY - offset.y, 1, tank_rot + turret_angle);
 		}
 	}
+}
+
 }

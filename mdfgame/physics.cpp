@@ -212,10 +212,10 @@ void UpdateProjectiles(World &w, float dt)
 		/* Calculate collisions for all tanks */
 		for(auto tank : w.tanks)
 		{
-			if(tank->dying) continue;
+			if(tank->Dying()) continue;
 			
-			float distance2 = vec2Length2(vec2Sub(proj->pos, tank->pos));
-			float r2 = proj->radius + tank->bounding_radius;
+			float distance2 = vec2Length2(vec2Sub(proj->pos, tank->Pos()));
+			float r2 = proj->radius + tank->BoundingRadius();
 			r2 *= r2;
 			
 			if(r2 >= distance2)
@@ -261,51 +261,51 @@ void UpdateTanks(World &w, float dt)
 	for(unsigned int i = 0; i < w.tanks.size(); i++)
 	{
 		Tank *tank = w.tanks[i];
+		auto planet = tank->GetPlanet();
+		auto player = tank->GetPlayer();
 		
-		tank->timeSinceLastFire -= dt;
-		tank->teleportTimer -= dt;
+		tank->TimeSinceLastFire() -= dt;
+		tank->TeleportTimer() -= dt;
 		
-		tank->pos.x = tank->planet->pos.x + (tank->planet->radius * cos(tank->angular_position + tank->planet->rot));
-		tank->pos.y = tank->planet->pos.y + (tank->planet->radius  * -sin(tank->angular_position + tank->planet->rot));
-			
-		tank->turret.x = 20.0f * cos(tank->turret_angle + tank->angular_position + tank->planet->rot);
-		tank->turret.y = 20.0f * -sin(tank->turret_angle + tank->angular_position + tank->planet->rot);
+		tank->Pos().x = planet->pos.x + (planet->radius * cos(tank->AngularPos() + planet->rot));
+		tank->Pos().y = planet->pos.y + (planet->radius  * -sin(tank->AngularPos() + planet->rot));
+		
+		tank->Turret().x = 20.0f * cos(tank->TurretAngle() + tank->AngularPos() + planet->rot);
+		tank->Turret().y = 20.0f * -sin(tank->TurretAngle() + tank->AngularPos() + planet->rot);
 		
 		/* Check if tank is crushed! */
 		for(auto planet : w.planets)
 		{
-			if(planet == tank->planet) continue;
+			if(planet == tank->GetPlanet()) continue;
 			
-			float dist = vec2Length(vec2Sub(planet->pos, tank->pos));
-			if(dist > planet->radius + tank->bounding_radius) continue;
+			float dist = vec2Length(vec2Sub(planet->pos, tank->Pos()));
+			if(dist > planet->radius + tank->BoundingRadius()) continue;
 			
-			if(!tank->dying)
-				w.effects.push_back(new Effect(EffectType::CRUSHED, tank->pos));
+			if(!tank->Dying())
+				w.effects.push_back(new Effect(EffectType::CRUSHED, tank->Pos()));
 			
-			Tank_Destroy(tank);
+			tank->Destroy();
 		}
 
-		if(tank->firing)
-			Tank_FireWeapon(tank->player, w, dt);
+		if(tank->Firing())
+			Tank::FireWeapon(player, w, dt);
 		
-		if(tank->firing)
-			Tank_FireWeapon(tank->player, w, dt);
+		if(tank->Firing())
+			Tank::FireWeapon(player, w, dt);
 		
-		if(tank->dying)
+		if(tank->Dying())
 		{
-			tank->dyingTimer -= dt;
-			if(tank->dyingTimer < 0)
+			tank->DyingTimer() -= dt;
+			if(tank->DyingTimer() < 0)
 			{
-				Player *player = tank->player;
-				
-				Tank_Free(tank);
+				delete tank;
 				w.tanks.erase(w.tanks.begin() + i);
 				
-				Tank_Spawn(w, player, w.planets[0]);
+				MDF::Tank::Spawn(w, player, w.planets[0]);
 
 				tank = player->GetTank();
 				Tank_SetImages(tank, player->Col());
-				Tank_Teleport(tank, w);
+				tank->Teleport(w);
 				i--;
 			}
 		}

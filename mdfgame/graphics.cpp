@@ -19,7 +19,7 @@ static SDL_Renderer *renderer;
 static SDL_Texture* background;
 static std::map<std::string, SDL_Texture *> images;
 static std::map<std::string, TTF_Font *> fonts;
-static std::map<TankColors,SDL_Texture*> tankParts;
+static std::map<MDF::TankColors,SDL_Texture*> tankParts;
 static SDL_Texture* LoadImage(const char *s);
 static void	LoadImages();
 
@@ -106,7 +106,7 @@ void Graphics_DrawScene(World &world)
 	offset.x += cursorX;
 	offset.y += cursorY;
 	
-	world.camera.PositionCorner(world.player ? world.player->GetTank()->pos : vec2(0, 0), offset, world.size);
+	world.camera.PositionCorner(world.player ? world.player->GetTank()->Pos() : vec2(0, 0), offset, world.size);
 	
 	offset = world.camera.GetCorner();
 	/** Fix bg **/
@@ -138,7 +138,7 @@ void Graphics_DrawScene(World &world)
 	
 	for (const auto tank : world.tanks)
 	{
-        Tank_Draw(tank, offset);
+        tank->Draw(offset);
 	}
 	
 	/* Draw projectiles */
@@ -196,11 +196,11 @@ void LoadImages()
 		images[it->first] = LoadImage(it->second.c_str());
 	
 	/* Temporary Tank Loading code */
-	tankParts[TANK_NEUTRAL] = images["TankNeutral"];
-	tankParts[TANK_BLUE] = images["TankBlue"];
-	tankParts[TANK_GREEN] = images["TankGreen"];
-	tankParts[TANK_RED] = images["TankRed"];
-	tankParts[TANK_YELLOW] = images["TankYellow"];
+	tankParts[MDF::TANK_NEUTRAL] = images["TankNeutral"];
+	tankParts[MDF::TANK_BLUE] = images["TankBlue"];
+	tankParts[MDF::TANK_GREEN] = images["TankGreen"];
+	tankParts[MDF::TANK_RED] = images["TankRed"];
+	tankParts[MDF::TANK_YELLOW] = images["TankYellow"];
 }
 
 void LoadFont()
@@ -212,9 +212,9 @@ void LoadFont()
 }
 
 /* set tank color */
-void Tank_SetImages(Tank *tank, TankColors col)
+void Tank_SetImages(MDF::Tank *tank, MDF::TankColors col)
 {
-	tank->tankBody = tankParts[col];
+	tank->SetTankBody(tankParts[col]);
 }
 
 void Planet_SetImage(Planet *planet, std::string id)

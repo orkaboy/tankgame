@@ -22,7 +22,7 @@ constexpr int FPS = 30;
 typedef struct World
 {
 	std::vector<Planet*> planets;
-	std::vector<Tank*> tanks;
+	std::vector<MDF::Tank*> tanks;
 	MDF::Player* player;
 	std::vector<Projectile*> projectiles;
 	std::vector<MDF::Effect*> effects;

@@ -90,7 +90,7 @@ void World_DeInit(World &world)
 	for(auto planet : world.planets)
 		Planet_Free(planet);
 	for(auto tank : world.tanks)
-		Tank_Free(tank);
+		delete tank;
 
 	for(auto proj : world.projectiles)
 		Projectile_Destroy(proj);

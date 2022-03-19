@@ -64,36 +64,39 @@ void LoadWeapons(void)
 void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 {
 	auto tank = player->GetTank();
-	if(tank->dying)
+	if(tank->Dying())
 		return;
-	if(tank->timeSinceLastFire > 0)
+	if(tank->TimeSinceLastFire() > 0)
 		return;
 	
-	tank->timeSinceLastFire = weapon.weaponDelay;
+	tank->TimeSinceLastFire() = weapon.weaponDelay;
 	//tank->fireTimer = 0;
+
+	auto planet = tank->GetPlanet();
+	auto tankPos = tank->Pos();
 	
 	switch(weapon.type)
 	{
 		case WEP_TURRET:
 		{
-			float vinkel = tank->turret_angle + tank->angular_position + tank->planet->rot;
-			
-			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tank->pos, vinkel, TURRET); // vel in pixels/sec
-			
-			p->pos = vec2Add(tank->pos, tank->turret);
-			
+			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->rot;
+
+			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tankPos, vinkel, TURRET); // vel in pixels/sec
+
+			p->pos = vec2Add(tankPos, tank->Turret());
+
             world.projectiles.push_back(p);
-			
+
 			Audio_PlayCanonFire();
 		}
 		break;
 		case WEP_FLAMER:
 		{
-			float vinkel = tank->turret_angle + tank->angular_position + tank->planet->rot + (float)(rand()%10)/20.0 - 0.25;
+			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->rot + (float)(rand()%10)/20.0 - 0.25;
 			
-			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tank->pos, vinkel, FLAMER);
+			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tankPos, vinkel, FLAMER);
 			
-			p->pos = vec2Add(tank->pos, tank->turret);
+			p->pos = vec2Add(tankPos, tank->Turret());
 			
             world.projectiles.push_back(p);
 			
@@ -102,11 +105,11 @@ void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 		break;
 		case WEP_CLUSTER:
 		{
-			float vinkel = tank->turret_angle + tank->angular_position + tank->planet->rot;
+			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->rot;
 			
-			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tank->pos, vinkel, CLUSTER); // vel in pixels/sec
+			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tankPos, vinkel, CLUSTER); // vel in pixels/sec
 			
-			p->pos = vec2Add(tank->pos, tank->turret);
+			p->pos = vec2Add(tankPos, tank->Turret());
 			
             world.projectiles.push_back(p);
 			
@@ -115,11 +118,11 @@ void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 		break;
 		case WEP_ROCKET:
 		{
-			float vinkel = tank->turret_angle + tank->angular_position + tank->planet->rot;
+			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->rot;
 			
-			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tank->pos, vinkel, ROCKET); // vel in pixels/sec
+			Projectile* p = Projectile_Create(player, weapon.outgoingPower, tankPos, vinkel, ROCKET); // vel in pixels/sec
 			
-			p->pos = vec2Add(tank->pos, tank->turret);
+			p->pos = vec2Add(tankPos, tank->Turret());
 			
             world.projectiles.push_back(p);
 			
@@ -129,22 +132,22 @@ void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 		
 		case WEP_JET:
 		{
-			float tankRotation = tank->angular_position + tank->planet->rot;
+			float tankRotation = tank->AngularPos() + planet->rot;
 			
 			/* x component is rotation, y comp is acc-force */
 			vec2 force;
-			force.x = cos(tank->turret_angle + (M_PI / 2)) / 5;
-			force.y = sin(tank->turret_angle + (M_PI / 2)) * weapon.outgoingPower;
+			force.x = cos(tank->TurretAngle() + (M_PI / 2)) / 5;
+			force.y = sin(tank->TurretAngle() + (M_PI / 2)) * weapon.outgoingPower;
 			
 			/* acc-force */
 			vec2 finalforce;
 			finalforce.x = -cos(tankRotation) * force.y;
 			finalforce.y = sin(tankRotation) * force.y;
 			/* Apply vel to planet */
-			tank->planet->vel.x += finalforce.x;
-			tank->planet->vel.y += finalforce.y;
+			planet->vel.x += finalforce.x;
+			planet->vel.y += finalforce.y;
 			/* Rotate planet */
-			tank->planet->rotvel += force.x;
+			planet->rotvel += force.x;
 		}
 		break;
 		

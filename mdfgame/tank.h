@@ -15,6 +15,8 @@ namespace MDF {
 struct Planet;
 struct World;
 
+namespace MDF {
+
 enum TankColors
 {
 	TANK_NEUTRAL,
@@ -30,12 +32,81 @@ enum class Direction
 	LEFT
 };
 
-typedef struct Tank
+class Tank
 {
+public:
+	/* New fire function */
+	static void FireWeapon ( MDF::Player *player, World &world, float dt );
+
+	/* spawn tank */
+	static void Spawn ( World& world, MDF::Player* player, Planet* planet );
+
+	/* move tank in dir */
+	void Move ( MDF::Direction dir );
+	/* teleport tank to planet */
+	void Teleport ( World& world);
+	/* rotate tank turrent */
+	void SetTurretRotation(Sint16 x, Sint16 y);
+	void RotateTurret ( MDF::Direction dir );
+	void RotateTurret ( float relangle );
+
+	void NextWeapon();
+
+	/* destroy tank, set tank to dead! */
+	void Destroy ();
+
+	/* Drawing function */
+	void Draw( vec2 offset ) const;
+
+	/* Getters and Setters */
+	auto Pos() const -> vec2 { return pos; }
+	auto Pos() -> vec2& { return pos; }
+
+	auto BoundingRadius() const -> float { return bounding_radius; }
+
+	auto HP() -> float& { return hitPoints; }
+	auto HP() const -> float { return hitPoints; }
+
+	auto GetPlanet() -> Planet* { return planet; }
+
+	auto GetPlayer() -> Player* { return player; }
+
+	auto Firing() const -> bool { return firing; }
+	void SetFiring(bool f) { firing = f; }
+
+	auto Dying() const -> bool { return dying; }
+	void SetDying(bool d) { dying = d; }
+
+	auto DyingTimer() const -> float { return dyingTimer; }
+	auto DyingTimer() -> float& { return dyingTimer; }
+
+	auto TeleportTimer() const -> float { return teleportTimer; }
+	auto TeleportTimer() -> float& { return teleportTimer; }
+
+	auto GetWeapon() const -> int { return weapon; }
+
+	auto AngularPos() const -> float { return angular_position; }
+	auto AngularPos() -> float& { return angular_position; }
+
+	auto Turret() const -> vec2 { return turret; }
+	auto Turret() -> vec2& { return turret; }
+
+	auto TurretAngle() const -> float { return turret_angle; }
+	auto TurretAngle() -> float& { return turret_angle; }
+
+	auto TimeSinceLastFire() const -> float { return timeSinceLastFire; }
+	auto TimeSinceLastFire() -> float& { return timeSinceLastFire; }
+
+	auto Ammo(int index) const -> int { if(index < MAX_WEAPONS) return ammo[index]; else return ammo[0]; }
+	auto Ammo(int index) -> int& { if(index < MAX_WEAPONS) return ammo[index]; else return ammo[0]; }
+
+	void SetTankBody(SDL_Texture* body) { tankBody = body; }
+
+private:
 	bool dying, firing;
 	float barrel_pressure;
 	
-	MDF::Player *player;
+	Player *player;
 	
     SDL_Texture *tankBody;
 	
@@ -57,29 +128,6 @@ typedef struct Tank
 	
 	int weapon;
 	int ammo[MAX_WEAPONS];
-} Tank;
+};
 
-/* New fire function */
-void Tank_FireWeapon ( MDF::Player *player, World &world, float dt );
-
-/* spawn tank */
-void Tank_Spawn ( World& world, MDF::Player* player, Planet* planet );
-
-/* move tank in dir */
-void Tank_Move ( Tank* tank, Direction dir );
-/* teleport tank to planet */
-void Tank_Teleport ( Tank* tank, World& world);
-/* rotate tank turrent */
-void Tank_SetTurretRotation(Tank *tank, Sint16 x, Sint16 y);
-void Tank_RotateTurret ( Tank* tank, Direction dir );
-void Tank_RotateTurret ( Tank* tank, float relangle );
-
-void Tank_NextWeapon( Tank* tank );
-
-/* destroy tank, set tank to dead! */
-void Tank_Destroy ( Tank* tank );
-/* free tank, after this tank is no more! */
-void Tank_Free ( Tank* tank );
-
-/* Drawing function */
-void Tank_Draw( const Tank *tank, vec2 offset );
+}
