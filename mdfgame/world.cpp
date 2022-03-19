@@ -13,15 +13,15 @@ namespace MDF {
 
 static std::map<std::string, World> worlds;
 
-World World_GetWorld(std::string id)
+World World::GetWorld(std::string id)
 {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::WORLD);
 	std::string path = res.find(id)->second;
 	
-	return World_Init(path);
+	return World(path);
 }
 
-World World_Init(std::string findpath)
+World::World(std::string findpath)
 {
 	std::ifstream pfile;
 
@@ -35,7 +35,6 @@ World World_Init(std::string findpath)
 	unsigned int num_planets;
 	pfile >> dummy >> num_planets;
 
-	World world;
 	for(unsigned int i = 0; i < num_planets; i++)
 	{
 		std::string tempid;
@@ -50,26 +49,24 @@ World World_Init(std::string findpath)
 
 		Planet_SetImage(planet, tempid);
 
-        world.planets.push_back(planet);
+        planets.push_back(planet);
 	}
 
 	/** TEMP **/
-	world.size = vec2(2000, 2000);
+	size = vec2(2000, 2000);
 
-	world.timeSinceLastAmmo = 0.0;
-
-	return world;
+	timeSinceLastAmmo = 0.0;
 }
 
-void World_SpawnAmmo(World &world, float dt)
+void World::SpawnAmmo(float dt)
 {
-	world.timeSinceLastAmmo += dt;
+	timeSinceLastAmmo += dt;
 
-	if (world.timeSinceLastAmmo >= 10.0 ) {
+	if (timeSinceLastAmmo >= 10.0 ) {
 		vec2 pos;
 
-		pos.x = rand()%(int)world.size.x;
-		pos.y = rand()%(int)world.size.y;
+		pos.x = rand()%(int)size.x;
+		pos.y = rand()%(int)size.y;
 
 		ProjectileType type;
 
@@ -83,21 +80,21 @@ void World_SpawnAmmo(World &world, float dt)
 
 		Projectile* p = Projectile_Create(NULL, 0.0, pos, 0.0, type);
 
-        world.projectiles.push_back(p);
-		world.timeSinceLastAmmo = 0.0;
+        projectiles.push_back(p);
+		timeSinceLastAmmo = 0.0;
 	}
 }
 
-void World_DeInit(World &world)
+World::~World()
 {
-	for(auto planet : world.planets)
+	for(auto planet : planets)
 		delete planet;
-	for(auto tank : world.tanks)
+	for(auto tank : tanks)
 		delete tank;
 
-	for(auto proj : world.projectiles)
+	for(auto proj : projectiles)
 		delete proj;
-	for(auto effect : world.effects)
+	for(auto effect : effects)
 		delete effect;
 }
 

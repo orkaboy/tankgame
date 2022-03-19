@@ -21,8 +21,17 @@ constexpr int FPS = 30;
 //#define NET_SERVER_MAX_PLAYERS 4
 //#define NET_SERVER_PACKET_SIZE 4096
 
-typedef struct World
+class World
 {
+public:
+	/* init the game */
+	World(std::string findpath);
+	~World();
+
+	void SpawnAmmo(float dt);
+
+	static World GetWorld(std::string id);
+
 	std::vector<MDF::Planet*> planets;
 	std::vector<MDF::Tank*> tanks;
 	MDF::Player* player;
@@ -33,7 +42,7 @@ typedef struct World
 	
 	vec2	size;
 	float timeSinceLastAmmo;
-} World;
+};
 
 // //Game now exists only for cultural and historical reasons ;)
 // typedef struct Game
@@ -46,12 +55,5 @@ typedef struct World
 //   Planet *planet;
 // } Game;
 
-/* init the game */
-World World_Init(std::string findpath);
-void World_DeInit(World &world);
-
-void World_SpawnAmmo(World &world, float dt);
-
-World World_GetWorld(std::string id);
 
 }

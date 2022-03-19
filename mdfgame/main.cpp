@@ -49,7 +49,7 @@ public:
 
 			if(!quit)
 			{
-				World world = World_GetWorld("WorldOne");
+				World world = World::GetWorld("WorldOne");
 
 				auto player = new MDF::Player;
 
@@ -137,7 +137,7 @@ private:
 				timestamp += dt;
 				accumulator -= dt;
 
-				World_SpawnAmmo(world,dt);
+				world.SpawnAmmo(dt);
 
 				/* Physics */
 				Physics::Process(world, dt);
@@ -154,8 +154,6 @@ private:
 
 			Graphics::EndScene();
 		}
-
-		World_DeInit(world);
 	}
 
 	void HandleMenu() {
