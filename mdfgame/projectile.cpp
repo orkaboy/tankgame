@@ -237,7 +237,7 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 		break;
 		case ROCKET:
 		{
-			vec2 cursor = Input_GetMousePos();
+			vec2 cursor = MDF::Input::GetMousePos();
 			
 			vec2 offset = world.camera.GetCorner();
 			offset.x += cursor.x;

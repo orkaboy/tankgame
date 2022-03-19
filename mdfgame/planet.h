@@ -9,7 +9,7 @@ namespace MDF {
 class Planet
 {
 public:
-	Planet(float x, float y, float radius, float mass);
+	Planet(vec2 pos, float radius, float mass);
 
 	auto Pos() const -> vec2 { return mPos; }
 	auto Pos() -> vec2& { return mPos; }

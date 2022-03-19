@@ -105,7 +105,7 @@ MenuOption TheMenu ( bool *quit )
             accumulator -= dt;
         }
 
-        auto cursor = Input_GetMousePos();
+        auto cursor = Input::GetMousePos();
 
         Graphics_BeginScene();
 

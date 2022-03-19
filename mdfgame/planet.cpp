@@ -2,14 +2,11 @@
 
 namespace MDF {
 
-Planet::Planet(float x, float y, float radius, float mass)
+Planet::Planet(vec2 pos, float radius, float mass)
 {
-	mPos.x = x;
-	mPos.y = y;
+	mPos = pos;
 	mRot = 0;
 	mRotvel = 0;
-	mVel.x = 0;
-	mVel.y = 0;
 	mRadius = radius;
 	mMass = mass;
 }

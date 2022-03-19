@@ -166,7 +166,7 @@ void Tank::Draw( vec2 offset ) const
         SDL_QueryTexture(cursor_tex, NULL, NULL, &w, &h);
 		//cursorX = (turret.x*4 + 2*pos.x) / 2;
 		//cursorY = (turret.y*4 + 2*pos.y) / 2;
-		auto cursor = Input_GetMousePos();
+		auto cursor = Input::GetMousePos();
         cursor.x -= w / 2;
         cursor.y -= h / 2;
 

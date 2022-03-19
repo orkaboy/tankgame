@@ -5,6 +5,9 @@
 #include "player.h"
 #include "world.h"
 
+namespace MDF {
+namespace Input {
+
 enum KeyStroke
 {
 	KEY_UP,
@@ -28,13 +31,16 @@ typedef void(*ActionHandler)(MDF::Player* player, World& world);
 typedef void(*KeyHandler)(SDL_Scancode key, World& world);
 typedef void(*MouseMoveHandler)(MDF::Player* player, World &world, vec2 cursor, Uint8 button);
 
-void Input_Init(World& w);
-void Input_HandleEvents();
-void Input_SetActionHandler(PlayerAction action, ActionHandler handler);
-void Input_BindKey(SDL_Scancode key, MDF::Player* player, PlayerAction ation, KeyStroke keystroke);
-void Input_SetHandler(KeyStroke stroke, KeyHandler handler);
-void Input_BindMouseHandler(MDF::Player* player);
-void Input_Grab();
-void Input_Release();
+void Init(World& w);
+void HandleEvents();
+void SetActionHandler(PlayerAction action, ActionHandler handler);
+void BindKey(SDL_Scancode key, MDF::Player* player, PlayerAction ation, KeyStroke keystroke);
+void SetHandler(KeyStroke stroke, KeyHandler handler);
+void BindMouseHandler(MDF::Player* player);
+void Grab();
+void Release();
 
-vec2 Input_GetMousePos();
+vec2 GetMousePos();
+
+}
+}

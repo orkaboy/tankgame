@@ -101,7 +101,7 @@ void Graphics_ApplySurface(SDL_Texture *source, int x, int y, float scaling, flo
 
 void Graphics_DrawScene(World &world)
 {
-	auto cursor = Input_GetMousePos();
+	auto cursor = MDF::Input::GetMousePos();
 	world.camera.PositionCorner(world.player ? world.player->GetTank()->Pos() : vec2(0, 0), cursor);
 	vec2 offset = world.camera.GetCorner();
 

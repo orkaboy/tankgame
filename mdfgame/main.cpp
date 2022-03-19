@@ -17,22 +17,24 @@
 
 bool gquit = false;
 
+namespace MDF {
+
 class Game {
 public:
 	Game(std::string resource_path) {
-		MDF::Resource::Init(resource_path);
+		Resource::Init(resource_path);
 		Graphics_Init();
-		MDF::Audio::Init();
-		MDF::Animation::LoadAnimations();
-		MDF::Weapon::LoadWeapons();
+		Audio::Init();
+		Animation::LoadAnimations();
+		Weapon::LoadWeapons();
 
-		MDF::Audio::LoadPresetWavFiles();
-		MDF::Audio::LoadPresetMp3Files();
+		Audio::LoadPresetWavFiles();
+		Audio::LoadPresetMp3Files();
 	}
 
 	~Game() {
-		MDF::Animation::UnloadAnimations();
-		MDF::Audio::ShutDown();
+		Animation::UnloadAnimations();
+		Audio::ShutDown();
 
 		IMG_Quit();
 		SDL_Quit();
@@ -82,30 +84,30 @@ private:
 		}
 	}
 
-	void InitializeInput(World& world, MDF::Player* player) {
-		Input_Init(world);
+	void InitializeInput(World& world, Player* player) {
+		Input::Init(world);
 
-		Input_BindKey(SDL_SCANCODE_A, player, PA_MOVE_BACKWARD, KEY_HOLD);
-		Input_BindKey(SDL_SCANCODE_D, player, PA_MOVE_FORWARD, KEY_HOLD);
-		//Input_BindKey(SDL_SCANCODE_W, player, PA_TURRET_UP, KEY_HOLD);
-		//Input_BindKey(SDL_SCANCODE_S, player, PA_TURRET_DOWN, KEY_HOLD);
-		Input_BindKey(SDL_SCANCODE_SPACE, player, PA_FIRE_BEGIN, KEY_DOWN);
-		Input_BindKey(SDL_SCANCODE_SPACE, player, PA_FIRE_END, KEY_UP);
-		Input_BindKey(SDL_SCANCODE_Q, player, PA_TELEPORT, KEY_HOLD);
-		Input_BindKey(SDL_SCANCODE_E, player, PA_CHANGE_WEP, KEY_DOWN);
+		Input::BindKey(SDL_SCANCODE_A, player, Input::PA_MOVE_BACKWARD, Input::KEY_HOLD);
+		Input::BindKey(SDL_SCANCODE_D, player, Input::PA_MOVE_FORWARD, Input::KEY_HOLD);
+		//Input::BindKey(SDL_SCANCODE_W, player, Input::PA_TURRET_UP, Input::KEY_HOLD);
+		//Input::BindKey(SDL_SCANCODE_S, player, Input::PA_TURRET_DOWN, Input::KEY_HOLD);
+		Input::BindKey(SDL_SCANCODE_SPACE, player, Input::PA_FIRE_BEGIN, Input::KEY_DOWN);
+		Input::BindKey(SDL_SCANCODE_SPACE, player, Input::PA_FIRE_END, Input::KEY_UP);
+		Input::BindKey(SDL_SCANCODE_Q, player, Input::PA_TELEPORT, Input::KEY_HOLD);
+		Input::BindKey(SDL_SCANCODE_E, player, Input::PA_CHANGE_WEP, Input::KEY_DOWN);
 
-		Input_BindMouseHandler(player);
+		Input::BindMouseHandler(player);
 
-		/*Input_BindKey(SDL_SCANCODE_LEFT, player2, PA_MOVE_BACKWARD, KEY_HOLD);
-		Input_BindKey(SDL_SCANCODE_RIGHT, player2, PA_MOVE_FORWARD, KEY_HOLD);
-		Input_BindKey(SDL_SCANCODE_UP, player2, PA_TURRET_UP, KEY_HOLD);
-		Input_BindKey(SDL_SCANCODE_DOWN, player2, PA_TURRET_DOWN, KEY_HOLD);
-		Input_BindKey(SDL_SCANCODE_RCTRL, player2, PA_FIRE_BEGIN, KEY_DOWN);
-		Input_BindKey(SDL_SCANCODE_RCTRL, player2, PA_FIRE_END, KEY_UP);
-		Input_BindKey(SDL_SCANCODE_RSHIFT, player2, PA_TELEPORT, KEY_HOLD);
-		Input_BindKey(SDL_SCANCODE_RETURN, player2, PA_CHANGE_WEP, KEY_DOWN);*/
+		/*Input::BindKey(SDL_SCANCODE_LEFT, player2, Input::PA_MOVE_BACKWARD, Input::KEY_HOLD);
+		Input::BindKey(SDL_SCANCODE_RIGHT, player2, Input::PA_MOVE_FORWARD, Input::KEY_HOLD);
+		Input::BindKey(SDL_SCANCODE_UP, player2, Input::PA_TURRET_UP, Input::KEY_HOLD);
+		Input::BindKey(SDL_SCANCODE_DOWN, player2, Input::PA_TURRET_DOWN, Input::KEY_HOLD);
+		Input::BindKey(SDL_SCANCODE_RCTRL, player2, Input::PA_FIRE_BEGIN, Input::KEY_DOWN);
+		Input::BindKey(SDL_SCANCODE_RCTRL, player2, Input::PA_FIRE_END, Input::KEY_UP);
+		Input::BindKey(SDL_SCANCODE_RSHIFT, player2, Input::PA_TELEPORT, Input::KEY_HOLD);
+		Input::BindKey(SDL_SCANCODE_RETURN, player2, Input::PA_CHANGE_WEP, Input::KEY_DOWN);*/
 
-		Input_SetHandler(KEY_DOWN, KeyDown);
+		Input::SetHandler(Input::KEY_DOWN, KeyDown);
 	}
 
 	void GameLoop(World& world) {
@@ -116,7 +118,7 @@ private:
 		float currentTime = (float)SDL_GetTicks();
 		float accumulator = 0.0f;
 
-		MDF::Audio::PlayMusic(0, -1);
+		Audio::PlayMusic(0, -1);
 
 		gquit = false;
 		while (!gquit)
@@ -130,7 +132,7 @@ private:
 
 			while (accumulator>=dt)
 			{
-				Input_HandleEvents();
+				Input::HandleEvents();
 
 				timestamp += dt;
 				accumulator -= dt;
@@ -138,9 +140,9 @@ private:
 				World_SpawnAmmo(world,dt);
 
 				/* Physics */
-				MDF::Physics::Process(world, dt);
+				Physics::Process(world, dt);
 				/* Animtions */
-				MDF::Effect::Update(world.effects, dt);
+				Effect::Update(world.effects, dt);
 			}
 
 			/* Graphics */
@@ -179,6 +181,7 @@ private:
 	bool quit{false};
 };
 
+}
 
 #include <unistd.h>
 
@@ -201,7 +204,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	Game game(resource_path);
+	MDF::Game game(resource_path);
 
 	game.Run();
 
