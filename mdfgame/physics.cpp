@@ -168,7 +168,7 @@ void UpdateProjectiles(World &w, float dt)
 		bool removal = false;
 		/* Gather acceleration from planets */
 		
-		Projectile_Update( proj, w, removal, dt );
+		proj->Update( w, removal, dt );
 
 		for(auto planet : w.planets)
 		{
@@ -236,7 +236,7 @@ void UpdateProjectiles(World &w, float dt)
 			proj->pos.y -= w.size.height;
 		
 		/* Remove projectile if collided with something */
-		if (removal) Projectile_Hit(proj, w, target, tPlanet, removal, dt);
+		if (removal) proj->Hit(w, target, tPlanet, removal, dt);
 		if (removal)
 		{
 			delete proj;

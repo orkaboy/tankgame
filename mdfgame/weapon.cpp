@@ -86,7 +86,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		{
 			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
 
-			Projectile* p = Projectile_Create(player, outgoingPower, tankPos, vinkel, TURRET); // vel in pixels/sec
+			auto p = Projectile::Create(player, outgoingPower, tankPos, vinkel, TURRET); // vel in pixels/sec
 
 			p->pos = vec2Add(tankPos, tank->Turret());
 
@@ -99,7 +99,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		{
 			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot() + (float)(rand()%10)/20.0 - 0.25;
 			
-			Projectile* p = Projectile_Create(player, outgoingPower, tankPos, vinkel, FLAMER);
+			auto p = Projectile::Create(player, outgoingPower, tankPos, vinkel, FLAMER);
 			
 			p->pos = vec2Add(tankPos, tank->Turret());
 			
@@ -112,7 +112,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		{
 			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
 			
-			Projectile* p = Projectile_Create(player, outgoingPower, tankPos, vinkel, CLUSTER); // vel in pixels/sec
+			auto p = Projectile::Create(player, outgoingPower, tankPos, vinkel, CLUSTER); // vel in pixels/sec
 			
 			p->pos = vec2Add(tankPos, tank->Turret());
 			
@@ -124,13 +124,13 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		case WEP_ROCKET:
 		{
 			float vinkel = tank->TurretAngle() + tank->AngularPos() + planet->Rot();
-			
-			Projectile* p = Projectile_Create(player, outgoingPower, tankPos, vinkel, ROCKET); // vel in pixels/sec
-			
+
+			auto p = Projectile::Create(player, outgoingPower, tankPos, vinkel, ROCKET); // vel in pixels/sec
+
 			p->pos = vec2Add(tankPos, tank->Turret());
-			
+
             world.projectiles.push_back(p);
-			
+
 			MDF::Audio::PlayCanonFire();
 		}
 		break;
@@ -138,7 +138,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 		case WEP_JET:
 		{
 			float tankRotation = tank->AngularPos() + planet->Rot();
-			
+
 			/* x component is rotation, y comp is acc-force */
 			vec2 force;
 			force.x = cos(tank->TurretAngle() + (M_PI / 2)) / 5;

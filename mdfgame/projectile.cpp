@@ -13,7 +13,7 @@
 
 namespace MDF {
 
-void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset)
+void Projectile::Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset)
 {
 	for (auto p : proj)
 	{
@@ -44,7 +44,7 @@ void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 
 }
 
 /* creats a projectile at position for players tank with vinkel and kraft */
-Projectile* Projectile_Create(MDF::Player* player, float kraft, vec2 pos, float vinkel, ProjectileType type)
+Projectile* Projectile::Create(MDF::Player* player, float kraft, vec2 pos, float vinkel, ProjectileType type)
 {
 	Projectile* p = new Projectile;
 
@@ -106,10 +106,10 @@ Projectile* Projectile_Create(MDF::Player* player, float kraft, vec2 pos, float 
 	return p;
 }
 
-void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt )
+void Projectile::Hit(World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt )
 {
 	if (target) {
-		switch(projectile->type)
+		switch(type)
 		{
 			case TURRET:
 			case FLAMER:
@@ -120,13 +120,13 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF
 			{
 				planet = target->GetPlanet();
 				/* Fix this */
-				target->HP() -= projectile->damage;
+				target->HP() -= damage;
 				if(target->HP() <= 0) {
 					target->Destroy();
-					if(projectile->player->GetTank() == target)
-						projectile->player->ModPoints(-1);
+					if(player->GetTank() == target)
+						player->ModPoints(-1);
 					else
-						projectile->player->ModPoints(1);
+						player->ModPoints(1);
 				}
 				else
 					MDF::Audio::PlayExplosionSmall();
@@ -165,20 +165,19 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF
 		}
 	}
 	
-	switch(projectile->type)
+	switch(type)
 	{
 		case CLUSTER:
 		{
-			Projectile* newproj;
 			for (int i = 0; i < CLUSTER_COUNT; i++) {
-				newproj = Projectile_Create(projectile->player, 150.f,
-					  projectile->pos, float(i * M_PI) / 6.0, CLUSTER_BIT);
-				newproj->pos.x -= projectile->vel.x*dt;
-				newproj->pos.y -= projectile->vel.y*dt;
+				auto newproj = Projectile::Create(player, 150.f,
+					  pos, float(i * M_PI) / 6.0, CLUSTER_BIT);
+				newproj->pos.x -= vel.x*dt;
+				newproj->pos.y -= vel.y*dt;
 				world.projectiles.push_back(newproj);
 			}
 			if (planet) {
-				vec2 velMod = projectile->vel;
+				vec2 velMod = vel;
 				velMod.x = velMod.x/planet->Mass()*10000.0;
 				velMod.y = velMod.y/planet->Mass()*10000.0;
 				planet->Vel() = vec2Add( planet->Vel(), velMod );
@@ -188,7 +187,7 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF
 		case ROCKET:
 		{
 			if (planet) {
-				vec2 velMod = projectile->vel;
+				vec2 velMod = vel;
 				velMod.x = velMod.x/planet->Mass()*10000.0;
 				velMod.y = velMod.y/planet->Mass()*10000.0;
 				planet->Vel() = vec2Add( planet->Vel(), velMod );
@@ -202,15 +201,15 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF
         case AMMO_NUKE:
 		{
 			if (planet) {
-				vec2 distance = vec2Sub( projectile->pos, planet->Pos() );
+				vec2 distance = vec2Sub( pos, planet->Pos() );
 				distance = vec2Normalize(distance);
 				
 				distance.x *= planet->Radius();
 				distance.y *= planet->Radius();
 				
-				projectile->vel = distance;
+				vel = distance;
 				
-				projectile->pos = vec2Add( planet->Pos(), distance );
+				pos = vec2Add( planet->Pos(), distance );
 				
 				removal = false;
 			}
@@ -220,20 +219,20 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF
 		break;
 	}
 }
-void Projectile_Update(Projectile* projectile, World &world, bool &removal, float dt )
+void Projectile::Update(World &world, bool &removal, float dt )
 {
-	if (projectile->animation) {
-		projectile->animation->UpdateAnimation(projectile->animFrame, projectile->animTimer, dt);
+	if (animation) {
+		animation->UpdateAnimation(animFrame, animTimer, dt);
 	}
 
-	switch(projectile->type)
+	switch(type)
 	{
 		case CLUSTER:
 		case FLAMER:
 		{
-			if (projectile->LifeTime <= 0.0)
+			if (LifeTime <= 0.0)
 				removal = true;
-			else projectile->LifeTime -= dt;
+			else LifeTime -= dt;
 		}
 		break;
 		case ROCKET:
@@ -244,17 +243,17 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 			offset.x += cursor.x;
 			offset.y += cursor.y;
 			
-			offset = vec2Sub( offset, projectile->pos );
+			offset = vec2Sub( offset, pos );
 			offset = vec2Normalize(offset);
 			
 			offset.x *=10.0;
 			offset.y *=10.0;
 			
-			projectile->vel = vec2Add( offset, projectile->vel );
+			vel = vec2Add( offset, vel );
 
-			if (vec2Length(projectile->vel) > 300.0) {
-				projectile->vel = vec2Normalize(projectile->vel);
-				projectile->vel = vec2Multiply(projectile->vel, 300.0);
+			if (vec2Length(vel) > 300.0) {
+				vel = vec2Normalize(vel);
+				vel = vec2Multiply(vel, 300.0);
 			}
 		}
 		break;
@@ -267,8 +266,8 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 				float dx, dy;
 				float r, r2;
 				
-				dx = tank->Pos().x - projectile->pos.x;
-				dy = tank->Pos().y - projectile->pos.y;
+				dx = tank->Pos().x - pos.x;
+				dy = tank->Pos().y - pos.y;
 				
 				r2 = dx*dx + dy*dy;
 				r = sqrt(r2);
@@ -282,8 +281,8 @@ void Projectile_Update(Projectile* projectile, World &world, bool &removal, floa
 				accx = acc * (dx / r);
 				accy = acc * (dy / r);
 				
-				projectile->vel.x += accx * dt;
-				projectile->vel.y += accy * dt;
+				vel.x += accx * dt;
+				vel.y += accy * dt;
 			}
 		}
 		break;

@@ -8,7 +8,7 @@
 
 namespace MDF {
 
-struct World;
+class World;
 class Tank;
 class Player;
 class Planet;
@@ -31,8 +31,18 @@ enum ProjectileType
 
 constexpr int CLUSTER_COUNT = 12;
 
-typedef struct Projectile
+class Projectile
 {
+public:
+	/* creats a projectile at position for players tank with vinkel and kraft */
+	static Projectile *Create(MDF::Player *player, float kraft, vec2 pos, float vinkel, ProjectileType type);
+
+	void Hit(World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt );
+
+	void Update(World &world, bool &removal, float dt );
+
+	static void Draw(std::vector<Projectile*> &projs, SDL_Renderer *screen, vec2 offset);
+
 	vec2 pos;
 	vec2 vel;
 	MDF::Player* player;
@@ -44,15 +54,7 @@ typedef struct Projectile
 	unsigned int animFrame;
 	float animTimer;
 	float damage;
-} Projectile;
+};
 
-/* creats a projectile at position for players tank with vinkel and kraft */
-Projectile *Projectile_Create(MDF::Player *player, float kraft, vec2 pos, float vinkel, ProjectileType type);
-
-void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt );
-
-void Projectile_Update(Projectile* projectile, World &world, bool &removal, float dt );
-
-void Projectile_Draw(std::vector<Projectile*> &proj, SDL_Renderer *screen, vec2 offset);
 
 }

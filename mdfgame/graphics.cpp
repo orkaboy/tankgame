@@ -143,7 +143,7 @@ void DrawScene(MDF::World &world)
 	}
 	
 	/* Draw projectiles */
-    Projectile_Draw(world.projectiles, renderer, offset);
+    Projectile::Draw(world.projectiles, renderer, offset);
 
 	if ( world.player )
 	{
