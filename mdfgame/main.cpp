@@ -62,7 +62,7 @@ public:
 				//player2->SetCol(MDF::TANK_YELLOW);
 
 				MDF::Tank::Spawn(world, player, world.planets[0]);
-				Tank_SetImages(player->GetTank(), player->Col());
+				Graphics::Tank_SetImages(player->GetTank(), player->Col());
 				//Tank_Spawn(world, player2, world.planets[4]);
 				//Tank_SetImages(player2->GetTank(), player2->Col());
 

@@ -25,8 +25,6 @@ void LoadFonts(void);
 
 void DrawString(std::string str, int x, int y);
 
-}
-
 /* set tank color */
 void Planet_SetImage(Planet *planet, std::string id);
 void Tank_SetImages(Tank *tank, TankColors col);
@@ -38,5 +36,7 @@ SDL_Renderer* ReturnRenderer();
 SDL_Window* ReturnScreen();
 SDL_Texture* ReturnBg();
 SDL_Texture* ReturnCursor();
+
+}
 
 }

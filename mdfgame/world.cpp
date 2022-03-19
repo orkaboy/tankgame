@@ -47,7 +47,7 @@ World::World(std::string findpath)
 
 		auto planet = new MDF::Planet(vec2(tempx, tempy), tempr, tempm);
 
-		Planet_SetImage(planet, tempid);
+		Graphics::Planet_SetImage(planet, tempid);
 
         planets.push_back(planet);
 	}

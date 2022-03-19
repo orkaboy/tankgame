@@ -16,6 +16,8 @@
 
 namespace MDF {
 
+namespace Graphics {
+
 static SDL_Window* screen;
 static SDL_Surface* screenSurface;
 static SDL_Renderer *renderer;
@@ -33,8 +35,6 @@ TTF_Font * getFont(std::string id)
 {
 	return fonts[id];
 }
-
-namespace Graphics {
 
 static SDL_Texture* LoadImage(const char *s);
 static void	LoadImages();
@@ -217,8 +217,6 @@ TTF_Font * LoadFont(const std::string &s, int fontsize)
 	return TTF_OpenFont( s.c_str(), fontsize );
 }
 
-} // namespace Graphics
-
 /* set tank color */
 void Tank_SetImages(MDF::Tank *tank, MDF::TankColors col)
 {
@@ -264,4 +262,5 @@ SDL_Texture* ReturnCursor()
 	return images["Cursor"];
 }
 
-}
+} // namespace Graphics
+} // namespace MDF

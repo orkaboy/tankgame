@@ -17,8 +17,8 @@ void Weapon::LoadWeapons(void)
 {
 	/* WEP_TURRET */
 	weapons[WEP_TURRET].type = WEP_TURRET;
-	weapons[WEP_TURRET].tankTurret = getImage("TankCannon");
-	weapons[WEP_TURRET].tankCursor = getImage("TankCursor");
+	weapons[WEP_TURRET].tankTurret = Graphics::getImage("TankCannon");
+	weapons[WEP_TURRET].tankCursor = Graphics::getImage("TankCursor");
 	
 	weapons[WEP_TURRET].fireAnimation = NULL;
 
@@ -27,8 +27,8 @@ void Weapon::LoadWeapons(void)
 
 	/* WEP_FLAMER */
 	weapons[WEP_FLAMER].type = WEP_FLAMER;
-	weapons[WEP_FLAMER].tankTurret = getImage("FlamerCannon");
-	weapons[WEP_FLAMER].tankCursor = getImage("TankCursor");
+	weapons[WEP_FLAMER].tankTurret = Graphics::getImage("FlamerCannon");
+	weapons[WEP_FLAMER].tankCursor = Graphics::getImage("TankCursor");
 	
 	weapons[WEP_FLAMER].fireAnimation = NULL;
 
@@ -37,8 +37,8 @@ void Weapon::LoadWeapons(void)
 	
 	/* WEP_CLUSTER */
 	weapons[WEP_CLUSTER].type = WEP_CLUSTER;
-	weapons[WEP_CLUSTER].tankTurret = getImage("ClusterCannon");
-	weapons[WEP_CLUSTER].tankCursor = getImage("TankCursor");
+	weapons[WEP_CLUSTER].tankTurret = Graphics::getImage("ClusterCannon");
+	weapons[WEP_CLUSTER].tankCursor = Graphics::getImage("TankCursor");
 	
 	weapons[WEP_CLUSTER].fireAnimation = NULL;
 
@@ -47,8 +47,8 @@ void Weapon::LoadWeapons(void)
 
 	/* WEP_ROCKET */
 	weapons[WEP_ROCKET].type = WEP_ROCKET;
-	weapons[WEP_ROCKET].tankTurret = getImage("ClusterCannon");
-	weapons[WEP_ROCKET].tankCursor = getImage("TankCursor");
+	weapons[WEP_ROCKET].tankTurret = Graphics::getImage("ClusterCannon");
+	weapons[WEP_ROCKET].tankCursor = Graphics::getImage("TankCursor");
 	
 	weapons[WEP_ROCKET].fireAnimation = NULL;
 
@@ -57,8 +57,8 @@ void Weapon::LoadWeapons(void)
 
 	/* WEP_JET */
 	weapons[WEP_JET].type = WEP_JET;
-	weapons[WEP_JET].tankTurret = getImage("JetCannon");
-	weapons[WEP_JET].tankCursor = getImage("JetCursor");
+	weapons[WEP_JET].tankTurret = Graphics::getImage("JetCannon");
+	weapons[WEP_JET].tankCursor = Graphics::getImage("JetCursor");
 
 	weapons[WEP_JET].fireAnimation = MDF::Animation::GetAnimation("JetFire");
 	

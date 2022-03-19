@@ -42,13 +42,13 @@ MenuOption TheMenu ( bool *quit )
 {
     SDL_Event event;
 
-    SDL_Texture* bg = ReturnBg();
-    SDL_Texture* cursor_tex = ReturnCursor();
+    auto bg = Graphics::ReturnBg();
+    auto cursor_tex = Graphics::ReturnCursor();
     Menu menu(bg, cursor_tex);
-    menu.AddButton(60, 100, MenuOption::HostGame, "Host Game", getFont("Text"));
-    menu.AddButton(290, 100, MenuOption::JoinGame, "Join Game", getFont("Text"));
-    menu.AddButton(510, 100, MenuOption::Settings, "Settings", getFont("Text"));
-    menu.AddButton(700, 100, MenuOption::QuitGame, "Quit", getFont("Text"));
+    menu.AddButton(60, 100, MenuOption::HostGame, "Host Game", Graphics::getFont("Text"));
+    menu.AddButton(290, 100, MenuOption::JoinGame, "Join Game", Graphics::getFont("Text"));
+    menu.AddButton(510, 100, MenuOption::Settings, "Settings", Graphics::getFont("Text"));
+    menu.AddButton(700, 100, MenuOption::QuitGame, "Quit", Graphics::getFont("Text"));
 
 
     bool mquit = false;
@@ -110,7 +110,7 @@ MenuOption TheMenu ( bool *quit )
         Graphics::BeginScene();
 
         menu.CheckButton(cursor.x, cursor.y);
-        Menu_Draw(menu);
+        Graphics::Menu_Draw(menu);
         Graphics::ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
 
         Graphics::EndScene();

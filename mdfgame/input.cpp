@@ -78,7 +78,7 @@ void SetHandler(KeyStroke stroke, KeyHandler handler)
 
 /* Code to transform raw mouse position to the logical rendering scale */
 vec2 GetMousePos() {
-	auto renderer = ReturnRenderer();
+	auto renderer = Graphics::ReturnRenderer();
 
 	int windowX, windowY;
 	SDL_GetMouseState(&windowX, &windowY);
@@ -87,7 +87,7 @@ vec2 GetMousePos() {
 	SDL_RenderGetLogicalSize(renderer, &logical_w, &logical_h);
 
 	int window_w, window_h;
-    SDL_GetWindowSize(ReturnScreen(), &window_w, &window_h);
+    SDL_GetWindowSize(Graphics::ReturnScreen(), &window_w, &window_h);
 
     int window_midpoint_x = window_w>>1;
     int window_midpoint_y = window_h>>1;

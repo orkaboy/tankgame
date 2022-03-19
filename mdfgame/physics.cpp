@@ -304,7 +304,7 @@ void UpdateTanks(World &w, float dt)
 				MDF::Tank::Spawn(w, player, w.planets[0]);
 
 				tank = player->GetTank();
-				Tank_SetImages(tank, player->Col());
+				Graphics::Tank_SetImages(tank, player->Col());
 				tank->Teleport(w);
 				i--;
 			}

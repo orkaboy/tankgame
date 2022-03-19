@@ -32,7 +32,7 @@ Animation * Animation::LoadAnimation(const char *filepath)
 	{
 		std::string imgPath;
 		file >> imgPath;
-		anim->frames[i] = getImage(imgPath);
+		anim->frames[i] = Graphics::getImage(imgPath);
 		file >> anim->frameTimer[i];
 	}
 	

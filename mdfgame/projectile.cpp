@@ -78,17 +78,17 @@ Projectile::Projectile(MDF::Player* player_, float kraft, vec2 pos_, float vinke
 		break;
 		case AMMO_TURRET:
 		{
-			surface = getImage("TurretAmmo");
+			surface = Graphics::getImage("TurretAmmo");
 		}
 		break;
 		case AMMO_FLAMER:
 		{
-			surface = getImage("FlamerAmmo");
+			surface = Graphics::getImage("FlamerAmmo");
 		}
 		break;
 		case AMMO_CLUSTER:
 		{
-			surface = getImage("ClusterAmmo");
+			surface = Graphics::getImage("ClusterAmmo");
 		}
 		break;
 		default:
