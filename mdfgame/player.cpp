@@ -55,7 +55,7 @@ void Player::DrawHud(SDL_Renderer* renderer, int x, int y)
 
     rectangleRGBA( renderer, x, y+32, x+154, y+37, 0, 100, 0, 100);
     /* reload gun timer */
-    float delay = Weapon_GetDelay(mTank->GetWeapon());
+    float delay = Weapon::GetDelay(mTank->GetWeapon());
 
     auto tslf = mTank->TimeSinceLastFire();
     if( tslf > 0 )

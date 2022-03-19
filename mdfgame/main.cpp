@@ -24,7 +24,7 @@ public:
 		Graphics_Init();
 		MDF::Audio::Init();
 		MDF::Animation::LoadAnimations();
-		LoadWeapons();
+		MDF::Weapon::LoadWeapons();
 
 		MDF::Audio::LoadPresetWavFiles();
 		MDF::Audio::LoadPresetMp3Files();

@@ -9,8 +9,8 @@ constexpr int MAX_WEAPONS = 5;
 struct World;
 
 namespace MDF {
-	class Player;
-}
+
+class Player;
 
 enum TankWeapon
 {
@@ -21,21 +21,29 @@ enum TankWeapon
 	WEP_JET,
 };
 
-typedef struct Weapon
+class Weapon
 {
+public:
+	static void LoadWeapons();
+	void Fire( MDF::Player *player, World &world );
+	static float GetDelay(int weapon_index);
+
+	auto FireAnimation() const -> Animation* { return fireAnimation; }
+	auto TankTurret() const -> SDL_Texture* { return tankTurret; }
+	auto TankCursor() const -> SDL_Texture* { return tankCursor; }
+
+private:
 	TankWeapon type;
 	
     SDL_Texture *tankTurret;
     SDL_Texture *tankCursor;
 	
-	MDF::Animation *FireAnimation;
+	Animation *fireAnimation;
 	
 	float weaponDelay;
 	float outgoingPower;
-} Weapon;
+};
 
 extern Weapon weapons[MAX_WEAPONS];
 
-void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world );
-float Weapon_GetDelay(int weapon_index);
-void LoadWeapons(void);
+}

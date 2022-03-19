@@ -15,9 +15,10 @@ void Tank::FireWeapon ( MDF::Player *player, World &world, float dt )
 {
 	Tank *tank = player->GetTank();
 	auto& weapon = weapons[tank->weapon];
-	Weapon_Fire( player, weapon, world );
-	if(weapon.FireAnimation)
-		weapon.FireAnimation->UpdateAnimation(tank->fireFrame, tank->fireTimer, dt);
+	weapon.Fire( player, world );
+	auto anim = weapon.FireAnimation();
+	if(anim)
+		anim->UpdateAnimation(tank->fireFrame, tank->fireTimer, dt);
 }
 
 void Tank::SetTurretRotation(vec2 target)
@@ -146,7 +147,7 @@ void Tank::Draw( vec2 offset ) const
 {
     SDL_Texture *body = tankBody;
 	const auto& weapon_ = weapons[weapon];
-    SDL_Texture *turret_ = weapon_.tankTurret;
+    SDL_Texture *turret_ = weapon_.TankTurret();
 	
 	float tank_rot = angular_position + planet->rot;
     Graphics_ApplySurface(body, (int)pos.x - offset.x, (int)pos.y - offset.y, 1, tank_rot - ((float)M_PI / 2));
@@ -157,7 +158,7 @@ void Tank::Draw( vec2 offset ) const
 
     Graphics_ApplySurface(turret_, (int)turretX - offset.x, (int)turretY - offset.y, 1, tank_rot + turret_angle);
 
-    SDL_Texture *cursor_tex = weapon_.tankCursor;
+    SDL_Texture *cursor_tex = weapon_.TankCursor();
 
 	if(cursor_tex != NULL)
 	{
@@ -172,9 +173,10 @@ void Tank::Draw( vec2 offset ) const
         Graphics_ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
 	}
 
-	if(firing && weapon_.FireAnimation)
+	auto anim = weapon_.FireAnimation();
+	if(firing && anim)
 	{
-        SDL_Texture *fireAnim = weapon_.FireAnimation->GetFrame(fireFrame);
+        SDL_Texture *fireAnim = anim->GetFrame(fireFrame);
 
 		if(fireAnim != NULL)
 		{
