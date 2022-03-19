@@ -7,7 +7,7 @@
 #include "tank.h"
 #include "graphics.h"
 
-static void DefaultMouseHandler ( MDF::Player* player, World &world, Sint16 x, Sint16 y, Uint8 button );
+static void DefaultMouseHandler ( MDF::Player* player, World &world, vec2 pos, Uint8 button );
 static void DefaultMoveForwardHandler ( MDF::Player* player, World& world );
 static void DefaultMoveBackwardHandler ( MDF::Player* player, World& world );
 static void DefaultFireBeginHandler ( MDF::Player* player, World& world );
@@ -23,7 +23,6 @@ typedef std::map<SDL_Scancode, std::pair<MDF::Player*, PlayerAction> > BindsMap;
 static std::map<KeyStroke, KeyHandler> strokehandlers;
 
 static std::pair<MDF::Player *, MouseMoveHandler> mouse_bind;
-int mx, my;
 
 static HandlerMap handlers;
 
@@ -47,18 +46,17 @@ void Input_Init(World& w)
 {
 	//Input_Grab();
 
-	mx = my = 0;
 	world = &w;
 
-	handlers[PA_MOVE_FORWARD]   	= DefaultMoveForwardHandler;
-	handlers[PA_MOVE_BACKWARD]  	= DefaultMoveBackwardHandler;
+	handlers[PA_MOVE_FORWARD]   = DefaultMoveForwardHandler;
+	handlers[PA_MOVE_BACKWARD]  = DefaultMoveBackwardHandler;
 	handlers[PA_FIRE_BEGIN]    	= DefaultFireBeginHandler;
 	handlers[PA_FIRE_END]    	= DefaultFireEndHandler;
-	handlers[PA_TURRET_UP]      	= DefaultTurretUpHandler;
-	handlers[PA_TURRET_DOWN]    	= DefaultTurretDownHandler;
-	handlers[PA_TELEPORT] 	    	= DefaultTeleportHandler;
+	handlers[PA_TURRET_UP]      = DefaultTurretUpHandler;
+	handlers[PA_TURRET_DOWN]    = DefaultTurretDownHandler;
+	handlers[PA_TELEPORT] 	    = DefaultTeleportHandler;
 	handlers[PA_CHANGE_WEP]		= DefaultChangeWepHandler;
-	mouse_bind.second		= DefaultMouseHandler;
+	mouse_bind.second			= DefaultMouseHandler;
 
 	strokehandlers[KEY_DOWN] = 0;
 	strokehandlers[KEY_UP] = 0;
@@ -144,11 +142,12 @@ void Input_HandleEvents()
                 strokehandlers[KEY_UP](event.key.keysym.scancode, *world);
 		}
 	}
-// 	SDL_GetRelativeMouseState(&mx, &my);
-	Uint8 button = SDL_GetMouseState(&mx, &my);
+
+	Uint8 button = SDL_GetMouseState(NULL, NULL);
+	auto cursor = Input_GetMousePos();
 
 	if ( mouse_bind.second )
-		mouse_bind.second(mouse_bind.first, *world, mx, my, button);
+		mouse_bind.second(mouse_bind.first, *world, cursor, button);
 	
     const Uint8* curstate = SDL_GetKeyboardState(NULL);
 	
@@ -182,13 +181,13 @@ void Input_BindKey(SDL_Scancode key, MDF::Player* player, PlayerAction action, K
 	}
 }
 
-void DefaultMouseHandler ( MDF::Player* player, World &world, Sint16 x, Sint16 y, Uint8 button )
+void DefaultMouseHandler ( MDF::Player* player, World &world, vec2 cursor, Uint8 button )
 {
 	vec2 offset = world.camera.GetCorner();
-	x += offset.x;
-	y += offset.y;
+	cursor.x += offset.x;
+	cursor.y += offset.y;
 	
-	player->GetTank()->SetTurretRotation(x, y);
+	player->GetTank()->SetTurretRotation(cursor);
 	
 	static bool l_pressed = false;
 	if(button & SDL_BUTTON(1))

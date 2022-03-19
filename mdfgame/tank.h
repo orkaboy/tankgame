@@ -46,7 +46,7 @@ public:
 	/* teleport tank to planet */
 	void Teleport ( World& world);
 	/* rotate tank turrent */
-	void SetTurretRotation(Sint16 x, Sint16 y);
+	void SetTurretRotation(vec2 target);
 	void RotateTurret ( MDF::Direction dir );
 	void RotateTurret ( float relangle );
 

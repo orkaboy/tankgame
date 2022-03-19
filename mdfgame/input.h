@@ -26,7 +26,7 @@ enum PlayerAction
 
 typedef void(*ActionHandler)(MDF::Player* player, World& world);
 typedef void(*KeyHandler)(SDL_Scancode key, World& world);
-typedef void(*MouseMoveHandler)(MDF::Player* player, World &world, Sint16 x, Sint16 y, Uint8 button);
+typedef void(*MouseMoveHandler)(MDF::Player* player, World &world, vec2 cursor, Uint8 button);
 
 void Input_Init(World& w);
 void Input_HandleEvents();
