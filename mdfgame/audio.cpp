@@ -6,10 +6,13 @@
 #include <iostream>
 #include <fmt/ostream.h>
 
+namespace MDF {
+namespace Audio {
+
 std::array<Mix_Chunk*, AUDIO_BUFFERSIZE> soundBuffer;
 std::array<Mix_Music*, MUSIC_BUFFERSIZE> musicBuffer;
 
-bool Audio_Init()
+bool Init()
 {
 	int audio_rate = 22050;
 	Uint16 audio_format = AUDIO_S16SYS;
@@ -27,7 +30,7 @@ bool Audio_Init()
 	return true;
 }
 
-Mix_Chunk* Audio_LoadWav(const char *file)
+Mix_Chunk* LoadWav(const char *file)
 {
 	Mix_Chunk *sound = Mix_LoadWAV(file);
 	if(sound == NULL)
@@ -36,7 +39,7 @@ Mix_Chunk* Audio_LoadWav(const char *file)
 	return sound;
 }
 
-Mix_Music* Audio_LoadMp3File(const char *file)
+Mix_Music* LoadMp3File(const char *file)
 {
 	Mix_Music *music = Mix_LoadMUS(file);
 	if(music == NULL)
@@ -45,20 +48,20 @@ Mix_Music* Audio_LoadMp3File(const char *file)
 	return music;
 }
 
-bool Audio_IsPlayingEngineSound()
+bool IsPlayingEngineSound()
 {
 	return Mix_Playing(0) != 0 ? true : false;
 }
 
-bool Audio_LoadPresetWavFiles()
+bool LoadPresetWavFiles()
 {
-	soundBuffer[AUDIO_CANONFIRE] = Audio_LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "CannonFire").c_str());
+	soundBuffer[AUDIO_CANONFIRE] = LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "CannonFire").c_str());
 	Mix_VolumeChunk(soundBuffer[AUDIO_CANONFIRE], 30); // volum between 0 and 128
-	soundBuffer[AUDIO_ENGINESOUND] = Audio_LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "Engine").c_str());
+	soundBuffer[AUDIO_ENGINESOUND] = LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "Engine").c_str());
 	Mix_VolumeChunk(soundBuffer[AUDIO_ENGINESOUND], 30);
-	soundBuffer[AUDIO_EXPLOSIONSMALL] = Audio_LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "ExplosionSmall").c_str());
+	soundBuffer[AUDIO_EXPLOSIONSMALL] = LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "ExplosionSmall").c_str());
 	Mix_VolumeChunk(soundBuffer[AUDIO_EXPLOSIONSMALL], 30);
-	soundBuffer[AUDIO_EXPLOSIONBIG] = Audio_LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "ExplosionBig").c_str());
+	soundBuffer[AUDIO_EXPLOSIONBIG] = LoadWav(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "ExplosionBig").c_str());
 	Mix_VolumeChunk(soundBuffer[AUDIO_EXPLOSIONBIG], 30);
 	
 	// this reserves channel 0 for engine sound..
@@ -67,13 +70,13 @@ bool Audio_LoadPresetWavFiles()
 	return true;
 }
 
-bool Audio_LoadPresetMp3Files()
+bool LoadPresetMp3Files()
 {
-	musicBuffer[0] = Audio_LoadMp3File(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "GravitankMusic").c_str());
+	musicBuffer[0] = LoadMp3File(MDF::Resource::GetFileName(MDF::Resource::Type::SOUND, "GravitankMusic").c_str());
 	return true;
 }
 
-bool Audio_PlayWav(Mix_Chunk *sound)
+bool PlayWav(Mix_Chunk *sound)
 {
 	int channel = Mix_PlayChannel(-1, sound, 0);
 	if(channel == -1) 
@@ -83,7 +86,7 @@ bool Audio_PlayWav(Mix_Chunk *sound)
 	return channel == -1 ? false : true;
 }
 
-bool Audio_PlayWavOnSpecificChannel(Mix_Chunk *sound, int channel)
+bool PlayWavOnSpecificChannel(Mix_Chunk *sound, int channel)
 {
 	channel = Mix_PlayChannel(channel, sound, 0);
 	if(channel == -1) 
@@ -93,7 +96,7 @@ bool Audio_PlayWavOnSpecificChannel(Mix_Chunk *sound, int channel)
 	return channel == -1 ? false : true;
 }
 
-void Audio_PlayMusic(int musicIndex, int playCount)
+void PlayMusic(int musicIndex, int playCount)
 {
 	if(musicIndex > MUSIC_BUFFERSIZE)
 	{
@@ -105,36 +108,39 @@ void Audio_PlayMusic(int musicIndex, int playCount)
 		fmt::print("Mix_PlayMusic: {}\n", Mix_GetError());
 }
 
-void Audio_StopMusic()
+void StopMusic()
 {
 	Mix_HaltMusic();
 }
 
-void Audio_PlayCanonFire()
+void PlayCanonFire()
 {
-	Audio_PlayWav(soundBuffer[AUDIO_CANONFIRE]);
+	PlayWav(soundBuffer[AUDIO_CANONFIRE]);
 }
 
-void Audio_PlayEngineSound()
+void PlayEngineSound()
 {
-	Audio_PlayWavOnSpecificChannel(soundBuffer[AUDIO_ENGINESOUND], 0);
+	PlayWavOnSpecificChannel(soundBuffer[AUDIO_ENGINESOUND], 0);
 }
 
-void Audio_PlayExplosionSmall()
+void PlayExplosionSmall()
 {
-	Audio_PlayWav(soundBuffer[AUDIO_EXPLOSIONSMALL]);
+	PlayWav(soundBuffer[AUDIO_EXPLOSIONSMALL]);
 }
 
-void Audio_PlayExplosionBig()
+void PlayExplosionBig()
 {
-	Audio_PlayWav(soundBuffer[AUDIO_EXPLOSIONBIG]);
+	PlayWav(soundBuffer[AUDIO_EXPLOSIONBIG]);
 }
 
-void Audio_ShutDown()
+void ShutDown()
 {
 	for(auto sound : soundBuffer)
 		Mix_FreeChunk(sound); 
 	
 	for(auto music : musicBuffer)
 		Mix_FreeMusic(music);
+}
+
+}
 }

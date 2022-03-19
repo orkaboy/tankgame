@@ -2,27 +2,32 @@
 
 #include "SDL2/SDL_mixer.h"
 
-bool Audio_Init();
-Mix_Chunk* Audio_LoadWav(const char *file);
-bool Audio_PlayWav(Mix_Chunk *sound);
-bool Audio_LoadPresetWavFiles();
+namespace MDF {
+namespace Audio {
 
-void Audio_ShutDown();
+bool Init();
+Mix_Chunk* LoadWav(const char *file);
+bool PlayWav(Mix_Chunk *sound);
+bool LoadPresetWavFiles();
 
-void Audio_PlayCanonFire(); // AUDIO_CANONFIRE
-void Audio_PlayEngineSound(); // AUDIO_ENGINESOUND
-void Audio_PlayExplosionSmall(); // AUDIO_EXPLOSIONSMALL
-void Audio_PlayExplosionBig(); // AUDIO_EXPLOSIONBIG
+void ShutDown();
+
+void PlayCanonFire(); // AUDIO_CANONFIRE
+void PlayEngineSound(); // AUDIO_ENGINESOUND
+void PlayExplosionSmall(); // AUDIO_EXPLOSIONSMALL
+void PlayExplosionBig(); // AUDIO_EXPLOSIONBIG
 
 
-bool Audio_IsPlayingEngineSound();
+bool IsPlayingEngineSound();
 
-Mix_Music* Audio_LoadMp3File(const char *file);
-bool Audio_LoadPresetMp3Files();
+Mix_Music* LoadMp3File(const char *file);
+bool LoadPresetMp3Files();
 
-void Audio_PlayMusic(int musicIndex = 0, int playCount = -1);
-void Audio_StopMusic();
+void PlayMusic(int musicIndex = 0, int playCount = -1);
+void StopMusic();
 
+}
+}
 
 // WARNING
 // Very unsafe, be sure to have AUDIO_BUFFERSIZE last

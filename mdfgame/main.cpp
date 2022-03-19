@@ -22,17 +22,17 @@ public:
 	Game(std::string resource_path) {
 		MDF::Resource::Init(resource_path);
 		Graphics_Init();
-		Audio_Init();
+		MDF::Audio::Init();
 		MDF::Animation::LoadAnimations();
 		LoadWeapons();
 
-		Audio_LoadPresetWavFiles();
-		Audio_LoadPresetMp3Files();
+		MDF::Audio::LoadPresetWavFiles();
+		MDF::Audio::LoadPresetMp3Files();
 	}
 
 	~Game() {
 		MDF::Animation::UnloadAnimations();
-		Audio_ShutDown();
+		MDF::Audio::ShutDown();
 
 		IMG_Quit();
 		SDL_Quit();
@@ -116,7 +116,7 @@ private:
 		float currentTime = (float)SDL_GetTicks();
 		float accumulator = 0.0f;
 
-		Audio_PlayMusic(0, -1);
+		MDF::Audio::PlayMusic(0, -1);
 
 		gquit = false;
 		while (!gquit)

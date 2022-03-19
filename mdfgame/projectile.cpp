@@ -128,7 +128,7 @@ void Projectile_Hit(Projectile* projectile, World &world, MDF::Tank* target, Pla
 						projectile->player->ModPoints(1);
 				}
 				else
-					Audio_PlayExplosionSmall();
+					MDF::Audio::PlayExplosionSmall();
 			}
 			break;
 			case AMMO_TURRET:

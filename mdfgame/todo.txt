@@ -1,18 +1,20 @@
 Roadmap Tank game
 -----------------
 
+* Implement teleport SFX
 * Implement aiming with keyboard
 * Implement GameState structure (input/loop/transitions) and refactor Menu and main Game into it
 
 Multiple players - colors
 
 Gamemodes
-* Turnbased
+* Networked, realtime
+* Turnbased (how to handle action economy?)
 * Hotseat (fixed screen)
 
 Implement ammo
 
-Implement proper death/respawn
+Implement proper death/respawn, + SFX
 
 Implement score
 

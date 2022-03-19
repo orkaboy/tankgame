@@ -85,8 +85,8 @@ void Tank::Move ( MDF::Direction dir )
 	while(angular_position > 2 * M_PI) angular_position -= 2*(float)M_PI;
 	while(angular_position < 0) angular_position += 2*(float)M_PI;
 	
-	if(!Audio_IsPlayingEngineSound())
-		Audio_PlayEngineSound();
+	if(!Audio::IsPlayingEngineSound())
+		Audio::PlayEngineSound();
 }
 
 void Tank::Spawn ( World& world, MDF::Player* player_, Planet* planet_ )
@@ -122,7 +122,7 @@ void Tank::Destroy ()
 	hitPoints = 0;
 	if(dying) return;
 
-	Audio_PlayExplosionBig();
+	MDF::Audio::PlayExplosionBig();
 	player->Deaths()++;
 	dying = true;
 	dyingTimer = 1; //Animlength

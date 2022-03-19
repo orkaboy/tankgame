@@ -87,7 +87,7 @@ void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 
             world.projectiles.push_back(p);
 
-			Audio_PlayCanonFire();
+			MDF::Audio::PlayCanonFire();
 		}
 		break;
 		case WEP_FLAMER:
@@ -100,7 +100,7 @@ void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 			
             world.projectiles.push_back(p);
 			
-			Audio_PlayCanonFire();
+			MDF::Audio::PlayCanonFire();
 		}
 		break;
 		case WEP_CLUSTER:
@@ -113,7 +113,7 @@ void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 			
             world.projectiles.push_back(p);
 			
-			Audio_PlayCanonFire();
+			MDF::Audio::PlayCanonFire();
 		}
 		break;
 		case WEP_ROCKET:
@@ -126,7 +126,7 @@ void Weapon_Fire( MDF::Player *player, Weapon &weapon, World &world )
 			
             world.projectiles.push_back(p);
 			
-			Audio_PlayCanonFire();
+			MDF::Audio::PlayCanonFire();
 		}
 		break;
 		
