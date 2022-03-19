@@ -39,86 +39,6 @@ MenuOption Menu::CheckButton(vec2 cursor)
 }
 
 
-MenuOption TheMenu ( bool *quit )
-{
-    SDL_Event event;
-
-    auto bg = Graphics::ReturnBg();
-    auto cursor_tex = Graphics::ReturnCursor();
-    Menu menu(bg, cursor_tex);
-    menu.AddButton(60, 100, MenuOption::HostGame, "Host Game", Graphics::getFont("Text"));
-    menu.AddButton(290, 100, MenuOption::JoinGame, "Join Game", Graphics::getFont("Text"));
-    menu.AddButton(510, 100, MenuOption::Settings, "Settings", Graphics::getFont("Text"));
-    menu.AddButton(700, 100, MenuOption::QuitGame, "Quit", Graphics::getFont("Text"));
-
-
-    bool mquit = false;
-    unsigned int i;
-    float timestamp = 0.0f;
-    const float dt = 1.0 / FPS;
-    float currentTime = SDL_GetTicks();
-    float accumulator = 0.0f;
-
-    while(!mquit)
-    {
-        while(SDL_PollEvent(&event))
-        {
-            if(event.type == SDL_QUIT)
-            {
-                mquit = true;
-                *quit = true;
-            }
-
-            if(event.type == SDL_KEYDOWN)
-            {
-                switch ( event.key.keysym.scancode )
-                {
-                case SDL_SCANCODE_E:
-                    mquit = true;
-                break;
-                case SDL_SCANCODE_ESCAPE:
-                    mquit = true;
-                    *quit = true;
-                break;
-                default:
-                break;
-                }
-            }
-            if( event.type == SDL_MOUSEBUTTONUP )
-            {
-                for(auto button : menu.Buttons())
-                {
-                    if(button->Over())
-                        return button->Ret();
-                }
-            }
-        }
-
-        float newTime = (float)SDL_GetTicks();
-        float deltaTime = (newTime - currentTime) / 1000.f;
-        currentTime = newTime;
-
-        accumulator += deltaTime;
-
-        while (accumulator>=dt)
-        {
-            timestamp += dt;
-            accumulator -= dt;
-        }
-
-
-        Graphics::BeginScene();
-        auto cursor = Input::GetMousePos();
-        menu.CheckButton(cursor);
-        Graphics::Menu_Draw(&menu);
-        Graphics::ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
-
-        Graphics::EndScene();
-    }
-    return MenuOption::NONE;
-}
-
-
 namespace Menues {
 
 void Main::EnterState() {
@@ -153,6 +73,7 @@ std::string Main::HandleEvents() {
                 if(button->Over()) {
                     switch(button->Ret()) {
                     case MenuOption::HostGame:
+                        return "Game";
                     case MenuOption::JoinGame:
                     case MenuOption::Settings:
                     case MenuOption::QuitGame:
@@ -162,7 +83,6 @@ std::string Main::HandleEvents() {
             }
         }
     }
-
     return "";
 }
 

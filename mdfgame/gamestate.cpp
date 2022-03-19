@@ -3,6 +3,12 @@
 
 namespace MDF {
 
+GameSM::~GameSM() {
+    for(auto state : mStates) {
+        delete state.second;
+    }
+}
+
 void GameSM::Run() {
     const float dt = 1.0 / FPS;
     float currentTime = SDL_GetTicks();

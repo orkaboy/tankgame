@@ -9,7 +9,7 @@ constexpr int MAX_WEAPONS = 5;
 
 namespace MDF {
 
-struct World;
+class World;
 class Player;
 
 enum TankWeapon
@@ -25,7 +25,7 @@ class Weapon
 {
 public:
 	static void LoadWeapons();
-	void Fire( MDF::Player *player, World &world );
+	void Fire( MDF::Player *player, World* world );
 	static float GetDelay(int weapon_index);
 
 	auto FireAnimation() const -> Animation* { return fireAnimation; }

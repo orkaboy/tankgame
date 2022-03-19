@@ -16,7 +16,7 @@ namespace Graphics {
 void BeginScene();
 void EndScene();
 
-void DrawScene(World &world);
+void DrawScene(World* world);
 void ApplySurface(SDL_Texture *source, int x, int y, float scaling = 1, float angle = 0);
 bool Init();
 /* func for loading fonts */

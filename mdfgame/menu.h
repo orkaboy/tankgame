@@ -27,8 +27,6 @@ private:
 	std::vector<MDF::Button*> mButtons;
 };
 
-MenuOption TheMenu ( bool* quit );
-
 namespace Menues {
 
 class Main : public GameState {

@@ -27,11 +27,11 @@ enum PlayerAction
 	PA_CHANGE_WEP
 };
 
-typedef void(*ActionHandler)(MDF::Player* player, World& world);
-typedef void(*KeyHandler)(SDL_Scancode key, World& world);
-typedef void(*MouseMoveHandler)(MDF::Player* player, World &world, vec2 cursor, Uint8 button);
+typedef void(*ActionHandler)(MDF::Player* player, World* world);
+typedef void(*KeyHandler)(SDL_Scancode key, World* world);
+typedef void(*MouseMoveHandler)(MDF::Player* player, World* world, vec2 cursor, Uint8 button);
 
-void Init(World& w);
+void Init(World* w);
 void HandleEvents();
 void SetActionHandler(PlayerAction action, ActionHandler handler);
 void BindKey(SDL_Scancode key, MDF::Player* player, PlayerAction ation, KeyStroke keystroke);

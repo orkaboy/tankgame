@@ -10,15 +10,15 @@
 namespace MDF {
 namespace Input {
 
-static void DefaultMouseHandler ( Player* player, World &world, vec2 pos, Uint8 button );
-static void DefaultMoveForwardHandler ( Player* player, World& world );
-static void DefaultMoveBackwardHandler ( Player* player, World& world );
-static void DefaultFireBeginHandler ( Player* player, World& world );
-static void DefaultFireEndHandler ( Player* player, World& world );
-static void DefaultTurretUpHandler ( Player* player, World& world );
-static void DefaultTurretDownHandler ( Player* player, World& world );
-static void DefaultTeleportHandler ( Player* player, World& world );
-static void DefaultChangeWepHandler ( Player* player, World& world );
+static void DefaultMouseHandler ( Player* player, World *world, vec2 pos, Uint8 button );
+static void DefaultMoveForwardHandler ( Player* player, World* world );
+static void DefaultMoveBackwardHandler ( Player* player, World* world );
+static void DefaultFireBeginHandler ( Player* player, World* world );
+static void DefaultFireEndHandler ( Player* player, World* world );
+static void DefaultTurretUpHandler ( Player* player, World* world );
+static void DefaultTurretDownHandler ( Player* player, World* world );
+static void DefaultTeleportHandler ( Player* player, World* world );
+static void DefaultChangeWepHandler ( Player* player, World* world );
 
 typedef std::map<PlayerAction, ActionHandler> HandlerMap;
 typedef std::map<SDL_Scancode, std::pair<Player*, PlayerAction> > BindsMap;
@@ -45,11 +45,11 @@ void Release()
     SDL_SetRelativeMouseMode(SDL_FALSE);
 }
 
-void Init(World& w)
+void Init(World* w)
 {
 	//Grab();
 
-	world = &w;
+	world = w;
 
 	handlers[PA_MOVE_FORWARD]   = DefaultMoveForwardHandler;
 	handlers[PA_MOVE_BACKWARD]  = DefaultMoveBackwardHandler;
@@ -129,20 +129,20 @@ void HandleEvents()
 			for ( BindsMap::iterator it = down_binds.begin(); it != down_binds.end(); it++ )
 			{
 				if ( event.key.keysym.sym == it->first )
-					handlers[it->second.second](it->second.first, *world);
+					handlers[it->second.second](it->second.first, world);
 			}
 			if ( strokehandlers[KEY_DOWN] )
-                strokehandlers[KEY_DOWN](event.key.keysym.scancode, *world);
+                strokehandlers[KEY_DOWN](event.key.keysym.scancode, world);
 		}	
         else if(event.type == SDL_KEYUP)
 		{
 			for ( BindsMap::iterator it = up_binds.begin(); it != up_binds.end(); it++ )
 			{
 				if ( event.key.keysym.sym == it->first )
-					handlers[it->second.second](it->second.first, *world);
+					handlers[it->second.second](it->second.first, world);
 			}
 			if ( strokehandlers[KEY_UP] )
-                strokehandlers[KEY_UP](event.key.keysym.scancode, *world);
+                strokehandlers[KEY_UP](event.key.keysym.scancode, world);
 		}
 	}
 
@@ -150,17 +150,17 @@ void HandleEvents()
 	auto cursor = GetMousePos();
 
 	if ( mouse_bind.second )
-		mouse_bind.second(mouse_bind.first, *world, cursor, button);
+		mouse_bind.second(mouse_bind.first, world, cursor, button);
 	
     const Uint8* curstate = SDL_GetKeyboardState(NULL);
 	
 	for ( BindsMap::iterator it = hold_binds.begin(); it != hold_binds.end(); it++ )
 	{
 		if ( curstate[it->first] )
-			handlers[it->second.second](it->second.first, *world);
+			handlers[it->second.second](it->second.first, world);
 	}
 	if ( strokehandlers[KEY_HOLD] )
-        strokehandlers[KEY_HOLD](event.key.keysym.scancode, *world);
+        strokehandlers[KEY_HOLD](event.key.keysym.scancode, world);
 }
 
 void SetActionHandler(PlayerAction action, ActionHandler handler)
@@ -184,9 +184,9 @@ void BindKey(SDL_Scancode key, Player* player, PlayerAction action, KeyStroke ke
 	}
 }
 
-void DefaultMouseHandler ( Player* player, World &world, vec2 cursor, Uint8 button )
+void DefaultMouseHandler ( Player* player, World* world, vec2 cursor, Uint8 button )
 {
-	cursor = vec2Add(cursor, world.camera.GetCorner());
+	cursor = vec2Add(cursor, world->camera.GetCorner());
 
 	player->GetTank()->SetTurretRotation(cursor);
 	
@@ -228,42 +228,42 @@ void DefaultMouseHandler ( Player* player, World &world, vec2 cursor, Uint8 butt
 	}
 }
 
-void DefaultMoveForwardHandler ( Player* player, World& world )
+void DefaultMoveForwardHandler ( Player* player, World* world )
 {
 	player->GetTank()->Move(Direction::RIGHT);
 }
 
-void DefaultMoveBackwardHandler ( Player* player, World& world )
+void DefaultMoveBackwardHandler ( Player* player, World* world )
 {
 	player->GetTank()->Move(Direction::LEFT);
 }
 
-void DefaultFireBeginHandler ( Player* player, World& world )
+void DefaultFireBeginHandler ( Player* player, World* world )
 {
 	player->GetTank()->SetFiring(true);
 }
 
-void DefaultFireEndHandler ( Player* player, World& world )
+void DefaultFireEndHandler ( Player* player, World* world )
 {
 	player->GetTank()->SetFiring(false);
 }
 
-void DefaultTurretUpHandler ( Player* player, World& world )
+void DefaultTurretUpHandler ( Player* player, World* world )
 {
 	player->GetTank()->RotateTurret(Direction::RIGHT);
 }
 
-void DefaultTurretDownHandler ( Player* player, World& world )
+void DefaultTurretDownHandler ( Player* player, World* world )
 {
 	player->GetTank()->RotateTurret(Direction::LEFT);
 }
 
-void DefaultTeleportHandler ( Player* player, World& world )
+void DefaultTeleportHandler ( Player* player, World* world )
 {
 	player->GetTank()->Teleport(world);
 }
 
-void DefaultChangeWepHandler ( Player* player, World& world )
+void DefaultChangeWepHandler ( Player* player, World* world )
 {
 	player->GetTank()->NextWeapon();
 }

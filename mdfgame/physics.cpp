@@ -8,10 +8,10 @@
 namespace MDF {
 namespace Physics {
 
-void UpdatePlanets(World &w, float dt);
+void UpdatePlanets(World* w, float dt);
 void PlanetBounce(Planet *p1, Planet *p2);
-void UpdateTanks(World &w, float dt);
-void UpdateProjectiles(World &w, float dt);
+void UpdateTanks(World* w, float dt);
+void UpdateProjectiles(World* w, float dt);
 
 
 void PlanetBounce(Planet *p1, Planet *p2)
@@ -43,9 +43,9 @@ void PlanetBounce(Planet *p1, Planet *p2)
 	p2->Vel() = vec2Add(p2->Vel(), vec2Multiply(n, optimizedP * p1->Mass()));
 }
 
-void UpdatePlanets(World &w, float dt)
+void UpdatePlanets(World* w, float dt)
 {
-	for(auto planet : w.planets)
+	for(auto planet : w->planets)
 	{
 		vec2 oldPos = planet->Pos();
 		
@@ -68,24 +68,24 @@ void UpdatePlanets(World &w, float dt)
 			planet->Vel().x = -planet->Vel().x;
 			planet->Pos().x = planet->Radius();
 		}
-		if(planet->Pos().x + planet->Radius() > w.size.width)
+		if(planet->Pos().x + planet->Radius() > w->size.width)
 		{
 			planet->Vel().x = -planet->Vel().x;
-			planet->Pos().x = w.size.width - planet->Radius();
+			planet->Pos().x = w->size.width - planet->Radius();
 		}
 		if(planet->Pos().y - planet->Radius() < 0) 
 		{
 			planet->Vel().y = -planet->Vel().y;
 			planet->Pos().y = planet->Radius();
 		}
-		if(planet->Pos().y + planet->Radius() > w.size.height)
+		if(planet->Pos().y + planet->Radius() > w->size.height)
 		{
 			planet->Vel().y = -planet->Vel().y;
-			planet->Pos().y = w.size.height - planet->Radius();
+			planet->Pos().y = w->size.height - planet->Radius();
 		}
 		
 		/* Check for collisions */
-		for(auto planet2 : w.planets)
+		for(auto planet2 : w->planets)
 		{
 			if(planet == planet2) continue;
 
@@ -155,12 +155,12 @@ void UpdatePlanets(World &w, float dt)
 	}
 }
 
-void UpdateProjectiles(World &w, float dt)
+void UpdateProjectiles(World* w, float dt)
 {
 	/* For all bullets */
-	for(unsigned int i = 0; i < w.projectiles.size(); i++)
+	for(unsigned int i = 0; i < w->projectiles.size(); i++)
 	{
-		Projectile* proj = w.projectiles[i];
+		Projectile* proj = w->projectiles[i];
 		Tank* target = NULL;
 		Planet* tPlanet = NULL;
 		
@@ -170,7 +170,7 @@ void UpdateProjectiles(World &w, float dt)
 		
 		proj->Update( w, removal, dt );
 
-		for(auto planet : w.planets)
+		for(auto planet : w->planets)
 		{
 			float dx, dy;
 			float r, r2;
@@ -195,7 +195,7 @@ void UpdateProjectiles(World &w, float dt)
 		proj->pos.y += proj->vel.y * dt;
 		
 		/* Collision with planet */
-		for(auto planet : w.planets)
+		for(auto planet : w->planets)
 		{
 			float distance2 = vec2Length2(vec2Sub(proj->pos, planet->Pos()));
 			float r2 = proj->radius + planet->Radius();
@@ -210,7 +210,7 @@ void UpdateProjectiles(World &w, float dt)
 		}
 		
 		/* Calculate collisions for all tanks */
-		for(auto tank : w.tanks)
+		for(auto tank : w->tanks)
 		{
 			if(tank->Dying()) continue;
 			
@@ -227,26 +227,26 @@ void UpdateProjectiles(World &w, float dt)
 		
 		/* Check if projectile left screen */
 		if(proj->pos.x < 0) 
-			proj->pos.x += w.size.width;
-		if(proj->pos.x > w.size.width) 
-			proj->pos.x -= w.size.width;
+			proj->pos.x += w->size.width;
+		if(proj->pos.x > w->size.width) 
+			proj->pos.x -= w->size.width;
 		if(proj->pos.y < 0) 
-			proj->pos.y += w.size.height;
-		if(proj->pos.y > w.size.height) 
-			proj->pos.y -= w.size.height;
+			proj->pos.y += w->size.height;
+		if(proj->pos.y > w->size.height) 
+			proj->pos.y -= w->size.height;
 		
 		/* Remove projectile if collided with something */
 		if (removal) proj->Hit(w, target, tPlanet, removal, dt);
 		if (removal)
 		{
 			delete proj;
-			w.projectiles.erase(w.projectiles.begin() + i);
+			w->projectiles.erase(w->projectiles.begin() + i);
 			i--;
 		}
 	}
 }
 
-void Process(World &w, float dt)
+void Process(World* w, float dt)
 {
 	UpdatePlanets(w, dt);
 	
@@ -255,12 +255,12 @@ void Process(World &w, float dt)
 	UpdateProjectiles(w, dt);
 }
 
-void UpdateTanks(World &w, float dt)
+void UpdateTanks(World* w, float dt)
 {
 	/* For all tanks */
-	for(unsigned int i = 0; i < w.tanks.size(); i++)
+	for(unsigned int i = 0; i < w->tanks.size(); i++)
 	{
-		Tank *tank = w.tanks[i];
+		Tank *tank = w->tanks[i];
 		auto planet = tank->GetPlanet();
 		auto player = tank->GetPlayer();
 		
@@ -274,7 +274,7 @@ void UpdateTanks(World &w, float dt)
 		tank->Turret().y = 20.0f * -sin(tank->TurretAngle() + tank->AngularPos() + planet->Rot());
 		
 		/* Check if tank is crushed! */
-		for(auto planet : w.planets)
+		for(auto planet : w->planets)
 		{
 			if(planet == tank->GetPlanet()) continue;
 			
@@ -282,7 +282,7 @@ void UpdateTanks(World &w, float dt)
 			if(dist > planet->Radius() + tank->BoundingRadius()) continue;
 			
 			if(!tank->Dying())
-				w.effects.push_back(new Effect(EffectType::CRUSHED, tank->Pos()));
+				w->effects.push_back(new Effect(EffectType::CRUSHED, tank->Pos()));
 			
 			tank->Destroy();
 		}
@@ -299,9 +299,9 @@ void UpdateTanks(World &w, float dt)
 			if(tank->DyingTimer() < 0)
 			{
 				delete tank;
-				w.tanks.erase(w.tanks.begin() + i);
+				w->tanks.erase(w->tanks.begin() + i);
 				
-				MDF::Tank::Spawn(w, player, w.planets[0]);
+				MDF::Tank::Spawn(w, player, w->planets[0]);
 
 				tank = player->GetTank();
 				Graphics::Tank_SetImages(tank, player->Col());

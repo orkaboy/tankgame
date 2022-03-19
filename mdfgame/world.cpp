@@ -11,14 +11,14 @@
 
 namespace MDF {
 
-static std::map<std::string, World> worlds;
+static std::map<std::string, World*> worlds;
 
-World World::GetWorld(std::string id)
+World* World::GetWorld(std::string id)
 {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::WORLD);
 	std::string path = res.find(id)->second;
 	
-	return World(path);
+	return new World(path);
 }
 
 World::World(std::string findpath)

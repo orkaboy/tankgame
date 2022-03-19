@@ -29,7 +29,7 @@ public:
 
 	void SpawnAmmo(float dt);
 
-	static World GetWorld(std::string id);
+	static World* GetWorld(std::string id);
 
 	std::vector<MDF::Planet*> planets;
 	std::vector<MDF::Tank*> tanks;

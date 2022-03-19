@@ -19,6 +19,8 @@ public:
 
 class GameSM {
 public:
+    ~GameSM();
+
     void Run();
 
     void RegisterState(std::string name, GameState* state) {

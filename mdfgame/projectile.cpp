@@ -101,7 +101,7 @@ Projectile::Projectile(MDF::Player* player_, float kraft, vec2 pos_, float vinke
 	}
 }
 
-void Projectile::Hit(World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt )
+void Projectile::Hit(World* world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt )
 {
 	if (target) {
 		switch(type)
@@ -169,7 +169,7 @@ void Projectile::Hit(World &world, MDF::Tank* target, MDF::Planet* planet, bool 
 					  pos, float(i * M_PI) / 6.0, CLUSTER_BIT);
 				newproj->pos.x -= vel.x*dt;
 				newproj->pos.y -= vel.y*dt;
-				world.projectiles.push_back(newproj);
+				world->projectiles.push_back(newproj);
 			}
 			if (planet) {
 				vec2 velMod = vel;
@@ -214,7 +214,7 @@ void Projectile::Hit(World &world, MDF::Tank* target, MDF::Planet* planet, bool 
 		break;
 	}
 }
-void Projectile::Update(World &world, bool &removal, float dt )
+void Projectile::Update(World* world, bool &removal, float dt )
 {
 	if (animation) {
 		animation->UpdateAnimation(animFrame, animTimer, dt);
@@ -234,7 +234,7 @@ void Projectile::Update(World &world, bool &removal, float dt )
 		{
 			vec2 cursor = MDF::Input::GetMousePos();
 			
-			vec2 offset = world.camera.GetCorner();
+			vec2 offset = world->camera.GetCorner();
 			offset.x += cursor.x;
 			offset.y += cursor.y;
 			
@@ -257,7 +257,7 @@ void Projectile::Update(World &world, bool &removal, float dt )
 		case AMMO_CLUSTER:
 		case AMMO_ROCKET:
 		{
-			for(auto tank : world.tanks) {
+			for(auto tank : world->tanks) {
 				float dx, dy;
 				float r, r2;
 				

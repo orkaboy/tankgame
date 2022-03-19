@@ -37,9 +37,9 @@ public:
 	/* creats a projectile at position for players tank with vinkel and kraft */
 	Projectile(MDF::Player *player, float kraft, vec2 pos, float vinkel, ProjectileType type);
 
-	void Hit(World &world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt );
+	void Hit(World* world, MDF::Tank* target, MDF::Planet* planet, bool &removal, float dt );
 
-	void Update(World &world, bool &removal, float dt );
+	void Update(World* world, bool &removal, float dt );
 
 	static void Draw(std::vector<Projectile*> &projs, SDL_Renderer *screen, vec2 offset);
 

@@ -66,7 +66,7 @@ void Weapon::LoadWeapons(void)
 	weapons[WEP_JET].outgoingPower = 20.f;
 }
 
-void Weapon::Fire( MDF::Player *player, World &world )
+void Weapon::Fire( MDF::Player *player, World* world )
 {
 	auto tank = player->GetTank();
 	if(tank->Dying())
@@ -90,7 +90,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 
 			p->pos = vec2Add(tankPos, tank->Turret());
 
-            world.projectiles.push_back(p);
+            world->projectiles.push_back(p);
 
 			MDF::Audio::PlayCanonFire();
 		}
@@ -103,7 +103,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 			
 			p->pos = vec2Add(tankPos, tank->Turret());
 			
-            world.projectiles.push_back(p);
+            world->projectiles.push_back(p);
 			
 			MDF::Audio::PlayCanonFire();
 		}
@@ -116,7 +116,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 			
 			p->pos = vec2Add(tankPos, tank->Turret());
 			
-            world.projectiles.push_back(p);
+            world->projectiles.push_back(p);
 			
 			MDF::Audio::PlayCanonFire();
 		}
@@ -129,7 +129,7 @@ void Weapon::Fire( MDF::Player *player, World &world )
 
 			p->pos = vec2Add(tankPos, tank->Turret());
 
-            world.projectiles.push_back(p);
+            world->projectiles.push_back(p);
 
 			MDF::Audio::PlayCanonFire();
 		}

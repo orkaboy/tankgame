@@ -1,7 +1,6 @@
 Roadmap Tank game
 -----------------
 * Implement aiming with keyboard
-* Implement GameState structure (input/loop/transitions) and refactor Menu and main Game into it
 * Implement Settings file for keybinds, graphics, audio etc.
 * Multiple players - select colors
 * Credits screen
