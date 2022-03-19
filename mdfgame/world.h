@@ -11,8 +11,8 @@
 
 namespace MDF {
 
-constexpr int SCREEN_WIDTH = 1024;
-constexpr int SCREEN_HEIGHT = 768;
+constexpr int SCREEN_WIDTH = 1280;
+constexpr int SCREEN_HEIGHT = 720;
 constexpr int SCREEN_BPP = 32;
 constexpr int FPS = 30;
 
