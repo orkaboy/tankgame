@@ -19,7 +19,8 @@ public:
     MenuOption CheckButton(vec2 cursor);
 
     auto Buttons() const -> const std::vector<MDF::Button*>& { return mButtons; }
-    auto BG() const -> SDL_Texture* { return mBg; }
+
+    void Draw();
 
 private:
     SDL_Texture *mBg;

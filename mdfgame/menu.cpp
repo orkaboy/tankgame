@@ -18,6 +18,16 @@ void Menu::AddButton(int x, int y, MenuOption ret, std::string text, TTF_Font *f
     mButtons.push_back(new Button(x, y, ret, text, font));
 }
 
+void Menu::Draw() {
+	SDL_Point size;
+    SDL_QueryTexture(mBg, NULL, NULL, &size.x, &size.y);
+    Graphics::ApplySurface(mBg, size.x / 2, size.y / 2);
+
+    auto renderer = Graphics::ReturnRenderer();
+    for(auto button : mButtons)
+        button->Draw(renderer);
+}
+
 MenuOption Menu::CheckButton(vec2 cursor)
 {
 	for(auto button : mButtons)
@@ -94,7 +104,7 @@ void Main::Draw() {
     auto cursor_tex = Graphics::ReturnCursor();
 
     mMenu->CheckButton(cursor);
-    Graphics::Menu_Draw(mMenu);
+    mMenu->Draw();
     Graphics::ApplySurface(cursor_tex, cursor.x, cursor.y, 1, 0);
 }
 

@@ -46,7 +46,7 @@ void Animation::UnloadAnimations(void) {
 	for(auto anim_pair : animations) {
 		auto anim = anim_pair.second;
 		if(anim) {
-			delete[] anim;
+			delete anim;
 		}
 	}
 }

@@ -228,20 +228,6 @@ void Planet_SetImage(MDF::Planet *planet, std::string id)
 		fmt::print("Couldn't load image {} from 'images'\n", id);
 }
 
-
-/* MENU STUFFIES ###############################################*/
-
-void Menu_Draw(MDF::Menu* menu)
-{
-	auto bg = menu->BG();
-	SDL_Point size;
-    SDL_QueryTexture(bg, NULL, NULL, &size.x, &size.y);
-    Graphics::ApplySurface(bg, size.x / 2, size.y / 2);
-
-    for(auto button : menu->Buttons())
-        button->Draw(renderer);
-}
-
 SDL_Renderer* ReturnRenderer()
 {
     return renderer;
