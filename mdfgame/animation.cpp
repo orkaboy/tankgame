@@ -10,86 +10,70 @@ namespace MDF {
 
 static std::map<std::string, Animation*>	animations;
 
-Animation * Animation::LoadAnimation(const char *filepath)
-{
+Animation * Animation::LoadAnimation(const char *filepath) {
 	std::ifstream file;
 	file.open(filepath, std::ios::in);
 	
-	if(!file)
-	{
+	if(!file) {
 		fmt::print("Couldn't load animation {}\n", filepath);
 		return NULL;
 	}
 	
 	Animation *anim = new Animation;
 	
-	file >> anim->numFrames;
+	int numFrames;
+	file >> numFrames;
 	
-    anim->frames = new SDL_Texture*[anim->numFrames];
-	anim->frameTimer = new float[anim->numFrames];
-	
-	for(unsigned int i = 0; i < anim->numFrames; i++)
-	{
+	for(unsigned int i = 0; i < numFrames; i++) {
 		std::string imgPath;
-		file >> imgPath;
-		anim->frames[i] = Graphics::getImage(imgPath);
-		file >> anim->frameTimer[i];
+		float timer;
+		file >> imgPath >> timer;
+		anim->frames.emplace_back(Graphics::getImage(imgPath));
+		anim->frameTimer.emplace_back(timer);
 	}
 	
 	return anim;
 }
 
-void Animation::LoadAnimations(void)
-{
+void Animation::LoadAnimations(void) {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::ANIMATION);
 	
-	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
-		animations[it->first] = LoadAnimation(it->second.c_str());
+	for (auto it : res)
+		animations[it.first] = LoadAnimation(it.second.c_str());
 }
 
-void Animation::UnloadAnimations(void)
-{
-	for(auto anim_pair : animations)
-	{
+void Animation::UnloadAnimations(void) {
+	for(auto anim_pair : animations) {
 		auto anim = anim_pair.second;
-		if(anim)
-		{
-			delete[] anim->frameTimer;
-			delete[] anim->frames;
+		if(anim) {
 			delete[] anim;
 		}
 	}
 }
 
-Animation * Animation::GetAnimation(std::string id)
-{
+Animation * Animation::GetAnimation(std::string id) {
 	return animations[id];
 }
 
-SDL_Texture * Animation::GetFrame(unsigned int frame)
-{
+SDL_Texture * Animation::GetFrame(unsigned int frame) {
     SDL_Texture *ret = NULL;
 
-	if(frame < numFrames)
+	if(frame < frames.size())
 		ret = frames[frame];
 	
 	return ret;
 }
 
-void Animation::UpdateAnimation(unsigned int &frame, float &timer, float dt)
-{
-	if(numFrames == 0) return;
+void Animation::UpdateAnimation(unsigned int &frame, float &timer, float dt) {
+	if(frames.empty()) return;
 	
-	if(frame >= numFrames)
+	if(frame >= frames.size())
 		frame = 0;
 	timer += dt;
-	if(timer >= frameTimer[frame])
-	{
+	if(timer >= frameTimer[frame]) {
 		timer -= frameTimer[frame];
 		frame++;
-		
-		if(frame >= numFrames)
-			frame = 0;
+		frame = frame % frames.size();
 	}
 }
 

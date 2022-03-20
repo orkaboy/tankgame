@@ -6,8 +6,7 @@
 
 namespace MDF {
 
-Button::Button(int x, int y, MenuOption ret, std::string txt, TTF_Font *font)
-{
+Button::Button(int x, int y, MenuOption ret, std::string txt, TTF_Font *font) {
 	mRet = ret;
 	mPos.x = x;
 	mPos.y = y;
@@ -24,14 +23,11 @@ Button::Button(int x, int y, MenuOption ret, std::string txt, TTF_Font *font)
 	SDL_FreeSurface(text);
 }
 
-void Button::Draw(SDL_Renderer *screen) const
-{
-	if(!mOver)
-	{
+void Button::Draw(SDL_Renderer *screen) const {
+	if(!mOver) {
 		rectangleRGBA( screen, mPos.x, mPos.y, mPos.x+mPos.w, mPos.y+mPos.h, 0, 255, 0, 255 );
 	}
-	else
-	{
+	else {
 		boxRGBA( screen, mPos.x, mPos.y, mPos.x+mPos.w, mPos.y+mPos.h, 0, 255, 0, 255 );
 	}
 

@@ -3,6 +3,7 @@
 #include "SDL2/SDL.h"
 
 #include <string>
+#include <vector>
 
 namespace MDF {
 
@@ -24,9 +25,8 @@ public:
 private:
 	static Animation* LoadAnimation(const char *filepath);
 
-	SDL_Texture **frames;
-	float *frameTimer;
-	unsigned int numFrames;
+	std::vector<SDL_Texture*> frames;
+	std::vector<float> frameTimer;
 };
 
 }

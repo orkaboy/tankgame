@@ -192,8 +192,8 @@ void LoadImages()
 {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::IMAGE);
 
-	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
-		images[it->first] = LoadImage(it->second.c_str());
+	for (auto it : res)
+		images[it.first] = LoadImage(it.second.c_str());
 
 	/* Temporary Tank Loading code */
 	tankParts[MDF::TANK_NEUTRAL] = images["TankNeutral"];
@@ -207,8 +207,8 @@ void LoadFonts()
 {
 	MDF::Resource::ResourceMap res = MDF::Resource::GetOfType(MDF::Resource::Type::FONT);
 
-	for ( MDF::Resource::ResourceMap::iterator it = res.begin(); it != res.end(); it++ )
-		fonts[it->first] = Graphics::LoadFont(it->second.c_str(),32);    
+	for (auto it : res)
+		fonts[it.first] = Graphics::LoadFont(it.second.c_str(), 32);    
 }
 
 TTF_Font * LoadFont(const std::string &s, int fontsize)
@@ -224,7 +224,7 @@ void Tank_SetImages(MDF::Tank *tank, MDF::TankColors col)
 
 void Planet_SetImage(MDF::Planet *planet, std::string id)
 {
-	if( (planet->SetImage(images[id]) ) == NULL)
+	if(planet->SetImage(images[id]) == NULL)
 		fmt::print("Couldn't load image {} from 'images'\n", id);
 }
 

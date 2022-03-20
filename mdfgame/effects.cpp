@@ -4,8 +4,7 @@
 
 namespace MDF {
 
-Effect::Effect(EffectType type, vec2 _pos)
-{
+Effect::Effect(EffectType type, vec2 _pos) {
 	/* Default Init values */
 	scale = 1;
 	anim = NULL;
@@ -17,8 +16,7 @@ Effect::Effect(EffectType type, vec2 _pos)
 	frameTimer = 0;
 	
 	/* Do special init based on type */
-	switch(type)
-	{
+	switch(type) {
 		case EffectType::EXPLOSION:
 			break;
 		case EffectType::CRUSHED:
@@ -31,25 +29,20 @@ Effect::Effect(EffectType type, vec2 _pos)
 	}
 }
 
-void Effect::Update(std::vector<Effect*> &effects, float dt)
-{
-	for(unsigned int i = 0; i < effects.size(); i++)
-	{
+void Effect::Update(std::vector<Effect*> &effects, float dt) {
+	for(unsigned int i = 0; i < effects.size(); i++) {
 		Effect *e = effects[i];
 		
 		e->lifetime -= dt;
-		if(e->lifetime <= 0)
-		{
+		if(e->lifetime <= 0) {
 			delete e;
 			effects.erase(effects.begin() + i);
 			i--;
 		}
-		else
-		{
+		else {
 			e->anim->UpdateAnimation(e->curFrame, e->frameTimer, dt);
 			
-			switch(e->type)
-			{
+			switch(e->type) {
 				case EffectType::EXPLOSION:
 					break;
 				case EffectType::CRUSHED:
@@ -61,10 +54,8 @@ void Effect::Update(std::vector<Effect*> &effects, float dt)
 	}
 }
 
-void Effect::Draw(std::vector<Effect*> &effects, vec2 offset)
-{
-	for(auto e : effects)
-	{
+void Effect::Draw(std::vector<Effect*> &effects, vec2 offset) {
+	for(auto e : effects) {
         SDL_Texture *img = e->anim->GetFrame(e->curFrame);
 		
 		if(img != NULL)

@@ -126,20 +126,20 @@ void HandleEvents()
 
         if(event.type == SDL_KEYDOWN)
 		{
-			for ( BindsMap::iterator it = down_binds.begin(); it != down_binds.end(); it++ )
+			for (auto it : down_binds)
 			{
-				if ( event.key.keysym.sym == it->first )
-					handlers[it->second.second](it->second.first, world);
+				if ( event.key.keysym.sym == it.first )
+					handlers[it.second.second](it.second.first, world);
 			}
 			if ( strokehandlers[KEY_DOWN] )
                 strokehandlers[KEY_DOWN](event.key.keysym.scancode, world);
 		}	
         else if(event.type == SDL_KEYUP)
 		{
-			for ( BindsMap::iterator it = up_binds.begin(); it != up_binds.end(); it++ )
+			for (auto it : up_binds)
 			{
-				if ( event.key.keysym.sym == it->first )
-					handlers[it->second.second](it->second.first, world);
+				if ( event.key.keysym.sym == it.first )
+					handlers[it.second.second](it.second.first, world);
 			}
 			if ( strokehandlers[KEY_UP] )
                 strokehandlers[KEY_UP](event.key.keysym.scancode, world);
@@ -154,10 +154,10 @@ void HandleEvents()
 	
     const Uint8* curstate = SDL_GetKeyboardState(NULL);
 	
-	for ( BindsMap::iterator it = hold_binds.begin(); it != hold_binds.end(); it++ )
+	for (auto it : hold_binds)
 	{
-		if ( curstate[it->first] )
-			handlers[it->second.second](it->second.first, world);
+		if ( curstate[it.first] )
+			handlers[it.second.second](it.second.first, world);
 	}
 	if ( strokehandlers[KEY_HOLD] )
         strokehandlers[KEY_HOLD](event.key.keysym.scancode, world);

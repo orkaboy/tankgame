@@ -21,8 +21,7 @@ void GameSM::Run() {
         currentTime = newTime;
         accumulator += deltaTime;
 
-        while (accumulator >= dt)
-        {
+        while (accumulator >= dt) {
             accumulator -= dt;
             /* Handle event loop */
             auto stateName = mCurState->HandleEvents();
