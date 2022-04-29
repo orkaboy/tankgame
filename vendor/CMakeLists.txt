@@ -1,5 +1,14 @@
 include(FetchContent)
 
+
+FetchContent_Declare(freetype
+  GIT_REPOSITORY https://github.com/freetype/freetype.git
+  GIT_TAG master
+)
+FetchContent_MakeAvailable(freetype)
+
+add_library(Freetype::Freetype ALIAS freetype)
+
 FetchContent_Declare(fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
   GIT_TAG 8.1.1
