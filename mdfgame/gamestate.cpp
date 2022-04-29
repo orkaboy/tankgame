@@ -1,5 +1,6 @@
 #include "gamestate.h"
 #include "graphics.h"
+#include <fmt/core.h>
 
 namespace MDF {
 
@@ -38,6 +39,7 @@ void GameSM::Run() {
         Graphics::EndScene();
 
         // TODO wait
+        //SDL_Delay(10);
     }
 }
 
@@ -45,6 +47,7 @@ void GameSM::Run() {
 void GameSM::TransitionState(std::string stateName) {
     if(stateName == "QUIT") {
         mQuit = true;
+        fmt::print("Quitting...\n");
     }
     else if(!stateName.empty()) {
         auto newState = mStates[stateName];

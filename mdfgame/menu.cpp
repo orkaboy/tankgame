@@ -70,6 +70,7 @@ std::string Main::HandleEvents() {
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
         if(event.type == SDL_QUIT) {
+            fmt::print("SDL_QUIT\n");
             return "QUIT";
         }
 
@@ -77,6 +78,7 @@ std::string Main::HandleEvents() {
             switch (event.key.keysym.scancode) {
             case SDL_SCANCODE_ESCAPE: // TODO Bug in SDL2 2.0.10 in WSL2
             //case SDL_SCANCODE_2:
+                fmt::print("SDL_SCANCODE_ESCAPE\n");
                 return "QUIT";
             }
         }
@@ -90,6 +92,7 @@ std::string Main::HandleEvents() {
                     case MenuOption::JoinGame:
                     case MenuOption::Settings:
                     case MenuOption::QuitGame:
+                        fmt::print("Button Quit\n");
                         return "QUIT";
                     }
                 }

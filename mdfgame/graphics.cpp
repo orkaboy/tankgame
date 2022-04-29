@@ -4,10 +4,10 @@
 #include "player.h"
 #include "input.h"
 
-#include "SDL2/SDL_ttf.h"
-#include "SDL2/SDL_image.h"
-#include "SDL2/SDL2_gfxPrimitives.h"
-#include "SDL2/SDL2_rotozoom.h"
+#include "SDL_ttf.h"
+#include "SDL_image.h"
+#include "SDL2_gfxPrimitives.h"
+#include "SDL2_rotozoom.h"
 
 #include <string>
 #include <map>
@@ -41,6 +41,18 @@ static void	LoadImages();
 
 bool Init(void)
 {
+	{
+		SDL_version compiled;
+		SDL_version linked;
+
+		SDL_VERSION(&compiled);
+		SDL_GetVersion(&linked);
+		fmt::print("Compiled against SDL version {}.{}.{}.\n",
+			compiled.major, compiled.minor, compiled.patch);
+		fmt::print("Linking against SDL version {}.{}.{}.\n",
+			linked.major, linked.minor, linked.patch);
+	}
+
 	// initialize SDL video
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{

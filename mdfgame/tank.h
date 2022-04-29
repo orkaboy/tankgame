@@ -5,7 +5,7 @@
 #include "audio.h"
 #include "weapon.h"
 
-#include "SDL2/SDL.h"
+#include "SDL.h"
 
 constexpr int MAX_HITPOINTS = 100;
 

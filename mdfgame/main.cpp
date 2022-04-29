@@ -31,6 +31,8 @@ public:
 
 		Audio::LoadPresetWavFiles();
 		Audio::LoadPresetMp3Files();
+		
+		fmt::print("Loaded resources and initialized libraries.\n");
 
 		mStateMachine.RegisterState("MainMenu", new Menues::Main);
 		mStateMachine.RegisterState("Game", new Game);
